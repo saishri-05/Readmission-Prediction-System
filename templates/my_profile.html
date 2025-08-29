@@ -3,336 +3,167 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Profile - Riskometer</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f8ff;
-            margin: 0;
-            padding: 0;
-            line-height: 1.6;
-        }
-
-        header {
-            background-color: #20b2aa;
-            padding: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            color: #fff;
-        }
-
-        header .brand {
-            font-size: 2em;
-            font-weight: bold;
-            text-decoration: none;
-            color: #ffffff;
-        }
-
-        .nav-link {
-            color: #ffffff;
-            text-decoration: none;
-            margin-left: 20px;
-            font-size: 1.1em;
-            transition: color 0.3s ease;
-        }
-
-        .nav-link:hover {
-            color: #e0e0e0;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 20px auto;
-            padding: 20px;
-        }
-
-        .profile-header {
-            background: linear-gradient(135deg, #20b2aa, #4682b4);
-            color: white;
-            padding: 30px;
-            border-radius: 15px;
-            text-align: center;
-            margin-bottom: 30px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .profile-header h1 {
-            margin: 0 0 10px 0;
-            font-size: 2.5em;
-        }
-
-        .profile-header p {
-            margin: 0;
-            font-size: 1.2em;
-            opacity: 0.9;
-        }
-
-        .profile-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-            margin-bottom: 30px;
-        }
-
-        .profile-section {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .profile-section h2 {
-            color: #4682b4;
-            margin-bottom: 20px;
-            font-size: 1.5em;
-            border-bottom: 2px solid #20b2aa;
-            padding-bottom: 10px;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 8px;
-            color: #333;
-        }
-
-        .form-group input,
-        .form-group select {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 1em;
-            transition: border-color 0.3s ease;
-            box-sizing: border-box;
-        }
-
-        .form-group input:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: #20b2aa;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-
-        .stat-card {
-            background: linear-gradient(135deg, #20b2aa, #4682b4);
-            color: white;
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-        }
-
-        .stat-card h3 {
-            margin: 0 0 10px 0;
-            font-size: 1.1em;
-        }
-
-        .stat-card .value {
-            font-size: 2em;
-            font-weight: bold;
-            margin: 10px 0;
-        }
-
-        .stat-card .unit {
-            font-size: 0.9em;
-            opacity: 0.8;
-        }
-
-        .health-indicators {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
-        }
-
-        .health-indicator {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 8px;
-            text-align: center;
-            border-left: 4px solid #20b2aa;
-        }
-
-        .health-indicator .label {
-            font-size: 0.9em;
-            color: #666;
-            margin-bottom: 5px;
-        }
-
-        .health-indicator .value {
-            font-size: 1.3em;
-            font-weight: bold;
-            color: #333;
-        }
-
-        .btn {
-            padding: 12px 25px;
-            border: none;
-            border-radius: 8px;
-            font-size: 1em;
-            font-weight: bold;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-            transition: all 0.3s ease;
-            margin: 5px;
-        }
-
-        .btn-primary {
-            background-color: #20b2aa;
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background-color: #1a9a92;
-        }
-
-        .btn-secondary {
-            background-color: #6c757d;
-            color: white;
-        }
-
-        .btn-secondary:hover {
-            background-color: #5a6268;
-        }
-
-        .flash-messages {
-            margin-bottom: 20px;
-        }
-
-        .flash-message {
-            padding: 12px 20px;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            font-weight: bold;
-        }
-
-        .flash-success {
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-
-        .flash-error {
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-
-        .full-width {
-            grid-column: 1 / -1;
-        }
-
-        @media (max-width: 768px) {
-            .profile-content {
-                grid-template-columns: 1fr;
-            }
-
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .health-indicators {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+    <link rel="icon" href="{{ url_for('static', filename='images/main.jpg') }}" type="image/gif">
+    <title>My Profile - HealthGuard</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+    <link href="{{ url_for('static', filename='css/font-awesome.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/responsive.css') }}" rel="stylesheet">
 </head>
 <body>
-    <header>
-        <a href="{{ url_for('index') }}" class="brand">Riskometer</a>
-        <nav>
-            <a href="{{ url_for('home') }}" class="nav-link">Home</a>
-            <a href="{{ url_for('my_reports') }}" class="nav-link">My Reports</a>
-        </nav>
-    </header>
+    <!-- Modern Navigation -->
+    <nav class="nav-modern">
+        <div class="nav-container">
+            <a href="{{ url_for('index') }}" class="nav-brand">
+                <i class="fa fa-heartbeat" style="margin-right: 8px;"></i>
+                HealthGuard
+            </a>
+            <div class="nav-links">
+                <a href="{{ url_for('home') }}" class="nav-link">
+                    <i class="fa fa-home" style="margin-right: 4px;"></i>
+                    Dashboard
+                </a>
+                <a href="{{ url_for('my_reports') }}" class="nav-link">
+                    <i class="fa fa-file-text-o" style="margin-right: 4px;"></i>
+                    My Reports
+                </a>
+                <a href="{{ url_for('logout') }}" class="btn-modern btn-outline btn-sm">
+                    <i class="fa fa-sign-out" style="margin-right: 4px;"></i>
+                    Logout
+                </a>
+            </div>
+        </div>
+    </nav>
 
-    <div class="container">
-        <!-- Flash Messages -->
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                <div class="flash-messages">
-                    {% for category, message in messages %}
-                        <div class="flash-message flash-{{ category }}">
-                            {{ message }}
-                        </div>
-                    {% endfor %}
+    <!-- Dashboard Content -->
+    <div class="dashboard-container animate-fadeIn">
+        <!-- Enhanced Header -->
+        <div class="dashboard-header">
+            <div style="width: 120px; height: 120px; background: var(--gradient-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto var(--space-xl); box-shadow: var(--shadow-xl); position: relative;">
+                <i class="fa fa-user" style="font-size: 48px; color: white;"></i>
+                <div style="position: absolute; bottom: 8px; right: 8px; width: 32px; height: 32px; background: var(--success); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 3px solid white;">
+                    <i class="fa fa-edit" style="font-size: 12px; color: white;"></i>
                 </div>
-            {% endif %}
-        {% endwith %}
-
-        <!-- Profile Header -->
-        <div class="profile-header">
-            <h1>{{ user_data[0] if user_data else 'User' }}</h1>
-            <p>Manage your personal information and health profile</p>
+            </div>
+            <h1 class="dashboard-title animate-fadeInUp">
+                Profile Management
+            </h1>
+            <p class="dashboard-subtitle animate-fadeInUp" style="animation-delay: 0.2s;">
+                Manage your personal information, update health preferences, and customize your HealthGuard experience.
+            </p>
         </div>
 
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            <div class="animate-fadeInUp" style="animation-delay: 0.4s; margin-bottom: var(--space-xl);">
+              {% for category, message in messages %}
+                <div class="alert-modern alert-{{ 'success' if category == 'success' else 'error' }}" style="display: flex; align-items: center; gap: var(--space-sm); margin-bottom: var(--space-md);">
+                  <i class="fa fa-{{ 'check-circle' if category == 'success' else 'exclamation-triangle' }}"></i>
+                  {{ message }}
+                </div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endwith %}
+
         <!-- Profile Content -->
-        <div class="profile-content">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-2xl); margin-bottom: var(--space-3xl);" class="animate-fadeInUp" style="animation-delay: 0.6s;">
             <!-- Personal Information -->
-            <div class="profile-section">
-                <h2>Personal Information</h2>
-                <form method="POST">
-                    <div class="form-group">
-                        <label for="name">Full Name*</label>
-                        <input type="text" id="name" name="name" value="{{ user_data[0] if user_data else '' }}" required>
+            <div class="card-modern" style="background: var(--background-primary); border-left: 4px solid var(--primary-color);">
+                <div style="display: flex; align-items: center; gap: var(--space-md); margin-bottom: var(--space-xl);">
+                    <div style="width: 50px; height: 50px; background: var(--gradient-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                        <i class="fa fa-user-circle" style="font-size: 20px; color: white;"></i>
                     </div>
-                    <div class="form-group">
-                        <label for="age">Age*</label>
-                        <input type="number" id="age" name="age" value="{{ user_data[1] if user_data else '' }}" min="1" max="120" required>
+                    <h2 style="color: var(--primary-color); margin: 0; font-size: var(--text-xl); font-family: 'Playfair Display', serif;">Personal Information</h2>
+                </div>
+
+                <form method="POST" class="form-modern">
+                    <div class="form-group-modern">
+                        <label class="form-label-modern">
+                            <i class="fa fa-user" style="margin-right: 4px; color: var(--primary-color);"></i>
+                            Full Name
+                        </label>
+                        <input type="text" name="name" class="form-input-modern" value="{{ user_data[0] if user_data else '' }}" required>
                     </div>
-                    <div class="form-group">
-                        <label for="gender">Gender*</label>
-                        <select id="gender" name="gender" required>
-                            <option value="">Select Gender</option>
-                            <option value="Male" {% if user_data and user_data[2] == 'Male' %}selected{% endif %}>Male</option>
-                            <option value="Female" {% if user_data and user_data[2] == 'Female' %}selected{% endif %}>Female</option>
-                            <option value="Other" {% if user_data and user_data[2] == 'Other' %}selected{% endif %}>Other</option>
-                        </select>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-lg);">
+                        <div class="form-group-modern">
+                            <label class="form-label-modern">
+                                <i class="fa fa-calendar" style="margin-right: 4px; color: var(--primary-color);"></i>
+                                Age
+                            </label>
+                            <input type="number" name="age" class="form-input-modern" value="{{ user_data[1] if user_data else '' }}" min="1" max="120" required>
+                        </div>
+                        <div class="form-group-modern">
+                            <label class="form-label-modern">
+                                <i class="fa fa-venus-mars" style="margin-right: 4px; color: var(--primary-color);"></i>
+                                Gender
+                            </label>
+                            <select name="gender" class="form-select-modern" required>
+                                <option value="">Select Gender</option>
+                                <option value="Male" {% if user_data and user_data[2] == 'Male' %}selected{% endif %}>Male</option>
+                                <option value="Female" {% if user_data and user_data[2] == 'Female' %}selected{% endif %}>Female</option>
+                                <option value="Other" {% if user_data and user_data[2] == 'Other' %}selected{% endif %}>Other</option>
+                            </select>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="email">Email Address*</label>
-                        <input type="email" id="email" name="email" value="{{ user_data[3] if user_data else '' }}" required>
+
+                    <div class="form-group-modern">
+                        <label class="form-label-modern">
+                            <i class="fa fa-envelope" style="margin-right: 4px; color: var(--primary-color);"></i>
+                            Email Address
+                        </label>
+                        <input type="email" name="email" class="form-input-modern" value="{{ user_data[3] if user_data else '' }}" required>
                     </div>
-                    <div class="form-group">
-                        <label for="mobile_number">Mobile Number</label>
-                        <input type="tel" id="mobile_number" name="mobile_number" value="{{ user_data[4] if user_data else '' }}">
+
+                    <div class="form-group-modern">
+                        <label class="form-label-modern">
+                            <i class="fa fa-phone" style="margin-right: 4px; color: var(--primary-color);"></i>
+                            Mobile Number
+                        </label>
+                        <input type="tel" name="mobile_number" class="form-input-modern" value="{{ user_data[4] if user_data else '' }}">
                     </div>
-                    <button type="submit" class="btn btn-primary">Update Profile</button>
-                    <a href="{{ url_for('change_password') }}" class="btn btn-secondary" style="margin-top: 10px; display: block; text-align: center;">Change Password</a>
+
+                    <div style="display: flex; gap: var(--space-md); margin-top: var(--space-xl);">
+                        <button type="submit" class="btn-modern btn-primary" style="flex: 1;">
+                            <i class="fa fa-save" style="margin-right: 8px;"></i>
+                            Update Profile
+                        </button>
+                        <a href="{{ url_for('change_password') }}" class="btn-modern btn-outline" style="flex: 1; text-align: center;">
+                            <i class="fa fa-lock" style="margin-right: 8px;"></i>
+                            Change Password
+                        </a>
+                    </div>
                 </form>
             </div>
 
-            <!-- Health Statistics -->
-            <div class="profile-section">
-                <h2>Health Overview</h2>
+            <!-- Health Overview -->
+            <div class="card-modern" style="background: var(--background-primary); border-left: 4px solid var(--secondary-color);">
+                <div style="display: flex; align-items: center; gap: var(--space-md); margin-bottom: var(--space-xl);">
+                    <div style="width: 50px; height: 50px; background: var(--gradient-success); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                        <i class="fa fa-heartbeat" style="font-size: 20px; color: white;"></i>
+                    </div>
+                    <h2 style="color: var(--secondary-color); margin: 0; font-size: var(--text-xl); font-family: 'Playfair Display', serif;">Health Overview</h2>
+                </div>
+
                 {% if health_stats and health_stats.latest_health %}
-                <div class="health-indicators">
-                    <div class="health-indicator">
-                        <div class="label">BMI</div>
-                        <div class="value">{{ "%.1f"|format(health_stats.latest_health[0]) if health_stats.latest_health[0] else "N/A" }}</div>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-lg);">
+                    <div style="background: var(--background-secondary); padding: var(--space-md); border-radius: var(--radius-lg); text-align: center;">
+                        <div style="font-size: var(--text-xs); color: var(--text-secondary); margin-bottom: var(--space-xs);">BMI</div>
+                        <div style="font-size: var(--text-lg); font-weight: 600; color: var(--text-primary);">{{ "%.1f"|format(health_stats.latest_health[0]) if health_stats.latest_health[0] else "N/A" }}</div>
                     </div>
-                    <div class="health-indicator">
-                        <div class="label">Blood Sugar</div>
-                        <div class="value">{{ "%.0f"|format(health_stats.latest_health[1]) if health_stats.latest_health[1] else "N/A" }}</div>
+                    <div style="background: var(--background-secondary); padding: var(--space-md); border-radius: var(--radius-lg); text-align: center;">
+                        <div style="font-size: var(--text-xs); color: var(--text-secondary); margin-bottom: var(--space-xs);">Blood Sugar</div>
+                        <div style="font-size: var(--text-lg); font-weight: 600; color: var(--text-primary);">{{ "%.0f"|format(health_stats.latest_health[1]) if health_stats.latest_health[1] else "N/A" }}</div>
                     </div>
-                    <div class="health-indicator">
-                        <div class="label">Cholesterol</div>
-                        <div class="value">{{ "%.0f"|format(health_stats.latest_health[2]) if health_stats.latest_health[2] else "N/A" }}</div>
+                    <div style="background: var(--background-secondary); padding: var(--space-md); border-radius: var(--radius-lg); text-align: center;">
+                        <div style="font-size: var(--text-xs); color: var(--text-secondary); margin-bottom: var(--space-xs);">Cholesterol</div>
+                        <div style="font-size: var(--text-lg); font-weight: 600; color: var(--text-primary);">{{ "%.0f"|format(health_stats.latest_health[2]) if health_stats.latest_health[2] else "N/A" }}</div>
                     </div>
-                    <div class="health-indicator">
-                        <div class="label">Blood Pressure</div>
-                        <div class="value">
+                    <div style="background: var(--background-secondary); padding: var(--space-md); border-radius: var(--radius-lg); text-align: center;">
+                        <div style="font-size: var(--text-xs); color: var(--text-secondary); margin-bottom: var(--space-xs);">Blood Pressure</div>
+                        <div style="font-size: var(--text-lg); font-weight: 600; color: var(--text-primary);">
                             {% if health_stats.latest_health[3] and health_stats.latest_health[4] %}
                                 {{ health_stats.latest_health[3] }}/{{ health_stats.latest_health[4] }}
                             {% else %}
@@ -340,74 +171,180 @@
                             {% endif %}
                         </div>
                     </div>
-                    <div class="health-indicator">
-                        <div class="label">Heart Rate</div>
-                        <div class="value">{{ health_stats.latest_health[5] if health_stats.latest_health[5] else "N/A" }}</div>
+                    <div style="background: var(--background-secondary); padding: var(--space-md); border-radius: var(--radius-lg); text-align: center;">
+                        <div style="font-size: var(--text-xs); color: var(--text-secondary); margin-bottom: var(--space-xs);">Heart Rate</div>
+                        <div style="font-size: var(--text-lg); font-weight: 600; color: var(--text-primary);">{{ health_stats.latest_health[5] if health_stats.latest_health[5] else "N/A" }}</div>
                     </div>
                     {% if health_stats.latest_risk %}
-                    <div class="health-indicator">
-                        <div class="label">Stress Level</div>
-                        <div class="value">{{ health_stats.latest_risk[0] if health_stats.latest_risk[0] else "N/A" }}</div>
+                    <div style="background: var(--background-secondary); padding: var(--space-md); border-radius: var(--radius-lg); text-align: center;">
+                        <div style="font-size: var(--text-xs); color: var(--text-secondary); margin-bottom: var(--space-xs);">Stress Level</div>
+                        <div style="font-size: var(--text-lg); font-weight: 600; color: var(--text-primary);">{{ health_stats.latest_risk[0] if health_stats.latest_risk[0] else "N/A" }}</div>
                     </div>
                     {% endif %}
                 </div>
                 {% else %}
-                <p style="text-align: center; color: #666; font-style: italic;">
-                    No health data available. <a href="{{ url_for('checkup') }}" style="color: #20b2aa;">Take your first checkup</a> to see your health overview.
-                </p>
+                <div style="text-align: center; padding: var(--space-2xl); background: var(--background-secondary); border-radius: var(--radius-lg); border: 2px dashed var(--border-color);">
+                    <div style="width: 60px; height: 60px; background: var(--gradient-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto var(--space-md); opacity: 0.7;">
+                        <i class="fa fa-stethoscope" style="font-size: 24px; color: white;"></i>
+                    </div>
+                    <p style="color: var(--text-secondary); font-style: italic; margin: 0;">
+                        No health data available. <a href="{{ url_for('checkup') }}" style="color: var(--primary-color); text-decoration: none; font-weight: 500;">Take your first assessment</a> to see your health overview.
+                    </p>
+                </div>
                 {% endif %}
             </div>
         </div>
 
         <!-- Activity Summary -->
-        <div class="profile-section full-width">
-            <h2>Activity & Statistics</h2>
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <h3>Total Checkups</h3>
-                    <div class="value">{{ health_stats.total_checkups if health_stats else 0 }}</div>
-                    <div class="unit">completed</div>
+        <div class="card-modern animate-fadeInUp" style="animation-delay: 0.8s; background: var(--background-primary); border-left: 4px solid var(--info);">
+            <div style="display: flex; align-items: center; gap: var(--space-md); margin-bottom: var(--space-xl);">
+                <div style="width: 50px; height: 50px; background: var(--gradient-secondary); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                    <i class="fa fa-chart-bar" style="font-size: 20px; color: white;"></i>
                 </div>
+                <h2 style="color: var(--info); margin: 0; font-size: var(--text-xl); font-family: 'Playfair Display', serif;">Activity & Statistics</h2>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-lg);">
+                <div style="background: var(--gradient-primary); color: white; padding: var(--space-lg); border-radius: var(--radius-xl); text-align: center; box-shadow: var(--shadow-md);">
+                    <h3 style="margin: 0 0 var(--space-sm) 0; font-size: var(--text-base); opacity: 0.9;">Total Assessments</h3>
+                    <div style="font-size: var(--text-3xl); font-weight: 700; margin: var(--space-sm) 0;">{{ health_stats.total_checkups if health_stats else 0 }}</div>
+                    <div style="font-size: var(--text-sm); opacity: 0.8;">completed</div>
+                </div>
+
                 {% if activity_summary %}
-                <div class="stat-card">
-                    <h3>Avg Daily Steps</h3>
-                    <div class="value">{{ "{:,}".format(activity_summary.avg_steps) if activity_summary.avg_steps else "0" }}</div>
-                    <div class="unit">steps/day</div>
+                <div style="background: var(--gradient-success); color: white; padding: var(--space-lg); border-radius: var(--radius-xl); text-align: center; box-shadow: var(--shadow-md);">
+                    <h3 style="margin: 0 0 var(--space-sm) 0; font-size: var(--text-base); opacity: 0.9;">Avg Daily Steps</h3>
+                    <div style="font-size: var(--text-2xl); font-weight: 700; margin: var(--space-sm) 0;">{{ "{:,}".format(activity_summary.avg_steps) if activity_summary.avg_steps else "0" }}</div>
+                    <div style="font-size: var(--text-sm); opacity: 0.8;">steps/day</div>
                 </div>
-                <div class="stat-card">
-                    <h3>Avg Calorie Intake</h3>
-                    <div class="value">{{ "{:,}".format(activity_summary.avg_calories) if activity_summary.avg_calories else "0" }}</div>
-                    <div class="unit">calories/day</div>
+
+                <div style="background: var(--gradient-secondary); color: white; padding: var(--space-lg); border-radius: var(--radius-xl); text-align: center; box-shadow: var(--shadow-md);">
+                    <h3 style="margin: 0 0 var(--space-sm) 0; font-size: var(--text-base); opacity: 0.9;">Avg Calorie Intake</h3>
+                    <div style="font-size: var(--text-2xl); font-weight: 700; margin: var(--space-sm) 0;">{{ "{:,}".format(activity_summary.avg_calories) if activity_summary.avg_calories else "0" }}</div>
+                    <div style="font-size: var(--text-sm); opacity: 0.8;">calories/day</div>
                 </div>
-                <div class="stat-card">
-                    <h3>Avg Sleep</h3>
-                    <div class="value">{{ activity_summary.avg_sleep if activity_summary.avg_sleep else "0" }}</div>
-                    <div class="unit">hours/night</div>
+
+                <div style="background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%); color: white; padding: var(--space-lg); border-radius: var(--radius-xl); text-align: center; box-shadow: var(--shadow-md);">
+                    <h3 style="margin: 0 0 var(--space-sm) 0; font-size: var(--text-base); opacity: 0.9;">Avg Sleep</h3>
+                    <div style="font-size: var(--text-2xl); font-weight: 700; margin: var(--space-sm) 0;">{{ activity_summary.avg_sleep if activity_summary.avg_sleep else "0" }}</div>
+                    <div style="font-size: var(--text-sm); opacity: 0.8;">hours/night</div>
                 </div>
                 {% endif %}
+
                 {% if health_stats and health_stats.latest_risk %}
-                <div class="stat-card">
-                    <h3>Risk Score</h3>
-                    <div class="value">{{ "%.1f"|format(health_stats.latest_risk[1]) if health_stats.latest_risk[1] else "N/A" }}</div>
-                    <div class="unit">out of 5</div>
+                <div style="background: linear-gradient(135deg, #ef4444 0%, #f87171 100%); color: white; padding: var(--space-lg); border-radius: var(--radius-xl); text-align: center; box-shadow: var(--shadow-md);">
+                    <h3 style="margin: 0 0 var(--space-sm) 0; font-size: var(--text-base); opacity: 0.9;">Risk Score</h3>
+                    <div style="font-size: var(--text-2xl); font-weight: 700; margin: var(--space-sm) 0;">{{ "%.1f"|format(health_stats.latest_risk[1]) if health_stats.latest_risk[1] else "N/A" }}</div>
+                    <div style="font-size: var(--text-sm); opacity: 0.8;">out of 5</div>
                 </div>
                 {% endif %}
+
                 {% if activity_summary and activity_summary.last_checkup %}
-                <div class="stat-card">
-                    <h3>Last Checkup</h3>
-                    <div class="value" style="font-size: 1.2em;">{{ activity_summary.last_checkup.split(' ')[0] if activity_summary.last_checkup else "Never" }}</div>
-                    <div class="unit">{{ activity_summary.last_checkup.split(' ')[1] if activity_summary.last_checkup and ' ' in activity_summary.last_checkup else "" }}</div>
+                <div style="background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%); color: white; padding: var(--space-lg); border-radius: var(--radius-xl); text-align: center; box-shadow: var(--shadow-md);">
+                    <h3 style="margin: 0 0 var(--space-sm) 0; font-size: var(--text-base); opacity: 0.9;">Last Assessment</h3>
+                    <div style="font-size: var(--text-lg); font-weight: 600; margin: var(--space-sm) 0;">{{ activity_summary.last_checkup.split(' ')[0] if activity_summary.last_checkup else "Never" }}</div>
+                    <div style="font-size: var(--text-sm); opacity: 0.8;">{{ activity_summary.last_checkup.split(' ')[1] if activity_summary.last_checkup and ' ' in activity_summary.last_checkup else "" }}</div>
                 </div>
                 {% endif %}
             </div>
         </div>
 
-        <!-- Action Buttons -->
-        <div style="text-align: center; margin-top: 30px;">
-            <a href="{{ url_for('checkup') }}" class="btn btn-primary">Take New Checkup</a>
-            <a href="{{ url_for('my_reports') }}" class="btn btn-secondary">View My Reports</a>
-            <a href="{{ url_for('home') }}" class="btn btn-secondary">Back to Home</a>
+        <!-- Quick Actions -->
+        <div class="card-modern animate-fadeInUp" style="animation-delay: 1s; text-align: center; background: var(--background-secondary); border: 2px dashed var(--border-color);">
+            <div style="margin-bottom: var(--space-lg);">
+                <div style="width: 60px; height: 60px; background: var(--gradient-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto var(--space-md);">
+                    <i class="fa fa-rocket" style="font-size: 24px; color: white;"></i>
+                </div>
+                <h3 style="color: var(--text-primary); margin-bottom: var(--space-md);">Take Action</h3>
+                <p style="color: var(--text-secondary); margin-bottom: var(--space-lg);">Continue your health journey with these recommended actions.</p>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-md);">
+                <a href="{{ url_for('checkup') }}" class="btn-modern btn-primary">
+                    <i class="fa fa-plus-circle" style="margin-right: 8px;"></i>
+                    New Assessment
+                </a>
+                <a href="{{ url_for('my_reports') }}" class="btn-modern btn-secondary">
+                    <i class="fa fa-chart-line" style="margin-right: 8px;"></i>
+                    View Reports
+                </a>
+                <a href="{{ url_for('analysis') }}" class="btn-modern btn-outline">
+                    <i class="fa fa-bar-chart" style="margin-right: 8px;"></i>
+                    Health Trends
+                </a>
+                <a href="{{ url_for('home') }}" class="btn-modern btn-outline">
+                    <i class="fa fa-home" style="margin-right: 8px;"></i>
+                    Dashboard
+                </a>
+            </div>
         </div>
     </div>
+
+    <script>
+        // Enhanced form interactions
+        document.querySelectorAll('.form-input-modern, .form-select-modern').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.style.borderColor = 'var(--primary-color)';
+                this.style.boxShadow = '0 0 0 3px rgba(37, 99, 235, 0.1)';
+                this.parentElement.style.transform = 'translateY(-2px)';
+            });
+
+            input.addEventListener('blur', function() {
+                this.style.borderColor = 'var(--border-color)';
+                this.style.boxShadow = 'none';
+                this.parentElement.style.transform = 'translateY(0)';
+            });
+        });
+
+        // Loading state for form submission
+        document.querySelector('form').addEventListener('submit', function(e) {
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+
+            submitBtn.innerHTML = '<span class="spinner"></span> Updating Profile...';
+            submitBtn.disabled = true;
+
+            // Re-enable after 3 seconds in case of error
+            setTimeout(() => {
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }, 3000);
+        });
+
+        // Add loading states to action buttons
+        document.querySelectorAll('.btn-modern').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                if (this.href && !this.href.includes('#')) {
+                    const originalText = this.innerHTML;
+                    this.innerHTML = '<span class="spinner"></span> Loading...';
+                    this.style.pointerEvents = 'none';
+
+                    setTimeout(() => {
+                        this.innerHTML = originalText;
+                        this.style.pointerEvents = 'auto';
+                    }, 2000);
+                }
+            });
+        });
+
+        // Mobile responsive adjustments
+        function handleResize() {
+            const profileGrid = document.querySelector('div[style*="grid-template-columns: 1fr 1fr"]');
+            const statsGrid = document.querySelector('div[style*="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr))"]');
+            const actionsGrid = document.querySelector('div[style*="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr))"]');
+
+            if (window.innerWidth <= 768) {
+                if (profileGrid) profileGrid.style.gridTemplateColumns = '1fr';
+                if (statsGrid) statsGrid.style.gridTemplateColumns = 'repeat(2, 1fr)';
+                if (actionsGrid) actionsGrid.style.gridTemplateColumns = 'repeat(2, 1fr)';
+            } else {
+                if (profileGrid) profileGrid.style.gridTemplateColumns = '1fr 1fr';
+                if (statsGrid) statsGrid.style.gridTemplateColumns = 'repeat(auto-fit, minmax(200px, 1fr))';
+                if (actionsGrid) actionsGrid.style.gridTemplateColumns = 'repeat(auto-fit, minmax(200px, 1fr))';
+            }
+        }
+
+        window.addEventListener('resize', handleResize);
+        handleResize();
+    </script>
 </body>
 </html>

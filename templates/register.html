@@ -10,268 +10,226 @@
     <link href="{{ url_for('static', filename='css/font-awesome.min.css') }}" rel="stylesheet"/>
     <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/responsive.css') }}" rel="stylesheet">
-    <style>
-        body {
-            font-family: "Inter", "Poppins", sans-serif;
-            background: var(--gradient-hero);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0;
-            padding: var(--space-lg);
-        }
-
-        .auth-container {
-            width: 100%;
-            max-width: 550px;
-            animation: fadeInUp 0.8s ease-out;
-        }
-
-        .auth-header {
-            text-align: center;
-            margin-bottom: var(--space-2xl);
-            color: white;
-        }
-
-        .auth-header h1 {
-            font-size: var(--text-3xl);
-            font-weight: 700;
-            margin-bottom: var(--space-sm);
-            font-family: 'Playfair Display', serif;
-        }
-
-        .auth-header p {
-            font-size: var(--text-lg);
-            opacity: 0.9;
-        }
-
-        .auth-box {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            padding: var(--space-2xl);
-            border-radius: var(--radius-2xl);
-            box-shadow: var(--shadow-2xl);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .auth-title {
-            text-align: center;
-            font-size: var(--text-2xl);
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: var(--space-xl);
-            font-family: 'Playfair Display', serif;
-        }
-
-        .auth-form {
-            display: flex;
-            flex-direction: column;
-            gap: var(--space-lg);
-        }
-
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: var(--space-lg);
-        }
-
-        @media (max-width: 640px) {
-            .form-row {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: var(--space-sm);
-        }
-
-        .form-group label {
-            font-weight: 600;
-            color: var(--text-primary);
-            font-size: var(--text-sm);
-        }
-
-        .form-group input {
-            padding: var(--space-md);
-            border: 2px solid var(--border-color);
-            border-radius: var(--radius-lg);
-            font-size: var(--text-base);
-            transition: all var(--transition-base);
-            background: white;
-        }
-
-        .form-group input:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-        }
-
-        .form-group input::placeholder {
-            color: var(--text-light);
-        }
-
-        .auth-actions {
-            display: flex;
-            flex-direction: column;
-            gap: var(--space-md);
-        }
-
-        .divider {
-            text-align: center;
-            color: var(--text-secondary);
-            font-size: var(--text-sm);
-            position: relative;
-            margin: var(--space-lg) 0;
-        }
-
-        .divider::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: var(--border-color);
-            z-index: 1;
-        }
-
-        .divider span {
-            background: white;
-            padding: 0 var(--space-md);
-            position: relative;
-            z-index: 2;
-        }
-
-        .login-link {
-            text-align: center;
-            color: var(--text-secondary);
-            font-size: var(--text-sm);
-        }
-
-        .login-link a {
-            color: var(--primary-color);
-            text-decoration: none;
-            font-weight: 600;
-            transition: color var(--transition-base);
-        }
-
-        .login-link a:hover {
-            color: var(--primary-dark);
-        }
-
-        .back-home {
-            position: absolute;
-            top: var(--space-lg);
-            left: var(--space-lg);
-            color: white;
-            text-decoration: none;
-            font-size: var(--text-sm);
-            font-weight: 500;
-            transition: all var(--transition-base);
-            z-index: 10;
-        }
-
-        .back-home:hover {
-            color: var(--accent-light);
-            transform: translateX(-4px);
-        }
-    </style>
 </head>
 
 <body>
-    <!-- Back to Home Link -->
-    <a href="{{ url_for('index') }}" class="back-home">
-        <i class="fa fa-arrow-left" style="margin-right: 8px;"></i>
-        Back to Home
-    </a>
-
-    <div class="auth-container">
-        <!-- Auth Header -->
-        <div class="auth-header">
-            <h1>
-                <i class="fa fa-heartbeat" style="margin-right: 12px;"></i>
-                HealthGuard
-            </h1>
-            <p>Create your account to start your health journey.</p>
-        </div>
-
-        <!-- Auth Box -->
-        <div class="auth-box">
-            <h2 class="auth-title">
-                <i class="fa fa-user-plus" style="margin-right: 8px; color: var(--secondary-color);"></i>
-                Create Account
-            </h2>
-            
-            <!-- Registration Form -->
-            <form action="{{ url_for('register') }}" method="POST" class="auth-form">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="name">
-                            <i class="fa fa-user" style="margin-right: 4px;"></i>
-                            Full Name
-                        </label>
-                        <input type="text" id="name" name="name" placeholder="Enter your full name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="age">
-                            <i class="fa fa-calendar" style="margin-right: 4px;"></i>
-                            Age
-                        </label>
-                        <input type="number" id="age" name="age" placeholder="Enter your age" required min="1" max="120">
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label for="email">
-                        <i class="fa fa-envelope" style="margin-right: 4px;"></i>
-                        Email Address
-                    </label>
-                    <input type="email" id="email" name="email" placeholder="Enter your email address" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="mobile_number">
-                        <i class="fa fa-phone" style="margin-right: 4px;"></i>
-                        Mobile Number
-                    </label>
-                    <input type="tel" id="mobile_number" name="mobile_number" placeholder="Enter your mobile number" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="password">
-                        <i class="fa fa-lock" style="margin-right: 4px;"></i>
-                        Password
-                    </label>
-                    <input type="password" id="password" name="password" placeholder="Create a strong password" required>
-                </div>
-                
-                <div class="auth-actions">
-                    <button type="submit" class="btn-modern btn-secondary w-full">
-                        <i class="fa fa-rocket" style="margin-right: 8px;"></i>
-                        Create Account
-                    </button>
-                </div>
-            </form>
-            
-            <div class="divider">
-                <span>Already have an account?</span>
-            </div>
-            
-            <div class="login-link">
-                Welcome back! 
-                <a href="{{ url_for('login') }}">
-                    <i class="fa fa-sign-in" style="margin-right: 4px;"></i>
-                    Sign in to your account
-                </a>
-            </div>
-        </div>
+  <!-- Enhanced Auth Background -->
+  <div class="hero-modern" style="min-height: 100vh; display: flex; align-items: center; justify-content: center; position: relative;">
+    <div class="floating-shapes">
+      <div class="shape"></div>
+      <div class="shape"></div>
+      <div class="shape"></div>
     </div>
 
-    <script src="{{ url_for('static', filename='js/jquery-3.4.1.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/bootstrap.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/custom.js') }}"></script>
+    <!-- Back to Home Link -->
+    <a href="{{ url_for('index') }}" style="position: absolute; top: var(--space-xl); left: var(--space-xl); color: white; text-decoration: none; font-size: var(--text-base); font-weight: 500; transition: all var(--transition-base); z-index: 10; display: flex; align-items: center; gap: var(--space-sm); padding: var(--space-sm) var(--space-md); background: rgba(255, 255, 255, 0.1); border-radius: var(--radius-lg); backdrop-filter: blur(10px);">
+      <i class="fa fa-arrow-left"></i>
+      Back to Home
+    </a>
+
+    <div style="width: 100%; max-width: 580px; padding: 0 var(--space-lg); z-index: 3; position: relative;">
+      <!-- Auth Header -->
+      <div style="text-align: center; margin-bottom: var(--space-2xl); color: white;">
+        <div style="display: flex; align-items: center; justify-content: center; gap: var(--space-md); margin-bottom: var(--space-lg);">
+          <div style="width: 60px; height: 60px; background: rgba(255, 255, 255, 0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(10px);">
+            <i class="fa fa-heartbeat" style="font-size: 24px; color: white;"></i>
+          </div>
+          <h1 style="font-size: var(--text-3xl); font-weight: 700; margin: 0; font-family: 'Playfair Display', serif;">
+            HealthGuard
+          </h1>
+        </div>
+        <p style="font-size: var(--text-lg); opacity: 0.9; margin: 0;">
+          Create your account to start your health journey.
+        </p>
+      </div>
+
+      <!-- Auth Box -->
+      <div style="background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px); padding: var(--space-2xl); border-radius: var(--radius-2xl); box-shadow: var(--shadow-2xl); border: 1px solid rgba(255, 255, 255, 0.2);">
+        <div style="text-align: center; margin-bottom: var(--space-xl);">
+          <div style="display: inline-flex; align-items: center; gap: var(--space-sm); color: var(--secondary-color); font-size: var(--text-2xl); font-weight: 600; font-family: 'Playfair Display', serif;">
+            <i class="fa fa-user-plus"></i>
+            Create Account
+          </div>
+        </div>
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="alert-modern alert-error" style="margin-bottom: var(--space-lg); display: flex; align-items: center; gap: var(--space-sm);">
+                <i class="fa fa-exclamation-triangle"></i>
+                {{ message }}
+              </div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        <!-- Registration Form -->
+        <form action="{{ url_for('register') }}" method="POST" class="form-modern">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-lg); margin-bottom: var(--space-lg);">
+            <div class="form-group-modern">
+              <label class="form-label-modern">
+                <i class="fa fa-user" style="margin-right: 4px; color: var(--secondary-color);"></i>
+                Full Name
+              </label>
+              <input type="text" name="name" class="form-input-modern" placeholder="Enter your full name" required>
+            </div>
+            <div class="form-group-modern">
+              <label class="form-label-modern">
+                <i class="fa fa-calendar" style="margin-right: 4px; color: var(--secondary-color);"></i>
+                Age
+              </label>
+              <input type="number" name="age" class="form-input-modern" placeholder="Enter your age" required min="1" max="120">
+            </div>
+          </div>
+
+          <div class="form-group-modern">
+            <label class="form-label-modern">
+              <i class="fa fa-envelope" style="margin-right: 4px; color: var(--secondary-color);"></i>
+              Email Address
+            </label>
+            <input type="email" name="email" class="form-input-modern" placeholder="Enter your email address" required>
+          </div>
+
+          <div class="form-group-modern">
+            <label class="form-label-modern">
+              <i class="fa fa-phone" style="margin-right: 4px; color: var(--secondary-color);"></i>
+              Mobile Number
+            </label>
+            <input type="tel" name="mobile_number" class="form-input-modern" placeholder="Enter your mobile number" required>
+          </div>
+
+          <div class="form-group-modern">
+            <label class="form-label-modern">
+              <i class="fa fa-lock" style="margin-right: 4px; color: var(--secondary-color);"></i>
+              Password
+            </label>
+            <input type="password" name="password" class="form-input-modern" placeholder="Create a strong password" required minlength="6">
+            <div style="font-size: var(--text-xs); color: var(--text-secondary); margin-top: var(--space-xs);">
+              Minimum 6 characters required
+            </div>
+          </div>
+
+          <!-- Terms and Privacy -->
+          <div style="margin-bottom: var(--space-lg);">
+            <label style="display: flex; align-items: flex-start; gap: var(--space-sm); font-size: var(--text-sm); color: var(--text-secondary); cursor: pointer;">
+              <input type="checkbox" required style="margin-top: 2px;">
+              <span>
+                I agree to the
+                <a href="#" style="color: var(--primary-color); text-decoration: none;">Terms of Service</a>
+                and
+                <a href="#" style="color: var(--primary-color); text-decoration: none;">Privacy Policy</a>
+              </span>
+            </label>
+          </div>
+
+          <button type="submit" class="btn-modern btn-secondary w-full" style="margin-bottom: var(--space-lg);">
+            <i class="fa fa-rocket" style="margin-right: 8px;"></i>
+            Create Account
+          </button>
+        </form>
+
+        <div style="text-align: center; color: var(--text-secondary); font-size: var(--text-sm); position: relative; margin: var(--space-lg) 0;">
+          <div style="position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: var(--border-color); z-index: 1;"></div>
+          <span style="background: white; padding: 0 var(--space-md); position: relative; z-index: 2;">
+            Already have an account?
+          </span>
+        </div>
+
+        <div style="text-align: center;">
+          <a href="{{ url_for('login') }}" class="btn-modern btn-outline w-full">
+            <i class="fa fa-sign-in" style="margin-right: 8px;"></i>
+            Sign In Instead
+          </a>
+        </div>
+
+        <!-- Security Notice -->
+        <div style="margin-top: var(--space-xl); padding: var(--space-md); background: rgba(16, 185, 129, 0.05); border-radius: var(--radius-lg); border: 1px solid rgba(16, 185, 129, 0.1);">
+          <p style="color: var(--text-secondary); font-size: var(--text-xs); margin: 0; text-align: center;">
+            <i class="fa fa-shield" style="margin-right: 4px; color: var(--success);"></i>
+            Your personal information is encrypted and stored securely
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/jquery-3.4.1.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/bootstrap.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/custom.js') }}"></script>
+
+  <script>
+    // Enhanced form interactions
+    document.querySelectorAll('.form-input-modern').forEach(input => {
+      input.addEventListener('focus', function() {
+        this.parentElement.style.transform = 'translateY(-2px)';
+        this.style.borderColor = 'var(--secondary-color)';
+      });
+
+      input.addEventListener('blur', function() {
+        this.parentElement.style.transform = 'translateY(0)';
+        if (!this.value) {
+          this.style.borderColor = 'var(--border-color)';
+        }
+      });
+    });
+
+    // Password strength indicator
+    const passwordInput = document.querySelector('input[name="password"]');
+    const strengthIndicator = document.createElement('div');
+    strengthIndicator.style.cssText = `
+      height: 4px;
+      background: var(--border-color);
+      border-radius: var(--radius-sm);
+      margin-top: var(--space-xs);
+      transition: all var(--transition-base);
+    `;
+    passwordInput.parentElement.appendChild(strengthIndicator);
+
+    passwordInput.addEventListener('input', function() {
+      const password = this.value;
+      let strength = 0;
+
+      if (password.length >= 6) strength++;
+      if (password.match(/[a-z]/)) strength++;
+      if (password.match(/[A-Z]/)) strength++;
+      if (password.match(/[0-9]/)) strength++;
+      if (password.match(/[^a-zA-Z0-9]/)) strength++;
+
+      const colors = ['#ef4444', '#f59e0b', '#eab308', '#22c55e', '#16a34a'];
+      const widths = ['20%', '40%', '60%', '80%', '100%'];
+
+      strengthIndicator.style.background = colors[strength - 1] || '#ef4444';
+      strengthIndicator.style.width = widths[strength - 1] || '0%';
+    });
+
+    // Loading state for form submission
+    document.querySelector('form').addEventListener('submit', function(e) {
+      const submitBtn = this.querySelector('button[type="submit"]');
+      const originalText = submitBtn.innerHTML;
+
+      submitBtn.innerHTML = '<span class="spinner"></span> Creating Account...';
+      submitBtn.disabled = true;
+
+      // Re-enable after 3 seconds in case of error
+      setTimeout(() => {
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+      }, 3000);
+    });
+
+    // Mobile responsive grid
+    function handleResize() {
+      const formGrid = document.querySelector('form > div[style*="grid-template-columns"]');
+      if (window.innerWidth <= 640) {
+        formGrid.style.gridTemplateColumns = '1fr';
+      } else {
+        formGrid.style.gridTemplateColumns = '1fr 1fr';
+      }
+    }
+
+    window.addEventListener('resize', handleResize);
+    handleResize();
+  </script>
 </body>
 </html>

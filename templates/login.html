@@ -10,267 +10,151 @@
   <link href="{{ url_for('static', filename='css/font-awesome.min.css') }}" rel="stylesheet"/>
   <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet"/>
   <link href="{{ url_for('static', filename='css/responsive.css') }}" rel="stylesheet"/>
-  <style>
-    body {
-      font-family: "Inter", "Poppins", sans-serif;
-      background: var(--gradient-hero);
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0;
-      padding: var(--space-lg);
-    }
-
-    .auth-container {
-      width: 100%;
-      max-width: 450px;
-      animation: fadeInUp 0.8s ease-out;
-    }
-
-    .auth-header {
-      text-align: center;
-      margin-bottom: var(--space-2xl);
-      color: white;
-    }
-
-    .auth-header h1 {
-      font-size: var(--text-3xl);
-      font-weight: 700;
-      margin-bottom: var(--space-sm);
-      font-family: 'Playfair Display', serif;
-    }
-
-    .auth-header p {
-      font-size: var(--text-lg);
-      opacity: 0.9;
-    }
-
-    .auth-box {
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(10px);
-      padding: var(--space-2xl);
-      border-radius: var(--radius-2xl);
-      box-shadow: var(--shadow-2xl);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-    }
-
-    .auth-title {
-      text-align: center;
-      font-size: var(--text-2xl);
-      font-weight: 600;
-      color: var(--text-primary);
-      margin-bottom: var(--space-xl);
-      font-family: 'Playfair Display', serif;
-    }
-
-    .auth-form {
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-lg);
-    }
-
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-sm);
-    }
-
-    .form-group label {
-      font-weight: 600;
-      color: var(--text-primary);
-      font-size: var(--text-sm);
-    }
-
-    .form-group input {
-      padding: var(--space-md);
-      border: 2px solid var(--border-color);
-      border-radius: var(--radius-lg);
-      font-size: var(--text-base);
-      transition: all var(--transition-base);
-      background: white;
-    }
-
-    .form-group input:focus {
-      outline: none;
-      border-color: var(--primary-color);
-      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-    }
-
-    .form-group input::placeholder {
-      color: var(--text-light);
-    }
-
-    .forgot-password {
-      text-align: right;
-      margin-top: calc(-1 * var(--space-sm));
-    }
-
-    .forgot-password a {
-      color: var(--primary-color);
-      text-decoration: none;
-      font-size: var(--text-sm);
-      font-weight: 500;
-      transition: color var(--transition-base);
-    }
-
-    .forgot-password a:hover {
-      color: var(--primary-dark);
-    }
-
-    .auth-actions {
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-md);
-    }
-
-    .divider {
-      text-align: center;
-      color: var(--text-secondary);
-      font-size: var(--text-sm);
-      position: relative;
-      margin: var(--space-lg) 0;
-    }
-
-    .divider::before {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: 0;
-      right: 0;
-      height: 1px;
-      background: var(--border-color);
-      z-index: 1;
-    }
-
-    .divider span {
-      background: white;
-      padding: 0 var(--space-md);
-      position: relative;
-      z-index: 2;
-    }
-
-    .register-link {
-      text-align: center;
-      color: var(--text-secondary);
-      font-size: var(--text-sm);
-    }
-
-    .register-link a {
-      color: var(--primary-color);
-      text-decoration: none;
-      font-weight: 600;
-      transition: color var(--transition-base);
-    }
-
-    .register-link a:hover {
-      color: var(--primary-dark);
-    }
-
-    .back-home {
-      position: absolute;
-      top: var(--space-lg);
-      left: var(--space-lg);
-      color: white;
-      text-decoration: none;
-      font-size: var(--text-sm);
-      font-weight: 500;
-      transition: all var(--transition-base);
-      z-index: 10;
-    }
-
-    .back-home:hover {
-      color: var(--accent-light);
-      transform: translateX(-4px);
-    }
-  </style>
 </head>
 
 <body>
-  <!-- Back to Home Link -->
-  <a href="{{ url_for('index') }}" class="back-home">
-    <i class="fa fa-arrow-left" style="margin-right: 8px;"></i>
-    Back to Home
-  </a>
-
-  <div class="auth-container">
-    <!-- Auth Header -->
-    <div class="auth-header">
-      <h1>
-        <i class="fa fa-heartbeat" style="margin-right: 12px;"></i>
-        HealthGuard
-      </h1>
-      <p>Welcome back! Please sign in to your account.</p>
+  <!-- Enhanced Auth Background -->
+  <div class="hero-modern" style="min-height: 100vh; display: flex; align-items: center; justify-content: center; position: relative;">
+    <div class="floating-shapes">
+      <div class="shape"></div>
+      <div class="shape"></div>
+      <div class="shape"></div>
     </div>
 
-    <!-- Auth Box -->
-    <div class="auth-box">
-      <h2 class="auth-title">
-        <i class="fa fa-user-circle" style="margin-right: 8px; color: var(--primary-color);"></i>
-        Patient Login
-      </h2>
-      
-      <!-- Flash Messages -->
-      {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-          {% for category, message in messages %}
-            <div class="alert-modern alert-error" style="margin-bottom: var(--space-lg);">
-              <i class="fa fa-exclamation-triangle" style="margin-right: 8px;"></i>
-              {{ message }}
-            </div>
-          {% endfor %}
-        {% endif %}
-      {% endwith %}
-      
-      <!-- Login Form -->
-      <form action="{{ url_for('login') }}" method="post" class="auth-form">
-        <div class="form-group">
-          <label for="email">
-            <i class="fa fa-envelope" style="margin-right: 4px;"></i>
-            Email Address
-          </label>
-          <input type="email" id="email" name="email" placeholder="Enter your email address" required />
+    <!-- Back to Home Link -->
+    <a href="{{ url_for('index') }}" style="position: absolute; top: var(--space-xl); left: var(--space-xl); color: white; text-decoration: none; font-size: var(--text-base); font-weight: 500; transition: all var(--transition-base); z-index: 10; display: flex; align-items: center; gap: var(--space-sm); padding: var(--space-sm) var(--space-md); background: rgba(255, 255, 255, 0.1); border-radius: var(--radius-lg); backdrop-filter: blur(10px);">
+      <i class="fa fa-arrow-left"></i>
+      Back to Home
+    </a>
+
+    <div style="width: 100%; max-width: 480px; padding: 0 var(--space-lg); z-index: 3; position: relative;">
+      <!-- Auth Header -->
+      <div style="text-align: center; margin-bottom: var(--space-2xl); color: white;">
+        <div style="display: flex; align-items: center; justify-content: center; gap: var(--space-md); margin-bottom: var(--space-lg);">
+          <div style="width: 60px; height: 60px; background: rgba(255, 255, 255, 0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(10px);">
+            <i class="fa fa-heartbeat" style="font-size: 24px; color: white;"></i>
+          </div>
+          <h1 style="font-size: var(--text-3xl); font-weight: 700; margin: 0; font-family: 'Playfair Display', serif;">
+            HealthGuard
+          </h1>
         </div>
-        
-        <div class="form-group">
-          <label for="password">
-            <i class="fa fa-lock" style="margin-right: 4px;"></i>
-            Password
-          </label>
-          <input type="password" id="password" name="password" placeholder="Enter your password" required />
+        <p style="font-size: var(--text-lg); opacity: 0.9; margin: 0;">
+          Welcome back! Please sign in to your account.
+        </p>
+      </div>
+
+      <!-- Auth Box -->
+      <div style="background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px); padding: var(--space-2xl); border-radius: var(--radius-2xl); box-shadow: var(--shadow-2xl); border: 1px solid rgba(255, 255, 255, 0.2);">
+        <div style="text-align: center; margin-bottom: var(--space-xl);">
+          <div style="display: inline-flex; align-items: center; gap: var(--space-sm); color: var(--primary-color); font-size: var(--text-2xl); font-weight: 600; font-family: 'Playfair Display', serif;">
+            <i class="fa fa-user-circle"></i>
+            Patient Login
+          </div>
         </div>
-        
-        <div class="forgot-password">
-          <a href="{{ url_for('forgot_password') }}">
-            <i class="fa fa-question-circle" style="margin-right: 4px;"></i>
-            Forgot your password?
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="alert-modern alert-error" style="margin-bottom: var(--space-lg); display: flex; align-items: center; gap: var(--space-sm);">
+                <i class="fa fa-exclamation-triangle"></i>
+                {{ message }}
+              </div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        <!-- Login Form -->
+        <form action="{{ url_for('login') }}" method="post" class="form-modern">
+          <div class="form-group-modern">
+            <label class="form-label-modern">
+              <i class="fa fa-envelope" style="margin-right: 4px; color: var(--primary-color);"></i>
+              Email Address
+            </label>
+            <input type="email" name="email" class="form-input-modern" placeholder="Enter your email address" required />
+          </div>
+
+          <div class="form-group-modern">
+            <label class="form-label-modern">
+              <i class="fa fa-lock" style="margin-right: 4px; color: var(--primary-color);"></i>
+              Password
+            </label>
+            <input type="password" name="password" class="form-input-modern" placeholder="Enter your password" required />
+          </div>
+
+          <div style="text-align: right; margin-bottom: var(--space-lg);">
+            <a href="{{ url_for('forgot_password') }}" style="color: var(--primary-color); text-decoration: none; font-size: var(--text-sm); font-weight: 500; transition: color var(--transition-base);">
+              <i class="fa fa-question-circle" style="margin-right: 4px;"></i>
+              Forgot your password?
+            </a>
+          </div>
+
+          <button type="submit" class="btn-modern btn-primary w-full" style="margin-bottom: var(--space-lg);">
+            <i class="fa fa-sign-in" style="margin-right: 8px;"></i>
+            Sign In to Dashboard
+          </button>
+        </form>
+
+        <div style="text-align: center; color: var(--text-secondary); font-size: var(--text-sm); position: relative; margin: var(--space-lg) 0;">
+          <div style="position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: var(--border-color); z-index: 1;"></div>
+          <span style="background: white; padding: 0 var(--space-md); position: relative; z-index: 2;">
+            Don't have an account?
+          </span>
+        </div>
+
+        <div style="text-align: center;">
+          <a href="{{ url_for('register') }}" class="btn-modern btn-outline w-full">
+            <i class="fa fa-user-plus" style="margin-right: 8px;"></i>
+            Create New Account
           </a>
         </div>
-        
-        <div class="auth-actions">
-          <button type="submit" class="btn-modern btn-primary w-full">
-            <i class="fa fa-sign-in" style="margin-right: 8px;"></i>
-            Sign In
-          </button>
+
+        <!-- Security Notice -->
+        <div style="margin-top: var(--space-xl); padding: var(--space-md); background: rgba(37, 99, 235, 0.05); border-radius: var(--radius-lg); border: 1px solid rgba(37, 99, 235, 0.1);">
+          <p style="color: var(--text-secondary); font-size: var(--text-xs); margin: 0; text-align: center;">
+            <i class="fa fa-shield" style="margin-right: 4px; color: var(--success);"></i>
+            Your data is protected with enterprise-grade security and HIPAA compliance
+          </p>
         </div>
-      </form>
-      
-      <div class="divider">
-        <span>Don't have an account?</span>
-      </div>
-      
-      <div class="register-link">
-        New to HealthGuard? 
-        <a href="{{ url_for('register') }}">
-          <i class="fa fa-user-plus" style="margin-right: 4px;"></i>
-          Create an account
-        </a>
       </div>
     </div>
   </div>
-    
+
   <script src="{{ url_for('static', filename='js/jquery-3.4.1.min.js') }}"></script>
   <script src="{{ url_for('static', filename='js/bootstrap.js') }}"></script>
   <script src="{{ url_for('static', filename='js/custom.js') }}"></script>
+
+  <script>
+    // Enhanced form interactions
+    document.querySelectorAll('.form-input-modern').forEach(input => {
+      input.addEventListener('focus', function() {
+        this.parentElement.style.transform = 'translateY(-2px)';
+      });
+
+      input.addEventListener('blur', function() {
+        this.parentElement.style.transform = 'translateY(0)';
+      });
+    });
+
+    // Loading state for form submission
+    document.querySelector('form').addEventListener('submit', function(e) {
+      const submitBtn = this.querySelector('button[type="submit"]');
+      const originalText = submitBtn.innerHTML;
+
+      submitBtn.innerHTML = '<span class="spinner"></span> Signing In...';
+      submitBtn.disabled = true;
+
+      // Re-enable after 3 seconds in case of error
+      setTimeout(() => {
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+      }, 3000);
+    });
+
+    // Floating shapes animation
+    document.querySelectorAll('.shape').forEach((shape, index) => {
+      shape.style.animationDelay = `${index * 2}s`;
+    });
+  </script>
 </body>
 </html>

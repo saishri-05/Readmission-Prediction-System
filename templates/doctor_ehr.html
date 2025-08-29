@@ -1,52 +1,255 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="utf-8"/>
-  <title>Doctor EHR Approvals</title>
-  <style>
-    body{font-family:Arial;background:#f4f7f9;margin:0;padding:20px}
-    h1{color:#0a3d62}
-    table{width:100%;border-collapse:collapse;background:#fff;box-shadow:0 8px 24px rgba(0,0,0,.08)}
-    th,td{padding:10px;border:1px solid #ddd;text-align:left;white-space:nowrap}
-    th{background:#0a3d62;color:#fff}
-    form.inline{display:inline}
-    button{padding:6px 12px;margin:2px;border:none;border-radius:4px;cursor:pointer}
-    .approve{background:#2e7d32;color:#fff}
-    .reject{background:#c62828;color:#fff}
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="icon" href="{{ url_for('static', filename='images/main.jpg') }}" type="image/gif">
+  <title>EHR Approvals - HealthGuard</title>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+  <link href="{{ url_for('static', filename='css/font-awesome.min.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static', filename='css/responsive.css') }}" rel="stylesheet">
 </head>
 <body>
-  <h1>EHR Requests Assigned To Me</h1>
-  <table>
-    <tr>
-      <th>ID</th><th>Created</th><th>Hospital</th><th>Type</th><th>Details</th>
-      <th>Status</th><th>Patient</th><th>Action</th>
-    </tr>
-    {% for r in rows %}
-      <tr>
-        <td>{{ r["ehr_id"] }}</td>
-        <td>{{ r["created_at"] }}</td>
-        <td>{{ r["hospital_name"] }}</td>
-        <td>{{ r["request_type"] }}</td>
-        <td>{{ r["details"] or '' }}</td>
-        <td>{{ r["status"] }}</td>
-        <td>{{ r["patient_user_id"] or '-' }}</td>
-        <td>
-          {% if r["status"] == 'PENDING' %}
-            <form class="inline" method="post" action="{{ url_for('doctor_ehr_action', ehr_id=r['ehr_id']) }}">
-              <input type="hidden" name="action" value="APPROVE">
-              <button class="approve" type="submit">Approve</button>
-            </form>
-            <form class="inline" method="post" action="{{ url_for('doctor_ehr_action', ehr_id=r['ehr_id']) }}">
-              <input type="hidden" name="action" value="REJECT">
-              <button class="reject" type="submit">Reject</button>
-            </form>
-          {% else %}
-            -
-          {% endif %}
-        </td>
-      </tr>
-    {% endfor %}
-  </table>
+  <!-- Modern Navigation -->
+  <nav class="nav-modern">
+    <div class="nav-container">
+      <a href="{{ url_for('index') }}" class="nav-brand">
+        <i class="fa fa-heartbeat" style="margin-right: 8px;"></i>
+        HealthGuard
+      </a>
+      <div class="nav-links">
+        <a href="{{ url_for('doctor_home') }}" class="nav-link">
+          <i class="fa fa-home" style="margin-right: 4px;"></i>
+          Dashboard
+        </a>
+        <a href="{{ url_for('doctor_reports') }}" class="nav-link">
+          <i class="fa fa-clipboard" style="margin-right: 4px;"></i>
+          Patient Reports
+        </a>
+        <a href="{{ url_for('doctor_logout') }}" class="btn-modern btn-outline btn-sm">
+          <i class="fa fa-sign-out" style="margin-right: 4px;"></i>
+          Logout
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Dashboard Content -->
+  <div class="dashboard-container animate-fadeIn">
+    <!-- Enhanced Header -->
+    <div class="dashboard-header">
+      <div style="width: 100px; height: 100px; background: var(--gradient-secondary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto var(--space-xl); box-shadow: var(--shadow-xl);">
+        <i class="fa fa-file-text-o" style="font-size: 40px; color: white;"></i>
+      </div>
+      <h1 class="dashboard-title animate-fadeInUp">
+        EHR Request Approvals
+      </h1>
+      <p class="dashboard-subtitle animate-fadeInUp" style="animation-delay: 0.2s;">
+        Review and approve Electronic Health Record requests assigned to you for patient care coordination.
+      </p>
+    </div>
+
+    {% if rows %}
+    <!-- Summary Stats -->
+    <div class="grid-modern grid-3 animate-fadeInUp" style="animation-delay: 0.4s; margin-bottom: var(--space-2xl);">
+      <div class="card-modern text-center">
+        <div style="background: var(--gradient-primary); color: white; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto var(--space-md); font-size: 18px;">
+          <i class="fa fa-file-text-o"></i>
+        </div>
+        <h3 class="card-title" style="color: var(--primary-color); margin-bottom: var(--space-sm); font-size: var(--text-lg);">Total Requests</h3>
+        <div style="font-size: var(--text-2xl); font-weight: 700; color: var(--text-primary);">{{ rows|length }}</div>
+      </div>
+      <div class="card-modern text-center">
+        <div style="background: var(--gradient-secondary); color: white; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto var(--space-md); font-size: 18px;">
+          <i class="fa fa-clock-o"></i>
+        </div>
+        <h3 class="card-title" style="color: var(--warning); margin-bottom: var(--space-sm); font-size: var(--text-lg);">Pending</h3>
+        <div style="font-size: var(--text-2xl); font-weight: 700; color: var(--text-primary);">
+          {{ rows|selectattr('status', 'equalto', 'PENDING')|list|length }}
+        </div>
+      </div>
+      <div class="card-modern text-center">
+        <div style="background: var(--gradient-success); color: white; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto var(--space-md); font-size: 18px;">
+          <i class="fa fa-check-circle"></i>
+        </div>
+        <h3 class="card-title" style="color: var(--success); margin-bottom: var(--space-sm); font-size: var(--text-lg);">Approved</h3>
+        <div style="font-size: var(--text-2xl); font-weight: 700; color: var(--text-primary);">
+          {{ rows|selectattr('status', 'equalto', 'APPROVED')|list|length }}
+        </div>
+      </div>
+    </div>
+
+    <!-- EHR Requests Table -->
+    <div class="card-modern animate-fadeInUp" style="animation-delay: 0.6s; padding: 0; overflow: hidden;">
+      <div style="padding: var(--space-xl) var(--space-xl) var(--space-lg); background: var(--gradient-secondary); color: white;">
+        <h2 style="margin: 0; font-size: var(--text-xl); font-weight: 600; display: flex; align-items: center; gap: var(--space-sm);">
+          <i class="fa fa-table"></i>
+          EHR Requests Assigned To Me
+        </h2>
+      </div>
+      <div style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse; background: white;">
+          <thead>
+            <tr style="background: var(--background-secondary);">
+              <th style="padding: var(--space-md); text-align: left; font-weight: 600; color: var(--text-primary); border-bottom: 2px solid var(--border-color); white-space: nowrap;">
+                <i class="fa fa-hashtag" style="margin-right: 4px; color: var(--primary-color);"></i>
+                Request ID
+              </th>
+              <th style="padding: var(--space-md); text-align: left; font-weight: 600; color: var(--text-primary); border-bottom: 2px solid var(--border-color); white-space: nowrap;">
+                <i class="fa fa-calendar" style="margin-right: 4px; color: var(--primary-color);"></i>
+                Created
+              </th>
+              <th style="padding: var(--space-md); text-align: left; font-weight: 600; color: var(--text-primary); border-bottom: 2px solid var(--border-color); white-space: nowrap;">
+                <i class="fa fa-hospital-o" style="margin-right: 4px; color: var(--primary-color);"></i>
+                Hospital
+              </th>
+              <th style="padding: var(--space-md); text-align: left; font-weight: 600; color: var(--text-primary); border-bottom: 2px solid var(--border-color); white-space: nowrap;">Request Type</th>
+              <th style="padding: var(--space-md); text-align: left; font-weight: 600; color: var(--text-primary); border-bottom: 2px solid var(--border-color); max-width: 200px;">Details</th>
+              <th style="padding: var(--space-md); text-align: left; font-weight: 600; color: var(--text-primary); border-bottom: 2px solid var(--border-color); white-space: nowrap;">Status</th>
+              <th style="padding: var(--space-md); text-align: left; font-weight: 600; color: var(--text-primary); border-bottom: 2px solid var(--border-color); white-space: nowrap;">Patient ID</th>
+              <th style="padding: var(--space-md); text-align: left; font-weight: 600; color: var(--text-primary); border-bottom: 2px solid var(--border-color); white-space: nowrap;">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for r in rows %}
+            <tr style="border-bottom: 1px solid var(--border-light); transition: background-color var(--transition-base);" onmouseover="this.style.backgroundColor='var(--background-secondary)'" onmouseout="this.style.backgroundColor='white'">
+              <td style="padding: var(--space-md); color: var(--text-secondary); font-family: monospace; font-weight: 600;">#{{ r["ehr_id"] }}</td>
+              <td style="padding: var(--space-md); color: var(--text-primary); white-space: nowrap;">
+                <div style="font-weight: 500;">{{ r["created_at"].split(' ')[0] if r["created_at"] else 'N/A' }}</div>
+                <div style="font-size: var(--text-xs); color: var(--text-secondary);">{{ r["created_at"].split(' ')[1] if r["created_at"] and ' ' in r["created_at"] else '' }}</div>
+              </td>
+              <td style="padding: var(--space-md); color: var(--text-primary); font-weight: 500;">{{ r["hospital_name"] or 'Unknown' }}</td>
+              <td style="padding: var(--space-md);">
+                <span style="padding: var(--space-xs) var(--space-sm); background: rgba(37, 99, 235, 0.1); color: var(--primary-color); border-radius: var(--radius-md); font-size: var(--text-xs); font-weight: 600;">
+                  {{ r["request_type"] or 'General' }}
+                </span>
+              </td>
+              <td style="padding: var(--space-md); max-width: 200px; word-wrap: break-word; color: var(--text-secondary); font-size: var(--text-sm);">
+                {% if r["details"] %}
+                  {{ r["details"][:100] }}{% if r["details"]|length > 100 %}...{% endif %}
+                {% else %}
+                  <span style="color: var(--text-light); font-style: italic;">No details provided</span>
+                {% endif %}
+              </td>
+              <td style="padding: var(--space-md);">
+                {% set status_color = 'var(--warning)' if r["status"] == 'PENDING' else ('var(--success)' if r["status"] == 'APPROVED' else 'var(--error)') %}
+                <span style="padding: var(--space-xs) var(--space-sm); background: {{ 'rgba(245, 158, 11, 0.1)' if r["status"] == 'PENDING' else ('rgba(16, 185, 129, 0.1)' if r["status"] == 'APPROVED' else 'rgba(239, 68, 68, 0.1)') }}; color: {{ status_color }}; border-radius: var(--radius-md); font-size: var(--text-xs); font-weight: 600;">
+                  {{ r["status"] }}
+                </span>
+              </td>
+              <td style="padding: var(--space-md); color: var(--text-secondary); font-family: monospace;">{{ r["patient_user_id"] or '-' }}</td>
+              <td style="padding: var(--space-md);">
+                {% if r["status"] == 'PENDING' %}
+                <div style="display: flex; gap: var(--space-xs);">
+                  <form method="post" action="{{ url_for('doctor_ehr_action', ehr_id=r['ehr_id']) }}" style="display: inline;">
+                    <input type="hidden" name="action" value="APPROVE">
+                    <button type="submit" class="btn-modern btn-sm" style="background: var(--gradient-success); color: white; border: none; padding: var(--space-xs) var(--space-sm);">
+                      <i class="fa fa-check" style="margin-right: 4px;"></i>
+                      Approve
+                    </button>
+                  </form>
+                  <form method="post" action="{{ url_for('doctor_ehr_action', ehr_id=r['ehr_id']) }}" style="display: inline;">
+                    <input type="hidden" name="action" value="REJECT">
+                    <button type="submit" class="btn-modern btn-sm" style="background: linear-gradient(135deg, #ef4444 0%, #f87171 100%); color: white; border: none; padding: var(--space-xs) var(--space-sm);">
+                      <i class="fa fa-times" style="margin-right: 4px;"></i>
+                      Reject
+                    </button>
+                  </form>
+                </div>
+                {% else %}
+                <span style="color: var(--text-light); font-style: italic;">No action needed</span>
+                {% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    {% else %}
+    <!-- No Data State -->
+    <div class="card-modern animate-fadeInUp" style="animation-delay: 0.4s; text-align: center; padding: var(--space-3xl); background: var(--background-secondary); border: 2px dashed var(--border-color);">
+      <div style="width: 120px; height: 120px; background: var(--gradient-secondary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto var(--space-xl); opacity: 0.8;">
+        <i class="fa fa-file-text-o" style="font-size: 48px; color: white;"></i>
+      </div>
+      <h2 style="color: var(--text-primary); margin-bottom: var(--space-lg); font-size: var(--text-2xl);">No EHR Requests</h2>
+      <p style="color: var(--text-secondary); margin-bottom: var(--space-2xl); max-width: 500px; margin-left: auto; margin-right: auto; font-size: var(--text-lg);">
+        There are currently no EHR requests assigned to you for approval. New requests will appear here when hospitals submit them.
+      </p>
+      <a href="{{ url_for('doctor_home') }}" class="btn-modern btn-primary btn-lg">
+        <i class="fa fa-home" style="margin-right: 8px;"></i>
+        Back to Dashboard
+      </a>
+    </div>
+    {% endif %}
+
+    <!-- Action Buttons -->
+    <div class="animate-fadeInUp" style="animation-delay: 0.8s; text-align: center; margin-top: var(--space-2xl);">
+      <div style="display: flex; gap: var(--space-lg); justify-content: center; flex-wrap: wrap;">
+        <a href="{{ url_for('doctor_reports') }}" class="btn-modern btn-secondary btn-lg">
+          <i class="fa fa-clipboard" style="margin-right: 8px;"></i>
+          View Patient Reports
+        </a>
+        <a href="{{ url_for('doctor_home') }}" class="btn-modern btn-outline btn-lg">
+          <i class="fa fa-home" style="margin-right: 8px;"></i>
+          Back to Dashboard
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Enhanced form interactions for approval buttons
+    document.querySelectorAll('form button').forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        const action = this.closest('form').querySelector('input[name="action"]').value;
+        const originalText = this.innerHTML;
+
+        this.innerHTML = `<span class="spinner"></span> ${action === 'APPROVE' ? 'Approving' : 'Rejecting'}...`;
+        this.disabled = true;
+
+        // Disable other button in the same row
+        const otherBtn = this.closest('td').querySelector('button:not([disabled])');
+        if (otherBtn) {
+          otherBtn.disabled = true;
+          otherBtn.style.opacity = '0.5';
+        }
+      });
+    });
+
+    // Enhanced table interactions
+    document.querySelectorAll('tbody tr').forEach(row => {
+      row.addEventListener('mouseenter', function() {
+        const pendingActions = this.querySelector('td:last-child form');
+        if (pendingActions) {
+          this.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.1)';
+        }
+      });
+
+      row.addEventListener('mouseleave', function() {
+        this.style.boxShadow = 'none';
+      });
+    });
+
+    // Add loading states to navigation buttons
+    document.querySelectorAll('.btn-modern').forEach(btn => {
+      if (!btn.closest('form')) {
+        btn.addEventListener('click', function(e) {
+          if (this.href && !this.href.includes('#')) {
+            const originalText = this.innerHTML;
+            this.innerHTML = '<span class="spinner"></span> Loading...';
+            this.style.pointerEvents = 'none';
+
+            setTimeout(() => {
+              this.innerHTML = originalText;
+              this.style.pointerEvents = 'auto';
+            }, 2000);
+          }
+        });
+      }
+    });
+  </script>
 </body>
 </html>

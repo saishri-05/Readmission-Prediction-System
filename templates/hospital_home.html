@@ -1,104 +1,264 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="utf-8"/>
-  <title>Hospital Dashboard</title>
-  <style>
-    body{font-family:Arial,Helvetica,sans-serif;background:#f4f7f9;margin:0;padding:20px}
-    h1{color:#0a3d62;margin:0 0 10px}
-    .sub{color:#335; margin:0 0 18px}
-    .cards{display:flex;gap:16px;flex-wrap:wrap;margin:12px 0 22px}
-    .card{background:#fff;padding:16px 18px;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.08);min-width:230px}
-    .card .k{color:#556; font-size:12px; letter-spacing:.3px; text-transform:uppercase}
-    .card .v{font-size:26px;margin-top:6px}
-    .delta{display:flex;align-items:center;gap:8px;margin-top:4px;font-size:14px}
-    .delta.up{color:#c62828}
-    .delta.down{color:#2e7d32}
-    .delta.flat{color:#6c757d}
-    .btns{margin:4px 0 18px}
-    .btn{display:inline-block;margin:6px 10px 0 0;padding:10px 16px;background:#0a3d62;color:#fff;text-decoration:none;border-radius:8px}
-    .btn:hover{background:#073d52}
-    table{width:100%;border-collapse:collapse;background:#fff;box-shadow:0 8px 24px rgba(0,0,0,.08);border-radius:10px;overflow:hidden}
-    th,td{padding:12px 14px;border-bottom:1px solid #eee;text-align:left;white-space:nowrap}
-    th{background:#0a3d62;color:#fff;font-weight:600}
-    tr:nth-child(even){background:#fafafa}
-    .muted{color:#6b7280}
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="icon" href="{{ url_for('static', filename='images/main.jpg') }}" type="image/gif">
+  <title>Hospital Dashboard - HealthGuard</title>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+  <link href="{{ url_for('static', filename='css/font-awesome.min.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static', filename='css/responsive.css') }}" rel="stylesheet">
 </head>
 <body>
-  <h1>{{ hospital_name }} — Monthly Cost Analysis</h1>
-  <p class="sub muted">Track spending trends, compare with last month, and monitor reductions.</p>
-
-  <div class="cards">
-    <div class="card">
-      <div class="k">Current Month</div>
-      <div class="v">{{ current_month or '-' }}</div>
-      <div class="k" style="margin-top:8px">Total Cost</div>
-      <div class="v">
-        {% if current_cost is not none %}₹{{ '%.2f' % current_cost }}{% else %}-{% endif %}
+  <!-- Modern Navigation -->
+  <nav class="nav-modern">
+    <div class="nav-container">
+      <a href="{{ url_for('index') }}" class="nav-brand">
+        <i class="fa fa-heartbeat" style="margin-right: 8px;"></i>
+        HealthGuard
+      </a>
+      <div class="nav-links">
+        <span style="color: var(--text-secondary); margin-right: var(--space-md); font-weight: 500;">{{ hospital_name }}</span>
+        <a href="{{ url_for('hospital_logout') }}" class="btn-modern btn-outline btn-sm">
+          <i class="fa fa-sign-out" style="margin-right: 4px;"></i>
+          Logout
+        </a>
       </div>
     </div>
+  </nav>
 
-    <div class="card">
-      <div class="k">Previous Month</div>
-      <div class="v">{{ previous_month or '-' }}</div>
-      <div class="k" style="margin-top:8px">Total Cost</div>
-      <div class="v">
-        {% if prev_cost is not none %}₹{{ '%.2f' % prev_cost }}{% else %}-{% endif %}
+  <!-- Dashboard Content -->
+  <div class="dashboard-container animate-fadeIn">
+    <!-- Enhanced Header -->
+    <div class="dashboard-header">
+      <div style="width: 100px; height: 100px; background: var(--gradient-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto var(--space-xl); box-shadow: var(--shadow-xl);">
+        <i class="fa fa-hospital-o" style="font-size: 40px; color: white;"></i>
       </div>
+      <h1 class="dashboard-title animate-fadeInUp">
+        {{ hospital_name }} Dashboard
+      </h1>
+      <p class="dashboard-subtitle animate-fadeInUp" style="animation-delay: 0.2s;">
+        Monitor monthly costs, track spending trends, and manage hospital operations with comprehensive analytics.
+      </p>
     </div>
 
-    <div class="card">
-      <div class="k">Change vs Previous</div>
-      {% if delta is not none %}
-        <div class="v">
-          {% set cls = 'flat' %}
-          {% if trend == 'down' %}{% set cls = 'down' %}{% elif trend == 'up' %}{% set cls = 'up' %}{% endif %}
-          <div class="delta {{ cls }}">
-            <span>
-              ₹{{ '%.2f' % delta }}
-              {% if delta_pct is not none %} ({{ '%.2f' % delta_pct }}%){% endif %}
-            </span>
-            {% if trend == 'down' %}⬇️ Saving
-            {% elif trend == 'up' %}⬆️ Increase
-            {% else %}→ No Change{% endif %}
+    <!-- Cost Analysis Cards -->
+    <div class="grid-modern grid-3 animate-fadeInUp" style="animation-delay: 0.4s; margin-bottom: var(--space-3xl);">
+      <div class="card-modern" style="background: var(--gradient-primary); color: white; min-height: 200px; display: flex; flex-direction: column; justify-content: space-between;">
+        <div>
+          <div style="display: flex; align-items: center; justify-content: center; width: 60px; height: 60px; background: rgba(255,255,255,0.2); border-radius: 50%; margin-bottom: var(--space-lg); backdrop-filter: blur(10px);">
+            <i class="fa fa-calendar" style="font-size: 24px; color: white;"></i>
           </div>
+          <h3 style="margin: 0 0 var(--space-sm) 0; font-size: var(--text-lg); opacity: 0.9;">Current Month</h3>
+          <div style="font-size: var(--text-base); opacity: 0.8; margin-bottom: var(--space-md);">{{ current_month or 'No data' }}</div>
         </div>
-      {% else %}
-        <div class="v">-</div>
-      {% endif %}
+        <div>
+          <div style="font-size: var(--text-2xl); font-weight: 700; margin-bottom: var(--space-xs);">
+            {% if current_cost is not none %}₹{{ '{:,.2f}'.format(current_cost) }}{% else %}₹0.00{% endif %}
+          </div>
+          <div style="font-size: var(--text-sm); opacity: 0.8;">Total Cost</div>
+        </div>
+      </div>
+
+      <div class="card-modern" style="background: var(--gradient-success); color: white; min-height: 200px; display: flex; flex-direction: column; justify-content: space-between;">
+        <div>
+          <div style="display: flex; align-items: center; justify-content: center; width: 60px; height: 60px; background: rgba(255,255,255,0.2); border-radius: 50%; margin-bottom: var(--space-lg); backdrop-filter: blur(10px);">
+            <i class="fa fa-history" style="font-size: 24px; color: white;"></i>
+          </div>
+          <h3 style="margin: 0 0 var(--space-sm) 0; font-size: var(--text-lg); opacity: 0.9;">Previous Month</h3>
+          <div style="font-size: var(--text-base); opacity: 0.8; margin-bottom: var(--space-md);">{{ previous_month or 'No data' }}</div>
+        </div>
+        <div>
+          <div style="font-size: var(--text-2xl); font-weight: 700; margin-bottom: var(--space-xs);">
+            {% if prev_cost is not none %}₹{{ '{:,.2f}'.format(prev_cost) }}{% else %}₹0.00{% endif %}
+          </div>
+          <div style="font-size: var(--text-sm); opacity: 0.8;">Total Cost</div>
+        </div>
+      </div>
+
+      <div class="card-modern" style="background: {{ 'var(--gradient-success)' if trend == 'down' else ('linear-gradient(135deg, #ef4444 0%, #f87171 100%)' if trend == 'up' else 'var(--gradient-secondary)') }}; color: white; min-height: 200px; display: flex; flex-direction: column; justify-content: space-between;">
+        <div>
+          <div style="display: flex; align-items: center; justify-content: center; width: 60px; height: 60px; background: rgba(255,255,255,0.2); border-radius: 50%; margin-bottom: var(--space-lg); backdrop-filter: blur(10px);">
+            <i class="fa fa-{{ 'arrow-down' if trend == 'down' else ('arrow-up' if trend == 'up' else 'minus') }}" style="font-size: 24px; color: white;"></i>
+          </div>
+          <h3 style="margin: 0 0 var(--space-sm) 0; font-size: var(--text-lg); opacity: 0.9;">Cost Change</h3>
+          <div style="font-size: var(--text-base); opacity: 0.8; margin-bottom: var(--space-md);">vs Previous Month</div>
+        </div>
+        <div>
+          {% if delta is not none %}
+          <div style="font-size: var(--text-xl); font-weight: 700; margin-bottom: var(--space-xs);">
+            ₹{{ '{:,.2f}'.format(delta) }}
+            {% if delta_pct is not none %} ({{ '{:.1f}'.format(delta_pct) }}%){% endif %}
+          </div>
+          <div style="font-size: var(--text-sm); opacity: 0.8;">
+            {% if trend == 'down' %}💰 Cost Savings
+            {% elif trend == 'up' %}📈 Cost Increase
+            {% else %}➡️ No Change{% endif %}
+          </div>
+          {% else %}
+          <div style="font-size: var(--text-xl); font-weight: 700; margin-bottom: var(--space-xs);">N/A</div>
+          <div style="font-size: var(--text-sm); opacity: 0.8;">Insufficient data</div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Management Tools -->
+    <div class="grid-modern grid-2 animate-fadeInUp" style="animation-delay: 0.6s; margin-bottom: var(--space-3xl);">
+      <div class="card-modern" style="background: var(--background-primary); border-left: 4px solid var(--accent-color); min-height: 250px; display: flex; flex-direction: column; justify-content: space-between;">
+        <div>
+          <div style="display: flex; align-items: center; gap: var(--space-md); margin-bottom: var(--space-lg);">
+            <div style="width: 50px; height: 50px; background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+              <i class="fa fa-dollar" style="font-size: 20px; color: white;"></i>
+            </div>
+            <h3 style="color: var(--accent-color); margin: 0; font-size: var(--text-xl); font-family: 'Playfair Display', serif;">Cost Management</h3>
+          </div>
+          <p style="color: var(--text-secondary); margin-bottom: var(--space-lg);">Track monthly expenses, analyze spending patterns, and manage hospital operational costs with detailed reporting.</p>
+        </div>
+        <a href="{{ url_for('hospital_costs') }}" class="btn-modern btn-lg" style="background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%); color: white; border: none;">
+          <i class="fa fa-chart-line" style="margin-right: 8px;"></i>
+          Manage Monthly Costs
+        </a>
+      </div>
+
+      <div class="card-modern" style="background: var(--background-primary); border-left: 4px solid var(--info); min-height: 250px; display: flex; flex-direction: column; justify-content: space-between;">
+        <div>
+          <div style="display: flex; align-items: center; gap: var(--space-md); margin-bottom: var(--space-lg);">
+            <div style="width: 50px; height: 50px; background: var(--gradient-secondary); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+              <i class="fa fa-file-text-o" style="font-size: 20px; color: white;"></i>
+            </div>
+            <h3 style="color: var(--info); margin: 0; font-size: var(--text-xl); font-family: 'Playfair Display', serif;">EHR Requests</h3>
+          </div>
+          <p style="color: var(--text-secondary); margin-bottom: var(--space-lg);">Submit and manage Electronic Health Record requests for patient data access and care coordination.</p>
+        </div>
+        <a href="{{ url_for('hospital_ehr') }}" class="btn-modern btn-secondary btn-lg">
+          <i class="fa fa-file-text-o" style="margin-right: 8px;"></i>
+          Manage EHR Requests
+        </a>
+      </div>
+    </div>
+
+    <!-- Recent Activity Table -->
+    {% if data and data|length > 0 %}
+    <div class="card-modern animate-fadeInUp" style="animation-delay: 0.8s; padding: 0; overflow: hidden;">
+      <div style="padding: var(--space-xl) var(--space-xl) var(--space-lg); background: var(--gradient-primary); color: white;">
+        <h2 style="margin: 0; font-size: var(--text-xl); font-weight: 600; display: flex; align-items: center; gap: var(--space-sm);">
+          <i class="fa fa-table"></i>
+          Recent Monthly Costs
+        </h2>
+      </div>
+      <div style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse; background: white;">
+          <thead>
+            <tr style="background: var(--background-secondary);">
+              <th style="padding: var(--space-md); text-align: left; font-weight: 600; color: var(--text-primary); border-bottom: 2px solid var(--border-color);">
+                <i class="fa fa-calendar" style="margin-right: 4px; color: var(--primary-color);"></i>
+                Month
+              </th>
+              <th style="padding: var(--space-md); text-align: left; font-weight: 600; color: var(--text-primary); border-bottom: 2px solid var(--border-color);">
+                <i class="fa fa-dollar" style="margin-right: 4px; color: var(--primary-color);"></i>
+                Total Cost
+              </th>
+              <th style="padding: var(--space-md); text-align: left; font-weight: 600; color: var(--text-primary); border-bottom: 2px solid var(--border-color);">
+                <i class="fa fa-chart-line" style="margin-right: 4px; color: var(--primary-color);"></i>
+                Trend
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for m, c in data %}
+            <tr style="border-bottom: 1px solid var(--border-light); transition: background-color var(--transition-base);" onmouseover="this.style.backgroundColor='var(--background-secondary)'" onmouseout="this.style.backgroundColor='white'">
+              <td style="padding: var(--space-md); color: var(--text-primary); font-weight: 500;">{{ m }}</td>
+              <td style="padding: var(--space-md); color: var(--text-primary); font-weight: 600; font-family: monospace;">₹{{ '{:,.2f}'.format(c) }}</td>
+              <td style="padding: var(--space-md);">
+                {% if loop.index > 1 %}
+                  {% set prev_cost = data[loop.index - 2][1] %}
+                  {% set change = c - prev_cost %}
+                  {% if change > 0 %}
+                    <span style="color: var(--error); display: flex; align-items: center; gap: var(--space-xs);">
+                      <i class="fa fa-arrow-up"></i>
+                      +₹{{ '{:,.2f}'.format(change) }}
+                    </span>
+                  {% elif change < 0 %}
+                    <span style="color: var(--success); display: flex; align-items: center; gap: var(--space-xs);">
+                      <i class="fa fa-arrow-down"></i>
+                      ₹{{ '{:,.2f}'.format(change) }}
+                    </span>
+                  {% else %}
+                    <span style="color: var(--text-secondary); display: flex; align-items: center; gap: var(--space-xs);">
+                      <i class="fa fa-minus"></i>
+                      No change
+                    </span>
+                  {% endif %}
+                {% else %}
+                  <span style="color: var(--text-light);">-</span>
+                {% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- Quick Actions -->
+    <div class="card-modern animate-fadeInUp" style="animation-delay: 1s; margin-top: var(--space-2xl); text-align: center; background: var(--background-primary); border: 2px solid var(--primary-color);">
+      <div style="margin-bottom: var(--space-lg);">
+        <div style="width: 60px; height: 60px; background: var(--gradient-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto var(--space-md);">
+          <i class="fa fa-rocket" style="font-size: 24px; color: white;"></i>
+        </div>
+        <h3 style="color: var(--primary-color); margin-bottom: var(--space-md);">Quick Actions</h3>
+        <p style="color: var(--text-secondary); margin-bottom: var(--space-lg);">Access frequently used hospital management tools and features.</p>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-md);">
+        <a href="{{ url_for('hospital_costs') }}" class="btn-modern btn-primary">
+          <i class="fa fa-plus-circle" style="margin-right: 8px;"></i>
+          Add Monthly Cost
+        </a>
+        <a href="{{ url_for('hospital_ehr') }}" class="btn-modern btn-secondary">
+          <i class="fa fa-file-text-o" style="margin-right: 8px;"></i>
+          EHR Requests
+        </a>
+        <a href="#" class="btn-modern btn-outline">
+          <i class="fa fa-chart-bar" style="margin-right: 8px;"></i>
+          Analytics
+        </a>
+        <a href="#" class="btn-modern btn-outline">
+          <i class="fa fa-cog" style="margin-right: 8px;"></i>
+          Settings
+        </a>
+      </div>
     </div>
   </div>
 
-  <div class="btns">
-    <a class="btn" href="{{ url_for('hospital_costs') }}">Manage Monthly Costs</a>
-    <a class="btn" href="{{ url_for('hospital_ehr') }}">EHR Requests</a>
-  </div>
+  <script>
+    // Add loading states to buttons
+    document.querySelectorAll('.btn-modern').forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        if (this.href && !this.href.includes('#')) {
+          const originalText = this.innerHTML;
+          this.innerHTML = '<span class="spinner"></span> Loading...';
+          this.style.pointerEvents = 'none';
 
-  <h2 class="muted" style="margin:12px 0">Recent Months</h2>
-  <div style="overflow-x:auto">
-    <table>
-      <thead>
-        <tr>
-          <th>Month</th>
-          <th>Total Cost</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% if data and data|length > 0 %}
-          {% for m, c in data %}
-            <tr>
-              <td>{{ m }}</td>
-              <td>₹{{ '%.2f' % c }}</td>
-            </tr>
-          {% endfor %}
-        {% else %}
-          <tr>
-            <td colspan="2" class="muted">No cost data yet.</td>
-          </tr>
-        {% endif %}
-      </tbody>
-    </table>
-  </div>
+          setTimeout(() => {
+            this.innerHTML = originalText;
+            this.style.pointerEvents = 'auto';
+          }, 2000);
+        }
+      });
+    });
+
+    // Enhanced table interactions
+    document.querySelectorAll('tbody tr').forEach(row => {
+      row.addEventListener('click', function() {
+        this.style.transform = 'scale(0.98)';
+        setTimeout(() => {
+          this.style.transform = 'scale(1)';
+        }, 150);
+      });
+    });
+  </script>
 </body>
 </html>

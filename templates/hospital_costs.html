@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="icon" href="{{ url_for('static', filename='images/main.jpg') }}" type="image/gif">
+  <title>Cost Management - HealthGuard</title>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+  <link href="{{ url_for('static', filename='css/font-awesome.min.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static', filename='css/responsive.css') }}" rel="stylesheet">
+</head>
+<body>
+  <!-- Modern Navigation -->
+  <nav class="nav-modern">
+    <div class="nav-container">
+      <a href="{{ url_for('index') }}" class="nav-brand">
+        <i class="fa fa-heartbeat" style="margin-right: 8px;"></i>
+        HealthGuard
+      </a>
+      <div class="nav-links">
+        <a href="{{ url_for('hospital_home') }}" class="nav-link">
+          <i class="fa fa-home" style="margin-right: 4px;"></i>
+          Dashboard
+        </a>
+        <a href="{{ url_for('hospital_ehr') }}" class="nav-link">
+          <i class="fa fa-file-text-o" style="margin-right: 4px;"></i>
+          EHR Requests
+        </a>
+        <a href="{{ url_for('hospital_logout') }}" class="btn-modern btn-outline btn-sm">
+          <i class="fa fa-sign-out" style="margin-right: 4px;"></i>
+          Logout
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Dashboard Content -->
+  <div class="dashboard-container animate-fadeIn">
+    <!-- Enhanced Header -->
+    <div class="dashboard-header">
+      <div style="width: 100px; height: 100px; background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto var(--space-xl); box-shadow: var(--shadow-xl);">
+        <i class="fa fa-dollar" style="font-size: 40px; color: white;"></i>
+      </div>
+      <h1 class="dashboard-title animate-fadeInUp">
+        Monthly Cost Management
+      </h1>
+      <p class="dashboard-subtitle animate-fadeInUp" style="animation-delay: 0.2s;">
+        Track and manage hospital operational costs with detailed monthly reporting and trend analysis.
+      </p>
+    </div>
+
+    <!-- Add New Cost Entry -->
+    <div class="card-modern animate-fadeInUp" style="animation-delay: 0.4s; margin-bottom: var(--space-2xl); background: var(--background-primary); border-left: 4px solid var(--accent-color);">
+      <div style="display: flex; align-items: center; gap: var(--space-md); margin-bottom: var(--space-xl);">
+        <div style="width: 50px; height: 50px; background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+          <i class="fa fa-plus-circle" style="font-size: 20px; color: white;"></i>
+        </div>
+        <h2 style="color: var(--accent-color); margin: 0; font-size: var(--text-xl); font-weight: 600;">Add Monthly Cost Entry</h2>
+      </div>
+
+      <form method="post" class="form-modern">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--space-lg); margin-bottom: var(--space-lg);">
+          <div class="form-group-modern">
+            <label class="form-label-modern">
+              <i class="fa fa-calendar" style="margin-right: 4px; color: var(--accent-color);"></i>
+              Month (YYYY-MM)
+            </label>
+            <input type="month" name="month" class="form-input-modern" required>
+          </div>
+
+          <div class="form-group-modern">
+            <label class="form-label-modern">
+              <i class="fa fa-dollar" style="margin-right: 4px; color: var(--accent-color);"></i>
+              Total Cost (₹)
+            </label>
+            <input type="number" name="total_cost" class="form-input-modern" step="0.01" min="0" placeholder="Enter total monthly cost" required>
+          </div>
+        </div>
+
+        <div class="form-group-modern">
+          <label class="form-label-modern">
+            <i class="fa fa-comment" style="margin-right: 4px; color: var(--accent-color);"></i>
+            Notes (Optional)
+          </label>
+          <textarea name="notes" class="form-input-modern" rows="3" placeholder="Add any additional notes about this month's costs, major expenses, or cost-saving initiatives..." style="resize: vertical;"></textarea>
+        </div>
+
+        <button type="submit" class="btn-modern btn-lg w-full" style="background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%); color: white; border: none;">
+          <i class="fa fa-save" style="margin-right: 8px;"></i>
+          Save Monthly Cost Entry
+        </button>
+      </form>
+    </div>
+
+    {% if all_costs %}
+    <!-- Cost History Table -->
+    <div class="card-modern animate-fadeInUp" style="animation-delay: 0.6s; padding: 0; overflow: hidden;">
+      <div style="padding: var(--space-xl) var(--space-xl) var(--space-lg); background: var(--gradient-primary); color: white;">
+        <h2 style="margin: 0; font-size: var(--text-xl); font-weight: 600; display: flex; align-items: center; gap: var(--space-sm);">
+          <i class="fa fa-table"></i>
+          Monthly Cost History
+        </h2>
+      </div>
+      <div style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse; background: white;">
+          <thead>
+            <tr style="background: var(--background-secondary);">
+              <th style="padding: var(--space-md); text-align: left; font-weight: 600; color: var(--text-primary); border-bottom: 2px solid var(--border-color);">
+                <i class="fa fa-calendar" style="margin-right: 4px; color: var(--accent-color);"></i>
+                Month
+              </th>
+              <th style="padding: var(--space-md); text-align: left; font-weight: 600; color: var(--text-primary); border-bottom: 2px solid var(--border-color);">
+                <i class="fa fa-dollar" style="margin-right: 4px; color: var(--accent-color);"></i>
+                Total Cost
+              </th>
+              <th style="padding: var(--space-md); text-align: left; font-weight: 600; color: var(--text-primary); border-bottom: 2px solid var(--border-color); max-width: 300px;">
+                <i class="fa fa-comment" style="margin-right: 4px; color: var(--accent-color);"></i>
+                Notes
+              </th>
+              <th style="padding: var(--space-md); text-align: left; font-weight: 600; color: var(--text-primary); border-bottom: 2px solid var(--border-color); white-space: nowrap;">
+                <i class="fa fa-clock-o" style="margin-right: 4px; color: var(--accent-color);"></i>
+                Created
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for r in all_costs %}
+            <tr style="border-bottom: 1px solid var(--border-light); transition: background-color var(--transition-base);" onmouseover="this.style.backgroundColor='var(--background-secondary)'" onmouseout="this.style.backgroundColor='white'">
+              <td style="padding: var(--space-md); color: var(--text-primary); font-weight: 600;">{{ r["month"] }}</td>
+              <td style="padding: var(--space-md); color: var(--text-primary); font-weight: 700; font-family: monospace; font-size: var(--text-lg);">₹{{ '{:,.2f}'.format(r["total_cost"]) }}</td>
+              <td style="padding: var(--space-md); max-width: 300px; word-wrap: break-word; color: var(--text-secondary); font-size: var(--text-sm);">
+                {% if r["notes"] %}
+                  {{ r["notes"][:150] }}{% if r["notes"]|length > 150 %}...{% endif %}
+                {% else %}
+                  <span style="color: var(--text-light); font-style: italic;">No notes provided</span>
+                {% endif %}
+              </td>
+              <td style="padding: var(--space-md); color: var(--text-secondary); white-space: nowrap;">
+                <div style="font-weight: 500;">{{ r["created_at"].split(' ')[0] if r["created_at"] else 'N/A' }}</div>
+                <div style="font-size: var(--text-xs); color: var(--text-light);">{{ r["created_at"].split(' ')[1] if r["created_at"] and ' ' in r["created_at"] else '' }}</div>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    {% else %}
+    <!-- No Data State -->
+    <div class="card-modern animate-fadeInUp" style="animation-delay: 0.6s; text-align: center; padding: var(--space-3xl); background: var(--background-secondary); border: 2px dashed var(--border-color);">
+      <div style="width: 120px; height: 120px; background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto var(--space-xl); opacity: 0.8;">
+        <i class="fa fa-dollar" style="font-size: 48px; color: white;"></i>
+      </div>
+      <h2 style="color: var(--text-primary); margin-bottom: var(--space-lg); font-size: var(--text-2xl);">No Cost Data Available</h2>
+      <p style="color: var(--text-secondary); margin-bottom: var(--space-2xl); max-width: 500px; margin-left: auto; margin-right: auto; font-size: var(--text-lg);">
+        No monthly cost entries have been recorded yet. Add your first cost entry using the form above to start tracking hospital expenses.
+      </p>
+    </div>
+    {% endif %}
+
+    <!-- Action Buttons -->
+    <div class="animate-fadeInUp" style="animation-delay: 0.8s; text-align: center; margin-top: var(--space-2xl);">
+      <div style="display: flex; gap: var(--space-lg); justify-content: center; flex-wrap: wrap;">
+        <a href="{{ url_for('hospital_ehr') }}" class="btn-modern btn-secondary btn-lg">
+          <i class="fa fa-file-text-o" style="margin-right: 8px;"></i>
+          EHR Requests
+        </a>
+        <a href="{{ url_for('hospital_home') }}" class="btn-modern btn-outline btn-lg">
+          <i class="fa fa-home" style="margin-right: 8px;"></i>
+          Back to Dashboard
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Enhanced form interactions
+    document.querySelectorAll('.form-input-modern, .form-select-modern, textarea').forEach(input => {
+      input.addEventListener('focus', function() {
+        this.style.borderColor = 'var(--accent-color)';
+        this.style.boxShadow = '0 0 0 3px rgba(245, 158, 11, 0.1)';
+        this.parentElement.style.transform = 'translateY(-2px)';
+      });
+
+      input.addEventListener('blur', function() {
+        this.style.borderColor = 'var(--border-color)';
+        this.style.boxShadow = 'none';
+        this.parentElement.style.transform = 'translateY(0)';
+      });
+    });
+
+    // Auto-format currency input
+    const costInput = document.querySelector('input[name="total_cost"]');
+    costInput.addEventListener('input', function() {
+      let value = this.value.replace(/[^\d.]/g, '');
+      if (value) {
+        this.style.borderColor = 'var(--success)';
+      }
+    });
+
+    // Loading state for form submission
+    document.querySelector('form').addEventListener('submit', function(e) {
+      const submitBtn = this.querySelector('button[type="submit"]');
+      const originalText = submitBtn.innerHTML;
+
+      submitBtn.innerHTML = '<span class="spinner"></span> Saving Cost Entry...';
+      submitBtn.disabled = true;
+
+      // Re-enable after 3 seconds in case of error
+      setTimeout(() => {
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+      }, 3000);
+    });
+
+    // Add loading states to navigation buttons
+    document.querySelectorAll('.btn-modern').forEach(btn => {
+      if (!btn.closest('form')) {
+        btn.addEventListener('click', function(e) {
+          if (this.href && !this.href.includes('#')) {
+            const originalText = this.innerHTML;
+            this.innerHTML = '<span class="spinner"></span> Loading...';
+            this.style.pointerEvents = 'none';
+
+            setTimeout(() => {
+              this.innerHTML = originalText;
+              this.style.pointerEvents = 'auto';
+            }, 2000);
+          }
+        });
+      }
+    });
+
+    // Enhanced table interactions
+    document.querySelectorAll('tbody tr').forEach(row => {
+      row.addEventListener('click', function() {
+        this.style.transform = 'scale(0.98)';
+        setTimeout(() => {
+          this.style.transform = 'scale(1)';
+        }, 150);
+      });
+    });
+
+    // Set default month to current month
+    const monthInput = document.querySelector('input[name="month"]');
+    if (monthInput && !monthInput.value) {
+      const now = new Date();
+      const currentMonth = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0');
+      monthInput.value = currentMonth;
+    }
+  </script>
+</body>
+</html>

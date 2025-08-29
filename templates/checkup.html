@@ -9,135 +9,24 @@
   <link href="{{ url_for('static', filename='css/font-awesome.min.css') }}" rel="stylesheet">
   <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
   <link href="{{ url_for('static', filename='css/responsive.css') }}" rel="stylesheet">
-  <style>
-    body {
-      font-family: "Inter", "Poppins", sans-serif;
-      background: var(--background-secondary);
-      color: var(--text-primary);
-      margin: 0;
-      min-height: 100vh;
-    }
-
-    .progress-bar {
-      width: 100%;
-      height: 8px;
-      background: var(--border-light);
-      border-radius: var(--radius-full);
-      margin-bottom: var(--space-2xl);
-      overflow: hidden;
-    }
-
-    .progress-fill {
-      height: 100%;
-      background: var(--gradient-primary);
-      border-radius: var(--radius-full);
-      transition: width 0.3s ease;
-      width: 0%;
-    }
-
-    .form-section {
-      background: var(--background-primary);
-      padding: var(--space-xl);
-      border-radius: var(--radius-xl);
-      margin-bottom: var(--space-xl);
-      box-shadow: var(--shadow-md);
-      border-left: 4px solid var(--primary-color);
-    }
-
-    .section-title {
-      font-size: var(--text-xl);
-      font-weight: 600;
-      color: var(--primary-color);
-      margin-bottom: var(--space-lg);
-      font-family: 'Playfair Display', serif;
-      display: flex;
-      align-items: center;
-      gap: var(--space-sm);
-    }
-
-    .form-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: var(--space-lg);
-    }
-
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-sm);
-    }
-
-    .form-group label {
-      font-weight: 600;
-      color: var(--text-primary);
-      font-size: var(--text-sm);
-      display: flex;
-      align-items: center;
-      gap: var(--space-xs);
-    }
-
-    .form-group input,
-    .form-group select {
-      padding: var(--space-md);
-      border: 2px solid var(--border-color);
-      border-radius: var(--radius-lg);
-      font-size: var(--text-base);
-      transition: all var(--transition-base);
-      background: white;
-    }
-
-    .form-group input:focus,
-    .form-group select:focus {
-      outline: none;
-      border-color: var(--primary-color);
-      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-    }
-
-    .form-group input::placeholder {
-      color: var(--text-light);
-    }
-
-    .help-text {
-      font-size: var(--text-xs);
-      color: var(--text-secondary);
-      margin-top: calc(-1 * var(--space-xs));
-    }
-
-    .submit-section {
-      text-align: center;
-      margin-top: var(--space-2xl);
-      padding: var(--space-xl);
-      background: var(--background-primary);
-      border-radius: var(--radius-xl);
-      box-shadow: var(--shadow-lg);
-    }
-
-    .icon-circle {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: var(--gradient-primary);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-size: 18px;
-    }
-  </style>
 </head>
 
 <body>
   <!-- Modern Navigation -->
   <nav class="nav-modern">
     <div class="nav-container">
-      <a href="/" class="nav-brand">
+      <a href="{{ url_for('index') }}" class="nav-brand">
         <i class="fa fa-heartbeat" style="margin-right: 8px;"></i>
         HealthGuard
       </a>
       <div class="nav-links">
-        <a href="/home" class="nav-link">
+        <a href="{{ url_for('home') }}" class="nav-link">
           <i class="fa fa-home" style="margin-right: 4px;"></i>
           Dashboard
+        </a>
+        <a href="{{ url_for('logout') }}" class="btn-modern btn-outline btn-sm">
+          <i class="fa fa-sign-out" style="margin-right: 4px;"></i>
+          Logout
         </a>
       </div>
     </div>
@@ -145,9 +34,12 @@
 
   <!-- Main Content -->
   <div class="dashboard-container animate-fadeIn">
+    <!-- Enhanced Header -->
     <div class="dashboard-header">
+      <div style="width: 100px; height: 100px; background: var(--gradient-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto var(--space-xl); box-shadow: var(--shadow-xl);">
+        <i class="fa fa-stethoscope" style="font-size: 40px; color: white;"></i>
+      </div>
       <h1 class="dashboard-title animate-fadeInUp">
-        <i class="fa fa-stethoscope" style="margin-right: 12px; color: var(--primary-color);"></i>
         Health Risk Assessment
       </h1>
       <p class="dashboard-subtitle animate-fadeInUp" style="animation-delay: 0.2s;">
@@ -156,34 +48,42 @@
     </div>
 
     <!-- Progress Bar -->
-    <div class="progress-bar animate-fadeInUp" style="animation-delay: 0.4s;">
-      <div class="progress-fill" id="progressFill"></div>
+    <div class="animate-fadeInUp" style="animation-delay: 0.4s; margin-bottom: var(--space-3xl);">
+      <div style="background: var(--background-primary); padding: var(--space-lg); border-radius: var(--radius-xl); box-shadow: var(--shadow-md); border: 1px solid var(--border-light);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-md);">
+          <span style="font-weight: 600; color: var(--text-primary);">Assessment Progress</span>
+          <span id="progressText" style="font-size: var(--text-sm); color: var(--text-secondary);">0% Complete</span>
+        </div>
+        <div style="width: 100%; height: 8px; background: var(--border-light); border-radius: var(--radius-full); overflow: hidden;">
+          <div id="progressFill" style="height: 100%; background: var(--gradient-primary); border-radius: var(--radius-full); transition: width 0.3s ease; width: 0%;"></div>
+        </div>
+      </div>
     </div>
 
     <form action="/predict" method="POST" id="healthForm" class="animate-fadeInUp" style="animation-delay: 0.6s;">
       <!-- Demographics Section -->
-      <div class="form-section">
-        <h2 class="section-title">
-          <div class="icon-circle">
-            <i class="fa fa-user"></i>
+      <div class="form-section" style="background: var(--background-primary); padding: var(--space-2xl); border-radius: var(--radius-xl); margin-bottom: var(--space-xl); box-shadow: var(--shadow-md); border-left: 4px solid var(--primary-color);">
+        <h2 class="section-title" style="font-size: var(--text-2xl); font-weight: 600; color: var(--primary-color); margin-bottom: var(--space-xl); font-family: 'Playfair Display', serif; display: flex; align-items: center; gap: var(--space-md);">
+          <div style="width: 50px; height: 50px; background: var(--gradient-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+            <i class="fa fa-user" style="color: white; font-size: 20px;"></i>
           </div>
           Personal Information
         </h2>
-        <div class="form-grid">
-          <div class="form-group">
-            <label for="age">
-              <i class="fa fa-birthday-cake"></i>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--space-xl);">
+          <div class="form-group" style="display: flex; flex-direction: column; gap: var(--space-sm);">
+            <label style="font-weight: 600; color: var(--text-primary); font-size: var(--text-sm); display: flex; align-items: center; gap: var(--space-xs);">
+              <i class="fa fa-birthday-cake" style="color: var(--primary-color);"></i>
               Age
             </label>
-            <input type="number" name="age" id="age" placeholder="Enter your age" required min="1" max="120">
-            <span class="help-text">Your current age in years</span>
+            <input type="number" name="age" id="age" placeholder="Enter your age" required min="1" max="120" style="padding: var(--space-md); border: 2px solid var(--border-color); border-radius: var(--radius-lg); font-size: var(--text-base); transition: all var(--transition-base); background: white;">
+            <span style="font-size: var(--text-xs); color: var(--text-secondary);">Your current age in years</span>
           </div>
-          <div class="form-group">
-            <label for="gender">
-              <i class="fa fa-venus-mars"></i>
+          <div class="form-group" style="display: flex; flex-direction: column; gap: var(--space-sm);">
+            <label style="font-weight: 600; color: var(--text-primary); font-size: var(--text-sm); display: flex; align-items: center; gap: var(--space-xs);">
+              <i class="fa fa-venus-mars" style="color: var(--primary-color);"></i>
               Gender
             </label>
-            <select name="gender" id="gender" required>
+            <select name="gender" id="gender" required style="padding: var(--space-md); border: 2px solid var(--border-color); border-radius: var(--radius-lg); font-size: var(--text-base); background: white; cursor: pointer;">
               <option value="">Select gender</option>
               <option value="1">Male</option>
               <option value="0">Female</option>
@@ -193,112 +93,112 @@
       </div>
 
       <!-- Vital Signs Section -->
-      <div class="form-section">
-        <h2 class="section-title">
-          <div class="icon-circle">
-            <i class="fa fa-heartbeat"></i>
+      <div class="form-section" style="background: var(--background-primary); padding: var(--space-2xl); border-radius: var(--radius-xl); margin-bottom: var(--space-xl); box-shadow: var(--shadow-md); border-left: 4px solid var(--secondary-color);">
+        <h2 class="section-title" style="font-size: var(--text-2xl); font-weight: 600; color: var(--secondary-color); margin-bottom: var(--space-xl); font-family: 'Playfair Display', serif; display: flex; align-items: center; gap: var(--space-md);">
+          <div style="width: 50px; height: 50px; background: var(--gradient-success); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+            <i class="fa fa-heartbeat" style="color: white; font-size: 20px;"></i>
           </div>
           Vital Signs & Lab Results
         </h2>
-        <div class="form-grid">
-          <div class="form-group">
-            <label for="systole">
-              <i class="fa fa-tint"></i>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-xl);">
+          <div class="form-group" style="display: flex; flex-direction: column; gap: var(--space-sm);">
+            <label style="font-weight: 600; color: var(--text-primary); font-size: var(--text-sm); display: flex; align-items: center; gap: var(--space-xs);">
+              <i class="fa fa-tint" style="color: var(--secondary-color);"></i>
               Systolic Blood Pressure
             </label>
-            <input type="number" name="systole" id="systole" placeholder="e.g., 120" required>
-            <span class="help-text">Normal: Less than 120 mmHg</span>
+            <input type="number" name="systole" id="systole" placeholder="e.g., 120" required style="padding: var(--space-md); border: 2px solid var(--border-color); border-radius: var(--radius-lg); font-size: var(--text-base); transition: all var(--transition-base); background: white;">
+            <span style="font-size: var(--text-xs); color: var(--text-secondary);">Normal: Less than 120 mmHg</span>
           </div>
-          <div class="form-group">
-            <label for="diastole">
-              <i class="fa fa-tint"></i>
+          <div class="form-group" style="display: flex; flex-direction: column; gap: var(--space-sm);">
+            <label style="font-weight: 600; color: var(--text-primary); font-size: var(--text-sm); display: flex; align-items: center; gap: var(--space-xs);">
+              <i class="fa fa-tint" style="color: var(--secondary-color);"></i>
               Diastolic Blood Pressure
             </label>
-            <input type="number" name="diastole" id="diastole" placeholder="e.g., 80" required>
-            <span class="help-text">Normal: 60-79 mmHg</span>
+            <input type="number" name="diastole" id="diastole" placeholder="e.g., 80" required style="padding: var(--space-md); border: 2px solid var(--border-color); border-radius: var(--radius-lg); font-size: var(--text-base); transition: all var(--transition-base); background: white;">
+            <span style="font-size: var(--text-xs); color: var(--text-secondary);">Normal: 60-79 mmHg</span>
           </div>
-          <div class="form-group">
-            <label for="heart_rate">
-              <i class="fa fa-heartbeat"></i>
+          <div class="form-group" style="display: flex; flex-direction: column; gap: var(--space-sm);">
+            <label style="font-weight: 600; color: var(--text-primary); font-size: var(--text-sm); display: flex; align-items: center; gap: var(--space-xs);">
+              <i class="fa fa-heartbeat" style="color: var(--secondary-color);"></i>
               Heart Rate
             </label>
-            <input type="number" name="heart_rate" id="heart_rate" placeholder="e.g., 75" required>
-            <span class="help-text">Normal: 60-100 bpm</span>
+            <input type="number" name="heart_rate" id="heart_rate" placeholder="e.g., 75" required style="padding: var(--space-md); border: 2px solid var(--border-color); border-radius: var(--radius-lg); font-size: var(--text-base); transition: all var(--transition-base); background: white;">
+            <span style="font-size: var(--text-xs); color: var(--text-secondary);">Normal: 60-100 bpm</span>
           </div>
-          <div class="form-group">
-            <label for="bmi">
-              <i class="fa fa-calculator"></i>
+          <div class="form-group" style="display: flex; flex-direction: column; gap: var(--space-sm);">
+            <label style="font-weight: 600; color: var(--text-primary); font-size: var(--text-sm); display: flex; align-items: center; gap: var(--space-xs);">
+              <i class="fa fa-calculator" style="color: var(--secondary-color);"></i>
               BMI
             </label>
-            <input type="number" step="0.1" name="bmi" id="bmi" placeholder="e.g., 22.5" required>
-            <span class="help-text">Normal: 18.5-24.9</span>
+            <input type="number" step="0.1" name="bmi" id="bmi" placeholder="e.g., 22.5" required style="padding: var(--space-md); border: 2px solid var(--border-color); border-radius: var(--radius-lg); font-size: var(--text-base); transition: all var(--transition-base); background: white;">
+            <span style="font-size: var(--text-xs); color: var(--text-secondary);">Normal: 18.5-24.9</span>
           </div>
-          <div class="form-group">
-            <label for="blood_sugar">
-              <i class="fa fa-flask"></i>
+          <div class="form-group" style="display: flex; flex-direction: column; gap: var(--space-sm);">
+            <label style="font-weight: 600; color: var(--text-primary); font-size: var(--text-sm); display: flex; align-items: center; gap: var(--space-xs);">
+              <i class="fa fa-flask" style="color: var(--secondary-color);"></i>
               Blood Sugar Level
             </label>
-            <input type="number" step="0.01" name="blood_sugar" id="blood_sugar" placeholder="e.g., 85" required>
-            <span class="help-text">Normal: 72-99 mg/dL</span>
+            <input type="number" step="0.01" name="blood_sugar" id="blood_sugar" placeholder="e.g., 85" required style="padding: var(--space-md); border: 2px solid var(--border-color); border-radius: var(--radius-lg); font-size: var(--text-base); transition: all var(--transition-base); background: white;">
+            <span style="font-size: var(--text-xs); color: var(--text-secondary);">Normal: 72-99 mg/dL</span>
           </div>
-          <div class="form-group">
-            <label for="cholesterol">
-              <i class="fa fa-flask"></i>
+          <div class="form-group" style="display: flex; flex-direction: column; gap: var(--space-sm);">
+            <label style="font-weight: 600; color: var(--text-primary); font-size: var(--text-sm); display: flex; align-items: center; gap: var(--space-xs);">
+              <i class="fa fa-flask" style="color: var(--secondary-color);"></i>
               Cholesterol
             </label>
-            <input type="number" step="0.01" name="cholesterol" id="cholesterol" placeholder="e.g., 180" required>
-            <span class="help-text">Total cholesterol in mg/dL</span>
+            <input type="number" step="0.01" name="cholesterol" id="cholesterol" placeholder="e.g., 180" required style="padding: var(--space-md); border: 2px solid var(--border-color); border-radius: var(--radius-lg); font-size: var(--text-base); transition: all var(--transition-base); background: white;">
+            <span style="font-size: var(--text-xs); color: var(--text-secondary);">Total cholesterol in mg/dL</span>
           </div>
         </div>
       </div>
 
       <!-- Blood Work Section -->
-      <div class="form-section">
-        <h2 class="section-title">
-          <div class="icon-circle">
-            <i class="fa fa-medkit"></i>
+      <div class="form-section" style="background: var(--background-primary); padding: var(--space-2xl); border-radius: var(--radius-xl); margin-bottom: var(--space-xl); box-shadow: var(--shadow-md); border-left: 4px solid var(--info);">
+        <h2 class="section-title" style="font-size: var(--text-2xl); font-weight: 600; color: var(--info); margin-bottom: var(--space-xl); font-family: 'Playfair Display', serif; display: flex; align-items: center; gap: var(--space-md);">
+          <div style="width: 50px; height: 50px; background: var(--gradient-secondary); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+            <i class="fa fa-medkit" style="color: white; font-size: 20px;"></i>
           </div>
           Blood Work & Tests
         </h2>
-        <div class="form-grid">
-          <div class="form-group">
-            <label for="rbc_count">
-              <i class="fa fa-tint"></i>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-xl);">
+          <div class="form-group" style="display: flex; flex-direction: column; gap: var(--space-sm);">
+            <label style="font-weight: 600; color: var(--text-primary); font-size: var(--text-sm); display: flex; align-items: center; gap: var(--space-xs);">
+              <i class="fa fa-tint" style="color: var(--info);"></i>
               RBC Count
             </label>
-            <input type="number" step="0.01" name="rbc_count" id="rbc_count" placeholder="e.g., 4.5" required>
-            <span class="help-text">Normal: 3-8 mcL</span>
+            <input type="number" step="0.01" name="rbc_count" id="rbc_count" placeholder="e.g., 4.5" required style="padding: var(--space-md); border: 2px solid var(--border-color); border-radius: var(--radius-lg); font-size: var(--text-base); transition: all var(--transition-base); background: white;">
+            <span style="font-size: var(--text-xs); color: var(--text-secondary);">Normal: 3-8 mcL</span>
           </div>
-          <div class="form-group">
-            <label for="wbc_count">
-              <i class="fa fa-shield"></i>
+          <div class="form-group" style="display: flex; flex-direction: column; gap: var(--space-sm);">
+            <label style="font-weight: 600; color: var(--text-primary); font-size: var(--text-sm); display: flex; align-items: center; gap: var(--space-xs);">
+              <i class="fa fa-shield" style="color: var(--info);"></i>
               WBC Count
             </label>
-            <input type="number" step="0.01" name="wbc_count" id="wbc_count" placeholder="e.g., 7000" required>
-            <span class="help-text">Normal: 4000-11000</span>
+            <input type="number" step="0.01" name="wbc_count" id="wbc_count" placeholder="e.g., 7000" required style="padding: var(--space-md); border: 2px solid var(--border-color); border-radius: var(--radius-lg); font-size: var(--text-base); transition: all var(--transition-base); background: white;">
+            <span style="font-size: var(--text-xs); color: var(--text-secondary);">Normal: 4000-11000</span>
           </div>
-          <div class="form-group">
-            <label for="glucose_mean">
-              <i class="fa fa-flask"></i>
+          <div class="form-group" style="display: flex; flex-direction: column; gap: var(--space-sm);">
+            <label style="font-weight: 600; color: var(--text-primary); font-size: var(--text-sm); display: flex; align-items: center; gap: var(--space-xs);">
+              <i class="fa fa-flask" style="color: var(--info);"></i>
               Glucose Level
             </label>
-            <input type="number" step="0.01" name="glucose_mean" id="glucose_mean" placeholder="e.g., 90" required>
-            <span class="help-text">Average glucose in mg/dL</span>
+            <input type="number" step="0.01" name="glucose_mean" id="glucose_mean" placeholder="e.g., 90" required style="padding: var(--space-md); border: 2px solid var(--border-color); border-radius: var(--radius-lg); font-size: var(--text-base); transition: all var(--transition-base); background: white;">
+            <span style="font-size: var(--text-xs); color: var(--text-secondary);">Average glucose in mg/dL</span>
           </div>
-          <div class="form-group">
-            <label for="hemoglobin_mean">
-              <i class="fa fa-tint"></i>
+          <div class="form-group" style="display: flex; flex-direction: column; gap: var(--space-sm);">
+            <label style="font-weight: 600; color: var(--text-primary); font-size: var(--text-sm); display: flex; align-items: center; gap: var(--space-xs);">
+              <i class="fa fa-tint" style="color: var(--info);"></i>
               Hemoglobin Level
             </label>
-            <input type="number" step="0.01" name="hemoglobin_mean" id="hemoglobin_mean" placeholder="e.g., 14" required>
-            <span class="help-text">Hemoglobin in g/dL</span>
+            <input type="number" step="0.01" name="hemoglobin_mean" id="hemoglobin_mean" placeholder="e.g., 14" required style="padding: var(--space-md); border: 2px solid var(--border-color); border-radius: var(--radius-lg); font-size: var(--text-base); transition: all var(--transition-base); background: white;">
+            <span style="font-size: var(--text-xs); color: var(--text-secondary);">Hemoglobin in g/dL</span>
           </div>
-          <div class="form-group">
-            <label for="allergies">
-              <i class="fa fa-exclamation-triangle"></i>
+          <div class="form-group" style="display: flex; flex-direction: column; gap: var(--space-sm);">
+            <label style="font-weight: 600; color: var(--text-primary); font-size: var(--text-sm); display: flex; align-items: center; gap: var(--space-xs);">
+              <i class="fa fa-exclamation-triangle" style="color: var(--info);"></i>
               Allergies
             </label>
-            <select name="allergies" id="allergies" required>
+            <select name="allergies" id="allergies" required style="padding: var(--space-md); border: 2px solid var(--border-color); border-radius: var(--radius-lg); font-size: var(--text-base); background: white; cursor: pointer;">
               <option value="">Select option</option>
               <option value="1">Yes</option>
               <option value="0">No</option>
@@ -308,58 +208,58 @@
       </div>
 
       <!-- Lifestyle Section -->
-      <div class="form-section">
-        <h2 class="section-title">
-          <div class="icon-circle">
-            <i class="fa fa-heart"></i>
+      <div class="form-section" style="background: var(--background-primary); padding: var(--space-2xl); border-radius: var(--radius-xl); margin-bottom: var(--space-xl); box-shadow: var(--shadow-md); border-left: 4px solid var(--accent-color);">
+        <h2 class="section-title" style="font-size: var(--text-2xl); font-weight: 600; color: var(--accent-color); margin-bottom: var(--space-xl); font-family: 'Playfair Display', serif; display: flex; align-items: center; gap: var(--space-md);">
+          <div style="width: 50px; height: 50px; background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+            <i class="fa fa-heart" style="color: white; font-size: 20px;"></i>
           </div>
           Lifestyle & Habits
         </h2>
-        <div class="form-grid">
-          <div class="form-group">
-            <label for="steps_per_day">
-              <i class="fa fa-walking"></i>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-xl);">
+          <div class="form-group" style="display: flex; flex-direction: column; gap: var(--space-sm);">
+            <label style="font-weight: 600; color: var(--text-primary); font-size: var(--text-sm); display: flex; align-items: center; gap: var(--space-xs);">
+              <i class="fa fa-walking" style="color: var(--accent-color);"></i>
               Steps Per Day
             </label>
-            <input type="number" name="steps_per_day" id="steps_per_day" placeholder="e.g., 8000" required>
-            <span class="help-text">Average daily step count</span>
+            <input type="number" name="steps_per_day" id="steps_per_day" placeholder="e.g., 8000" required style="padding: var(--space-md); border: 2px solid var(--border-color); border-radius: var(--radius-lg); font-size: var(--text-base); transition: all var(--transition-base); background: white;">
+            <span style="font-size: var(--text-xs); color: var(--text-secondary);">Average daily step count</span>
           </div>
-          <div class="form-group">
-            <label for="calorie_intake">
-              <i class="fa fa-cutlery"></i>
+          <div class="form-group" style="display: flex; flex-direction: column; gap: var(--space-sm);">
+            <label style="font-weight: 600; color: var(--text-primary); font-size: var(--text-sm); display: flex; align-items: center; gap: var(--space-xs);">
+              <i class="fa fa-cutlery" style="color: var(--accent-color);"></i>
               Daily Calorie Intake
             </label>
-            <input type="number" name="calorie_intake" id="calorie_intake" placeholder="e.g., 2000" required>
-            <span class="help-text">Average calories per day</span>
+            <input type="number" name="calorie_intake" id="calorie_intake" placeholder="e.g., 2000" required style="padding: var(--space-md); border: 2px solid var(--border-color); border-radius: var(--radius-lg); font-size: var(--text-base); transition: all var(--transition-base); background: white;">
+            <span style="font-size: var(--text-xs); color: var(--text-secondary);">Average calories per day</span>
           </div>
-          <div class="form-group">
-            <label for="smoking">
-              <i class="fa fa-ban"></i>
+          <div class="form-group" style="display: flex; flex-direction: column; gap: var(--space-sm);">
+            <label style="font-weight: 600; color: var(--text-primary); font-size: var(--text-sm); display: flex; align-items: center; gap: var(--space-xs);">
+              <i class="fa fa-ban" style="color: var(--accent-color);"></i>
               Smoking
             </label>
-            <select name="smoking" id="smoking" required>
+            <select name="smoking" id="smoking" required style="padding: var(--space-md); border: 2px solid var(--border-color); border-radius: var(--radius-lg); font-size: var(--text-base); background: white; cursor: pointer;">
               <option value="">Select option</option>
               <option value="1">Yes</option>
               <option value="0">No</option>
             </select>
           </div>
-          <div class="form-group">
-            <label for="alcohol">
-              <i class="fa fa-glass"></i>
+          <div class="form-group" style="display: flex; flex-direction: column; gap: var(--space-sm);">
+            <label style="font-weight: 600; color: var(--text-primary); font-size: var(--text-sm); display: flex; align-items: center; gap: var(--space-xs);">
+              <i class="fa fa-glass" style="color: var(--accent-color);"></i>
               Alcohol Consumption
             </label>
-            <select name="alcohol" id="alcohol" required>
+            <select name="alcohol" id="alcohol" required style="padding: var(--space-md); border: 2px solid var(--border-color); border-radius: var(--radius-lg); font-size: var(--text-base); background: white; cursor: pointer;">
               <option value="">Select option</option>
               <option value="1">Yes</option>
               <option value="0">No</option>
             </select>
           </div>
-          <div class="form-group">
-            <label for="sleep_pattern">
-              <i class="fa fa-moon-o"></i>
+          <div class="form-group" style="display: flex; flex-direction: column; gap: var(--space-sm);">
+            <label style="font-weight: 600; color: var(--text-primary); font-size: var(--text-sm); display: flex; align-items: center; gap: var(--space-xs);">
+              <i class="fa fa-moon-o" style="color: var(--accent-color);"></i>
               Sleep Pattern
             </label>
-            <select name="sleep_pattern" id="sleep_pattern" required>
+            <select name="sleep_pattern" id="sleep_pattern" required style="padding: var(--space-md); border: 2px solid var(--border-color); border-radius: var(--radius-lg); font-size: var(--text-base); background: white; cursor: pointer;">
               <option value="">Select pattern</option>
               <option value="1">Good (7-9 hours)</option>
               <option value="0">Poor (Less than 7 hours)</option>
@@ -369,44 +269,44 @@
       </div>
 
       <!-- Medical History Section -->
-      <div class="form-section">
-        <h2 class="section-title">
-          <div class="icon-circle">
-            <i class="fa fa-clipboard"></i>
+      <div class="form-section" style="background: var(--background-primary); padding: var(--space-2xl); border-radius: var(--radius-xl); margin-bottom: var(--space-xl); box-shadow: var(--shadow-md); border-left: 4px solid var(--error);">
+        <h2 class="section-title" style="font-size: var(--text-2xl); font-weight: 600; color: var(--error); margin-bottom: var(--space-xl); font-family: 'Playfair Display', serif; display: flex; align-items: center; gap: var(--space-md);">
+          <div style="width: 50px; height: 50px; background: linear-gradient(135deg, #ef4444 0%, #f87171 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+            <i class="fa fa-clipboard" style="color: white; font-size: 20px;"></i>
           </div>
           Medical History & Claims
         </h2>
-        <div class="form-grid">
-          <div class="form-group">
-            <label for="num_claims">
-              <i class="fa fa-file-text-o"></i>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-xl);">
+          <div class="form-group" style="display: flex; flex-direction: column; gap: var(--space-sm);">
+            <label style="font-weight: 600; color: var(--text-primary); font-size: var(--text-sm); display: flex; align-items: center; gap: var(--space-xs);">
+              <i class="fa fa-file-text-o" style="color: var(--error);"></i>
               Number of Claims
             </label>
-            <input type="number" name="num_claims" id="num_claims" placeholder="e.g., 2" required min="0" max="10">
-            <span class="help-text">Insurance claims in past year</span>
+            <input type="number" name="num_claims" id="num_claims" placeholder="e.g., 2" required min="0" max="10" style="padding: var(--space-md); border: 2px solid var(--border-color); border-radius: var(--radius-lg); font-size: var(--text-base); transition: all var(--transition-base); background: white;">
+            <span style="font-size: var(--text-xs); color: var(--text-secondary);">Insurance claims in past year</span>
           </div>
-          <div class="form-group">
-            <label for="service_type">
-              <i class="fa fa-hospital-o"></i>
+          <div class="form-group" style="display: flex; flex-direction: column; gap: var(--space-sm);">
+            <label style="font-weight: 600; color: var(--text-primary); font-size: var(--text-sm); display: flex; align-items: center; gap: var(--space-xs);">
+              <i class="fa fa-hospital-o" style="color: var(--error);"></i>
               Service Type
             </label>
-            <input type="text" name="service_type" id="service_type" placeholder="e.g., consultation, surgery" required>
-            <span class="help-text">Type of medical service received</span>
+            <input type="text" name="service_type" id="service_type" placeholder="e.g., consultation, surgery" required style="padding: var(--space-md); border: 2px solid var(--border-color); border-radius: var(--radius-lg); font-size: var(--text-base); transition: all var(--transition-base); background: white;">
+            <span style="font-size: var(--text-xs); color: var(--text-secondary);">Type of medical service received</span>
           </div>
-          <div class="form-group">
-            <label for="diagnosis_code">
-              <i class="fa fa-code"></i>
+          <div class="form-group" style="display: flex; flex-direction: column; gap: var(--space-sm);">
+            <label style="font-weight: 600; color: var(--text-primary); font-size: var(--text-sm); display: flex; align-items: center; gap: var(--space-xs);">
+              <i class="fa fa-code" style="color: var(--error);"></i>
               Diagnosis Code
             </label>
-            <input type="text" name="diagnosis_code" id="diagnosis_code" placeholder="e.g., F32, M79" required>
-            <span class="help-text">ICD diagnosis code</span>
+            <input type="text" name="diagnosis_code" id="diagnosis_code" placeholder="e.g., F32, M79" required style="padding: var(--space-md); border: 2px solid var(--border-color); border-radius: var(--radius-lg); font-size: var(--text-base); transition: all var(--transition-base); background: white;">
+            <span style="font-size: var(--text-xs); color: var(--text-secondary);">ICD diagnosis code</span>
           </div>
-          <div class="form-group">
-            <label for="procedure_code">
-              <i class="fa fa-cogs"></i>
+          <div class="form-group" style="display: flex; flex-direction: column; gap: var(--space-sm);">
+            <label style="font-weight: 600; color: var(--text-primary); font-size: var(--text-sm); display: flex; align-items: center; gap: var(--space-xs);">
+              <i class="fa fa-cogs" style="color: var(--error);"></i>
               Procedure Code
             </label>
-            <select name="procedure_code" id="procedure_code" required>
+            <select name="procedure_code" id="procedure_code" required style="padding: var(--space-md); border: 2px solid var(--border-color); border-radius: var(--radius-lg); font-size: var(--text-base); background: white; cursor: pointer;">
               <option value="">Select procedure</option>
               <option value="P01">P01 (Routine Blood Test)</option>
               <option value="P02">P02 (Physical Exam)</option>
@@ -415,27 +315,73 @@
               <option value="P05">P05 (Major Surgery)</option>
             </select>
           </div>
-          <div class="form-group">
-            <label for="cost_of_service">
-              <i class="fa fa-dollar"></i>
+          <div class="form-group" style="display: flex; flex-direction: column; gap: var(--space-sm);">
+            <label style="font-weight: 600; color: var(--text-primary); font-size: var(--text-sm); display: flex; align-items: center; gap: var(--space-xs);">
+              <i class="fa fa-dollar" style="color: var(--error);"></i>
               Cost of Service
             </label>
-            <input type="number" step="0.01" name="cost_of_service" id="cost_of_service" placeholder="e.g., 250.00" required>
-            <span class="help-text">Total cost in USD</span>
+            <input type="number" step="0.01" name="cost_of_service" id="cost_of_service" placeholder="e.g., 250.00" required style="padding: var(--space-md); border: 2px solid var(--border-color); border-radius: var(--radius-lg); font-size: var(--text-base); transition: all var(--transition-base); background: white;">
+            <span style="font-size: var(--text-xs); color: var(--text-secondary);">Total cost in USD</span>
           </div>
         </div>
       </div>
 
       <!-- Submit Section -->
-      <div class="submit-section">
-        <h3 style="color: var(--primary-color); margin-bottom: var(--space-lg);">Ready to Submit?</h3>
-        <p style="color: var(--text-secondary); margin-bottom: var(--space-xl);">Your health data will be analyzed using advanced AI to provide personalized risk assessments and recommendations.</p>
-        <button type="submit" class="btn-modern btn-primary btn-lg">
-          <i class="fa fa-rocket" style="margin-right: 8px;"></i>
+      <div class="submit-section" style="text-align: center; margin-top: var(--space-2xl); padding: var(--space-2xl); background: var(--background-primary); border-radius: var(--radius-xl); box-shadow: var(--shadow-lg); border: 2px solid var(--primary-color);">
+        <div style="width: 80px; height: 80px; background: var(--gradient-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto var(--space-lg);">
+          <i class="fa fa-rocket" style="font-size: 32px; color: white;"></i>
+        </div>
+        <h3 style="color: var(--primary-color); margin-bottom: var(--space-lg); font-size: var(--text-2xl);">Ready to Submit?</h3>
+        <p style="color: var(--text-secondary); margin-bottom: var(--space-xl); max-width: 600px; margin-left: auto; margin-right: auto;">Your health data will be analyzed using advanced AI algorithms to provide personalized risk assessments, preventive recommendations, and actionable insights for your wellness journey.</p>
+        <button type="submit" class="btn-modern btn-primary btn-lg" style="padding: var(--space-lg) var(--space-2xl); font-size: var(--text-lg);">
+          <i class="fa fa-rocket" style="margin-right: 12px;"></i>
           Analyze My Health Risk
         </button>
       </div>
     </form>
   </div>
+
+  <script>
+    // Enhanced form interactions
+    document.querySelectorAll('input, select').forEach(input => {
+      input.addEventListener('focus', function() {
+        this.style.borderColor = 'var(--primary-color)';
+        this.style.boxShadow = '0 0 0 3px rgba(37, 99, 235, 0.1)';
+        this.parentElement.style.transform = 'translateY(-2px)';
+      });
+
+      input.addEventListener('blur', function() {
+        this.style.borderColor = 'var(--border-color)';
+        this.style.boxShadow = 'none';
+        this.parentElement.style.transform = 'translateY(0)';
+      });
+
+      // Progress tracking
+      input.addEventListener('input', updateProgress);
+      input.addEventListener('change', updateProgress);
+    });
+
+    function updateProgress() {
+      const totalFields = document.querySelectorAll('input[required], select[required]').length;
+      const filledFields = Array.from(document.querySelectorAll('input[required], select[required]')).filter(field => field.value.trim() !== '').length;
+      const progress = (filledFields / totalFields) * 100;
+
+      document.getElementById('progressFill').style.width = progress + '%';
+      document.getElementById('progressText').textContent = Math.round(progress) + '% Complete';
+    }
+
+    // Loading state for form submission
+    document.getElementById('healthForm').addEventListener('submit', function(e) {
+      const submitBtn = this.querySelector('button[type="submit"]');
+      const originalText = submitBtn.innerHTML;
+
+      submitBtn.innerHTML = '<span class="spinner"></span> Analyzing Health Data...';
+      submitBtn.disabled = true;
+      submitBtn.style.pointerEvents = 'none';
+    });
+
+    // Initialize progress
+    updateProgress();
+  </script>
 </body>
 </html>

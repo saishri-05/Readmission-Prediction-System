@@ -4,96 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="icon" href="{{ url_for('static', filename='images/main.jpg') }}" type="image/gif">
-    <title>My Dashboard - Hospital Readmission Prediction and Prevention</title>
+    <title>My Dashboard - HealthGuard</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.css') }}">
     <link href="{{ url_for('static', filename='css/font-awesome.min.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/responsive.css') }}" rel="stylesheet">
-    <style>
-        body {
-            font-family: "Inter", "Poppins", sans-serif;
-            background: var(--background-secondary);
-            color: var(--text-primary);
-            margin: 0;
-            min-height: 100vh;
-        }
-
-        /* Chatbot styles */
-        .chatbot-container {
-            position: fixed;
-            bottom: 20px;
-            right: 80px;
-            width: 280px;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
-            overflow: hidden;
-            display: none;
-            animation: slideUp 0.5s ease-in-out;
-        }
-        .chatbot-header {
-            background-color: #4f46e5; /* Indigo header */
-            color: #fff;
-            padding: 15px;
-            text-align: center;
-            font-weight: bold;
-            font-size: 1em;
-            letter-spacing: 0.5px;
-        }
-        .chatbot-messages {
-            height: 280px;
-            overflow-y: auto;
-            padding: 10px;
-            background-color: #eef2f7;
-        }
-        .chatbot-input {
-            display: flex;
-            border-top: 1px solid #ddd;
-        }
-        .chatbot-input input {
-            flex: 1;
-            padding: 10px;
-            border: none;
-            outline: none;
-            font-size: 0.9em;
-        }
-        .chatbot-input button {
-            padding: 10px;
-            background-color: #4f46e5;
-            color: #fff;
-            border: none;
-            cursor: pointer;
-            font-size: 0.9em;
-            transition: background-color 0.3s ease;
-        }
-        .chatbot-input button:hover {
-            background-color: #6366f1;
-        }
-        .chatbot-toggle {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 80px;
-            height: 80px;
-            background-color: #fff;
-            border-radius: 50%;
-            cursor: pointer;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            transition: transform 0.3s ease;
-        }
-        .chatbot-toggle:hover {
-            transform: scale(1.05);
-        }
-        .chatbot-toggle img {
-            width: 60px;
-            height: 60px;
-            object-fit: cover;
-        }
-    </style>
 </head>
 <body>
     <!-- Modern Navigation -->
@@ -104,7 +19,7 @@
                 HealthGuard
             </a>
             <div class="nav-links">
-                <span style="color: var(--text-secondary); margin-right: var(--space-md);">Welcome, {{ name }}!</span>
+                <span style="color: var(--text-secondary); margin-right: var(--space-md); font-weight: 500;">Welcome, {{ name }}!</span>
                 <a href="{{ url_for('logout') }}" class="btn-modern btn-outline btn-sm">
                     <i class="fa fa-sign-out" style="margin-right: 4px;"></i>
                     Logout
@@ -115,65 +30,33 @@
 
     <!-- Dashboard Content -->
     <div class="dashboard-container animate-fadeIn">
+        <!-- Enhanced Header -->
         <div class="dashboard-header">
+            <div style="width: 100px; height: 100px; background: var(--gradient-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto var(--space-xl); box-shadow: var(--shadow-xl);">
+                <i class="fa fa-user" style="font-size: 40px; color: white;"></i>
+            </div>
             <h1 class="dashboard-title animate-fadeInUp">
-                <i class="fa fa-tachometer" style="margin-right: 12px; color: var(--primary-color);"></i>
                 My Health Dashboard
             </h1>
             <p class="dashboard-subtitle animate-fadeInUp" style="animation-delay: 0.2s;">
-                Monitor your health, track your progress, and stay on top of your wellness journey.
+                Monitor your health, track your progress, and stay on top of your wellness journey with AI-powered insights.
             </p>
         </div>
 
-        <!-- Enhanced Key Metrics -->
-        <div class="grid-modern grid-3 animate-fadeInUp" style="animation-delay: 0.4s; margin-bottom: var(--space-3xl);">
-            <div class="card-modern text-center" style="background: linear-gradient(135deg, rgba(37, 99, 235, 0.05) 0%, rgba(37, 99, 235, 0.1) 100%); border: 2px solid rgba(37, 99, 235, 0.2); padding: var(--space-xl);">
-                <div style="background: var(--gradient-primary); color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto var(--space-lg); font-size: 24px; box-shadow: var(--shadow-lg);">
-                    <i class="fa fa-heartbeat"></i>
-                </div>
-                <h3 class="card-title" style="color: var(--primary-color); margin-bottom: var(--space-md); font-size: var(--text-xl);">Health Monitoring</h3>
-                <p style="color: var(--text-secondary); font-size: var(--text-base); line-height: 1.5;">Comprehensive AI-powered health assessment and continuous monitoring system</p>
-                <div style="margin-top: var(--space-lg); padding: var(--space-md); background: rgba(37, 99, 235, 0.05); border-radius: var(--radius-lg);">
-                    <span style="color: var(--primary-color); font-weight: 700; font-size: var(--text-sm);">✓ Active Status</span>
-                </div>
-            </div>
-            
-            <div class="card-modern text-center" style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, rgba(16, 185, 129, 0.1) 100%); border: 2px solid rgba(16, 185, 129, 0.2); padding: var(--space-xl);">
-                <div style="background: var(--gradient-success); color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto var(--space-lg); font-size: 24px; box-shadow: var(--shadow-lg);">
-                    <i class="fa fa-chart-line"></i>
-                </div>
-                <h3 class="card-title" style="color: var(--secondary-color); margin-bottom: var(--space-md); font-size: var(--text-xl);">Analytics & Reports</h3>
-                <p style="color: var(--text-secondary); font-size: var(--text-base); line-height: 1.5;">Detailed health analytics with trend analysis and personalized insights</p>
-                <div style="margin-top: var(--space-lg); padding: var(--space-md); background: rgba(16, 185, 129, 0.05); border-radius: var(--radius-lg);">
-                    <span style="color: var(--secondary-color); font-weight: 700; font-size: var(--text-sm);">✓ Data Ready</span>
-                </div>
-            </div>
-            
-            <div class="card-modern text-center" style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, rgba(147, 51, 234, 0.1) 100%); border: 2px solid rgba(59, 130, 246, 0.2); padding: var(--space-xl);">
-                <div style="background: var(--gradient-secondary); color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto var(--space-lg); font-size: 24px; box-shadow: var(--shadow-lg);">
-                    <i class="fa fa-brain"></i>
-                </div>
-                <h3 class="card-title" style="color: var(--info); margin-bottom: var(--space-md); font-size: var(--text-xl);">AI Intelligence</h3>
-                <p style="color: var(--text-secondary); font-size: var(--text-base); line-height: 1.5;">Advanced machine learning algorithms providing smart health predictions</p>
-                <div style="margin-top: var(--space-lg); padding: var(--space-md); background: rgba(59, 130, 246, 0.05); border-radius: var(--radius-lg);">
-                    <span style="color: var(--info); font-weight: 700; font-size: var(--text-sm);">✓ AI Enabled</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Main Dashboard Cards -->
-        <div class="grid-modern grid-2 animate-fadeInUp" style="animation-delay: 0.6s; gap: var(--space-2xl);">
+        <!-- Main Action Cards -->
+        <div class="grid-modern grid-2 animate-fadeInUp" style="animation-delay: 0.6s; gap: var(--space-2xl); margin-bottom: var(--space-3xl);">
             <!-- Primary Risk Assessment Card -->
-            <div class="card-modern card-gradient" style="background: var(--gradient-primary); min-height: 280px; display: flex; flex-direction: column; justify-content: space-between;">
-                <div>
-                    <div style="display: flex; align-items: center; justify-content: center; width: 80px; height: 80px; background: rgba(255,255,255,0.2); border-radius: 50%; margin-bottom: var(--space-xl);">
+            <div class="card-modern card-gradient" style="background: var(--gradient-primary); min-height: 320px; display: flex; flex-direction: column; justify-content: space-between; position: relative; overflow: hidden;">
+                <div style="position: absolute; top: -50px; right: -50px; width: 150px; height: 150px; background: rgba(255,255,255,0.1); border-radius: 50%; opacity: 0.3;"></div>
+                <div style="position: relative; z-index: 2;">
+                    <div style="display: flex; align-items: center; justify-content: center; width: 80px; height: 80px; background: rgba(255,255,255,0.2); border-radius: 50%; margin-bottom: var(--space-xl); backdrop-filter: blur(10px);">
                         <i class="fa fa-stethoscope" style="font-size: 32px; color: white;"></i>
                     </div>
                     <h3 class="card-title" style="font-size: var(--text-2xl); margin-bottom: var(--space-lg);">Comprehensive Risk Assessment</h3>
-                    <p class="card-content" style="font-size: var(--text-lg); line-height: 1.7;">Complete your detailed health evaluation using our advanced AI-powered system. Get personalized risk predictions, preventive measures, and actionable health recommendations tailored specifically for you.</p>
+                    <p class="card-content" style="font-size: var(--text-lg); line-height: 1.7; margin-bottom: var(--space-xl);">Complete your detailed health evaluation using our advanced AI-powered system. Get personalized risk predictions, preventive measures, and actionable health recommendations.</p>
                 </div>
-                <div style="margin-top: var(--space-xl);">
-                    <a href="{{ url_for('checkup') }}" class="btn-modern btn-lg" style="background: rgba(255,255,255,0.9); color: var(--primary-color); border: none; font-weight: 700; width: 100%; padding: var(--space-lg);">
+                <div style="position: relative; z-index: 2;">
+                    <a href="{{ url_for('checkup') }}" class="btn-modern btn-lg" style="background: rgba(255,255,255,0.9); color: var(--primary-color); border: none; font-weight: 700; width: 100%; padding: var(--space-lg); transition: all var(--transition-base);">
                         <i class="fa fa-rocket" style="margin-right: 12px;"></i>
                         Start Health Assessment
                     </a>
@@ -181,15 +64,16 @@
             </div>
 
             <!-- Enhanced Health Reports Card -->
-            <div class="card-modern" style="min-height: 280px; display: flex; flex-direction: column; justify-content: space-between; background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, rgba(16, 185, 129, 0.1) 100%); border: 2px solid var(--secondary-color);">
-                <div>
-                    <div style="display: flex; align-items: center; justify-content: center; width: 80px; height: 80px; background: var(--gradient-success); border-radius: 50%; margin-bottom: var(--space-xl);">
+            <div class="card-modern" style="min-height: 320px; display: flex; flex-direction: column; justify-content: space-between; background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, rgba(16, 185, 129, 0.1) 100%); border: 2px solid var(--secondary-color); position: relative; overflow: hidden;">
+                <div style="position: absolute; bottom: -50px; left: -50px; width: 150px; height: 150px; background: rgba(16, 185, 129, 0.1); border-radius: 50%; opacity: 0.5;"></div>
+                <div style="position: relative; z-index: 2;">
+                    <div style="display: flex; align-items: center; justify-content: center; width: 80px; height: 80px; background: var(--gradient-success); border-radius: 50%; margin-bottom: var(--space-xl); box-shadow: var(--shadow-lg);">
                         <i class="fa fa-file-text-o" style="font-size: 32px; color: white;"></i>
                     </div>
                     <h3 class="card-title" style="font-size: var(--text-2xl); margin-bottom: var(--space-lg); color: var(--secondary-color);">Health Reports & Analytics</h3>
-                    <p class="card-content" style="font-size: var(--text-lg); line-height: 1.7;">Access your comprehensive health reports, track your progress over time, and view detailed analytics of your medical history. Monitor trends and get insights into your health journey.</p>
+                    <p class="card-content" style="font-size: var(--text-lg); line-height: 1.7; margin-bottom: var(--space-xl);">Access your comprehensive health reports, track your progress over time, and view detailed analytics of your medical history and trends.</p>
                 </div>
-                <div style="margin-top: var(--space-xl);">
+                <div style="position: relative; z-index: 2;">
                     <a href="{{ url_for('my_reports') }}" class="btn-modern btn-secondary btn-lg" style="width: 100%; padding: var(--space-lg); font-weight: 700;">
                         <i class="fa fa-chart-line" style="margin-right: 12px;"></i>
                         View My Reports
@@ -199,11 +83,11 @@
         </div>
 
         <!-- Enhanced Secondary Features -->
-        <div class="grid-modern grid-3 animate-fadeInUp" style="animation-delay: 0.8s; margin-top: var(--space-3xl);">
+        <div class="grid-modern grid-3 animate-fadeInUp" style="animation-delay: 0.8s; margin-bottom: var(--space-3xl);">
             <!-- Health Insights Card -->
-            <div class="card-modern" style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, rgba(147, 51, 234, 0.1) 100%); border: 2px solid var(--info); min-height: 220px;">
+            <div class="card-modern interactive-card" style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, rgba(147, 51, 234, 0.1) 100%); border: 2px solid var(--info); min-height: 280px; cursor: pointer;">
                 <div class="text-center" style="margin-bottom: var(--space-xl);">
-                    <div style="background: var(--gradient-secondary); color: white; width: 70px; height: 70px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto; font-size: 28px;">
+                    <div style="background: var(--gradient-secondary); color: white; width: 70px; height: 70px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto; font-size: 28px; transition: transform var(--transition-base);">
                         <i class="fa fa-brain"></i>
                     </div>
                 </div>
@@ -218,9 +102,9 @@
             </div>
 
             <!-- Profile Management Card -->
-            <div class="card-modern" style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.05) 0%, rgba(245, 158, 11, 0.1) 100%); border: 2px solid var(--accent-color); min-height: 220px;">
+            <div class="card-modern interactive-card" style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.05) 0%, rgba(245, 158, 11, 0.1) 100%); border: 2px solid var(--accent-color); min-height: 280px; cursor: pointer;">
                 <div class="text-center" style="margin-bottom: var(--space-xl);">
-                    <div style="background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%); color: white; width: 70px; height: 70px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto; font-size: 28px;">
+                    <div style="background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%); color: white; width: 70px; height: 70px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto; font-size: 28px; transition: transform var(--transition-base);">
                         <i class="fa fa-user-circle"></i>
                     </div>
                 </div>
@@ -235,9 +119,9 @@
             </div>
 
             <!-- Support & Feedback Card -->
-            <div class="card-modern" style="background: linear-gradient(135deg, rgba(239, 68, 68, 0.05) 0%, rgba(239, 68, 68, 0.1) 100%); border: 2px solid var(--error); min-height: 220px;">
+            <div class="card-modern interactive-card" style="background: linear-gradient(135deg, rgba(239, 68, 68, 0.05) 0%, rgba(239, 68, 68, 0.1) 100%); border: 2px solid var(--error); min-height: 280px; cursor: pointer;">
                 <div class="text-center" style="margin-bottom: var(--space-xl);">
-                    <div style="background: linear-gradient(135deg, #ef4444 0%, #f87171 100%); color: white; width: 70px; height: 70px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto; font-size: 28px;">
+                    <div style="background: linear-gradient(135deg, #ef4444 0%, #f87171 100%); color: white; width: 70px; height: 70px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto; font-size: 28px; transition: transform var(--transition-base);">
                         <i class="fa fa-life-ring"></i>
                     </div>
                 </div>
@@ -252,15 +136,102 @@
             </div>
         </div>
 
+        <!-- Quick Actions Section -->
+        <div class="card-modern animate-fadeInUp" style="animation-delay: 1s; background: var(--background-primary); border: 2px solid var(--primary-color); margin-bottom: var(--space-2xl);">
+            <div style="text-align: center; margin-bottom: var(--space-xl);">
+                <h3 style="color: var(--primary-color); margin-bottom: var(--space-md); font-size: var(--text-2xl);">Quick Actions</h3>
+                <p style="color: var(--text-secondary); margin-bottom: var(--space-lg);">Access your most-used features and tools for efficient health management.</p>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-lg);">
+                <a href="{{ url_for('checkup') }}" class="btn-modern btn-primary" style="padding: var(--space-lg); text-align: center;">
+                    <i class="fa fa-plus-circle" style="margin-right: 8px;"></i>
+                    New Assessment
+                </a>
+                <a href="{{ url_for('my_reports') }}" class="btn-modern btn-outline" style="padding: var(--space-lg); text-align: center;">
+                    <i class="fa fa-history" style="margin-right: 8px;"></i>
+                    View History
+                </a>
+                <a href="{{ url_for('analysis') }}" class="btn-modern btn-outline" style="padding: var(--space-lg); text-align: center;">
+                    <i class="fa fa-bar-chart" style="margin-right: 8px;"></i>
+                    Health Trends
+                </a>
+                <a href="{{ url_for('diet_plan') }}" class="btn-modern btn-outline" style="padding: var(--space-lg); text-align: center;">
+                    <i class="fa fa-cutlery" style="margin-right: 8px;"></i>
+                    Diet Plan
+                </a>
+            </div>
+        </div>
+
         <!-- Help Section -->
-        <div class="card-modern animate-fadeInUp" style="animation-delay: 1s; margin-top: var(--space-2xl); text-align: center; background: var(--background-primary); border: 2px dashed var(--border-color);">
-            <h3 style="color: var(--text-primary); margin-bottom: var(--space-md);">Need Help?</h3>
-            <p style="color: var(--text-secondary); margin-bottom: var(--space-lg);">Have questions about your health assessment or need assistance navigating the platform?</p>
-            <a href="{{ url_for('feedback') }}" class="btn-modern btn-primary">
-                <i class="fa fa-comment" style="margin-right: 8px;"></i>
-                Contact Support
-            </a>
+        <div class="card-modern animate-fadeInUp" style="animation-delay: 1.2s; text-align: center; background: var(--background-secondary); border: 2px dashed var(--border-color);">
+            <div style="margin-bottom: var(--space-lg);">
+                <div style="width: 60px; height: 60px; background: var(--gradient-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto var(--space-md);">
+                    <i class="fa fa-question-circle" style="font-size: 24px; color: white;"></i>
+                </div>
+                <h3 style="color: var(--text-primary); margin-bottom: var(--space-md);">Need Help Getting Started?</h3>
+                <p style="color: var(--text-secondary); margin-bottom: var(--space-lg); max-width: 600px; margin-left: auto; margin-right: auto;">Have questions about your health assessment or need assistance navigating the platform? Our support team is here to help you every step of the way.</p>
+            </div>
+            <div style="display: flex; gap: var(--space-md); justify-content: center; flex-wrap: wrap;">
+                <a href="{{ url_for('feedback') }}" class="btn-modern btn-primary">
+                    <i class="fa fa-comment" style="margin-right: 8px;"></i>
+                    Contact Support
+                </a>
+                <a href="#" class="btn-modern btn-outline" onclick="startTour()">
+                    <i class="fa fa-play-circle" style="margin-right: 8px;"></i>
+                    Take a Tour
+                </a>
+            </div>
         </div>
     </div>
+
+    <script>
+        // Enhanced card interactions
+        document.querySelectorAll('.interactive-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                const icon = this.querySelector('div[style*="border-radius: 50%"]');
+                if (icon) {
+                    icon.style.transform = 'scale(1.1) rotate(5deg)';
+                }
+                this.style.transform = 'translateY(-8px) scale(1.02)';
+            });
+
+            card.addEventListener('mouseleave', function() {
+                const icon = this.querySelector('div[style*="border-radius: 50%"]');
+                if (icon) {
+                    icon.style.transform = 'scale(1) rotate(0deg)';
+                }
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+
+            // Make cards clickable
+            card.addEventListener('click', function() {
+                const link = this.querySelector('a');
+                if (link) {
+                    window.location.href = link.href;
+                }
+            });
+        });
+
+        // Simple tour function
+        function startTour() {
+            alert('Welcome to HealthGuard! Start by taking your first health assessment to get personalized insights and recommendations.');
+        }
+
+        // Add loading states to buttons
+        document.querySelectorAll('.btn-modern').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                if (this.href && !this.href.includes('#')) {
+                    const originalText = this.innerHTML;
+                    this.innerHTML = '<span class="spinner"></span> Loading...';
+                    this.style.pointerEvents = 'none';
+
+                    setTimeout(() => {
+                        this.innerHTML = originalText;
+                        this.style.pointerEvents = 'auto';
+                    }, 2000);
+                }
+            });
+        });
+    </script>
 </body>
 </html>

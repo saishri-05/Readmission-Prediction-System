@@ -3,89 +3,204 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Send OTP</title>
-    <style>
-        body {
-            font-family: "Arial", sans-serif;
-            background-color: #f4f4f4;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-
-        .otp-container {
-            background-color: #ffffff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            width: 100%;
-            max-width: 400px;
-        }
-
-        h1 {
-            color: #333;
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 10px;
-            font-weight: bold;
-            color: #555;
-        }
-
-        input[type="text"] {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 20px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 16px;
-        }
-
-        button {
-            width: 100%;
-            padding: 10px;
-            background-color: #007bff;
-            color: #ffffff;
-            border: none;
-            border-radius: 4px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        button:hover {
-            background-color: #0056b3;
-        }
-
-        p {
-            color: #777;
-            margin-top: 20px;
-        }
-
-        a {
-            color: #007bff;
-            text-decoration: none;
-        }
-
-        a:hover {
-            text-decoration: underline;
-        }
-    </style>
+    <link rel="icon" href="{{ url_for('static', filename='images/main.jpg') }}" type="image/gif">
+    <title>HealthGuard - Verify Email</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+    <link href="{{ url_for('static', filename='css/font-awesome.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/responsive.css') }}" rel="stylesheet">
 </head>
+
 <body>
-    <div class="otp-container">
-        <h1>Send OTP</h1>
-        <p>We have sent an OTP to your registered email. Please enter the OTP below to proceed.</p>
-        <form action="{{ url_for('verify_otp') }}" method="post">
-            <label for="otp">Enter the OTP:</label>
-            <input type="text" name="otp" id="otp" required>
-            <button type="submit">Verify OTP</button>
-        </form>
+  <!-- Enhanced Auth Background -->
+  <div class="hero-modern" style="min-height: 100vh; display: flex; align-items: center; justify-content: center; position: relative;">
+    <div class="floating-shapes">
+      <div class="shape"></div>
+      <div class="shape"></div>
+      <div class="shape"></div>
     </div>
+
+    <div style="width: 100%; max-width: 480px; padding: 0 var(--space-lg); z-index: 3; position: relative;">
+      <!-- Auth Header -->
+      <div style="text-align: center; margin-bottom: var(--space-2xl); color: white;">
+        <div style="display: flex; align-items: center; justify-content: center; gap: var(--space-md); margin-bottom: var(--space-lg);">
+          <div style="width: 60px; height: 60px; background: rgba(255, 255, 255, 0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(10px);">
+            <i class="fa fa-heartbeat" style="font-size: 24px; color: white;"></i>
+          </div>
+          <h1 style="font-size: var(--text-3xl); font-weight: 700; margin: 0; font-family: 'Playfair Display', serif;">
+            HealthGuard
+          </h1>
+        </div>
+        <p style="font-size: var(--text-lg); opacity: 0.9; margin: 0;">
+          Email verification required for account security.
+        </p>
+      </div>
+
+      <!-- Auth Box -->
+      <div style="background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px); padding: var(--space-2xl); border-radius: var(--radius-2xl); box-shadow: var(--shadow-2xl); border: 1px solid rgba(255, 255, 255, 0.2);">
+        <div style="text-align: center; margin-bottom: var(--space-xl);">
+          <div style="width: 80px; height: 80px; background: var(--gradient-success); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto var(--space-lg);">
+            <i class="fa fa-envelope" style="font-size: 32px; color: white;"></i>
+          </div>
+          <div style="color: var(--success); font-size: var(--text-2xl); font-weight: 600; font-family: 'Playfair Display', serif; margin-bottom: var(--space-sm);">
+            Check Your Email
+          </div>
+          <p style="color: var(--text-secondary); font-size: var(--text-base); margin: 0;">
+            We've sent a verification code to your email address
+          </p>
+        </div>
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="alert-modern alert-{{ 'success' if category == 'success' else 'error' }}" style="margin-bottom: var(--space-lg); display: flex; align-items: center; gap: var(--space-sm);">
+                <i class="fa fa-{{ 'check-circle' if category == 'success' else 'exclamation-triangle' }}"></i>
+                {{ message }}
+              </div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        <!-- Information Box -->
+        <div style="background: rgba(16, 185, 129, 0.05); border: 1px solid rgba(16, 185, 129, 0.1); border-radius: var(--radius-lg); padding: var(--space-lg); margin-bottom: var(--space-xl);">
+          <div style="display: flex; align-items: flex-start; gap: var(--space-sm);">
+            <i class="fa fa-info-circle" style="color: var(--success); margin-top: 2px;"></i>
+            <div style="color: var(--text-secondary); font-size: var(--text-sm); line-height: 1.5;">
+              <strong style="color: var(--text-primary);">Verification Steps:</strong><br>
+              1. Check your email inbox (and spam folder)<br>
+              2. Find the email from HealthGuard<br>
+              3. Enter the 6-digit verification code below<br>
+              4. Code expires in 10 minutes for security
+            </div>
+          </div>
+        </div>
+
+        <!-- OTP Form -->
+        <form action="{{ url_for('verify_otp') }}" method="post" class="form-modern">
+          <div class="form-group-modern">
+            <label class="form-label-modern">
+              <i class="fa fa-key" style="margin-right: 4px; color: var(--success);"></i>
+              Verification Code
+            </label>
+            <input type="text" name="otp" class="form-input-modern" placeholder="Enter 6-digit code" required maxlength="6" style="text-align: center; font-size: var(--text-xl); letter-spacing: 0.2em; font-weight: 600;">
+            <div style="font-size: var(--text-xs); color: var(--text-secondary); margin-top: var(--space-xs); text-align: center;">
+              Enter the code exactly as received
+            </div>
+          </div>
+
+          <button type="submit" class="btn-modern btn-secondary w-full" style="margin-bottom: var(--space-lg);">
+            <i class="fa fa-check-circle" style="margin-right: 8px;"></i>
+            Verify Email Address
+          </button>
+        </form>
+
+        <div style="text-align: center; color: var(--text-secondary); font-size: var(--text-sm); position: relative; margin: var(--space-lg) 0;">
+          <div style="position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: var(--border-color); z-index: 1;"></div>
+          <span style="background: white; padding: 0 var(--space-md); position: relative; z-index: 2;">
+            Didn't receive the code?
+          </span>
+        </div>
+
+        <div style="text-align: center;">
+          <a href="{{ url_for('send_otp') }}" class="btn-modern btn-outline w-full" id="resendBtn">
+            <i class="fa fa-refresh" style="margin-right: 8px;"></i>
+            Resend Verification Code
+          </a>
+        </div>
+
+        <!-- Help Section -->
+        <div style="margin-top: var(--space-xl); padding: var(--space-md); background: rgba(59, 130, 246, 0.05); border-radius: var(--radius-lg); border: 1px solid rgba(59, 130, 246, 0.1);">
+          <div style="text-align: center;">
+            <p style="color: var(--text-secondary); font-size: var(--text-xs); margin: 0 0 var(--space-sm);">
+              <i class="fa fa-life-ring" style="margin-right: 4px; color: var(--info);"></i>
+              Having trouble? We're here to help
+            </p>
+            <a href="{{ url_for('feedback') }}" style="color: var(--info); text-decoration: none; font-size: var(--text-sm); font-weight: 500;">
+              <i class="fa fa-envelope" style="margin-right: 4px;"></i>
+              Contact Support
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/jquery-3.4.1.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/bootstrap.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/custom.js') }}"></script>
+
+  <script>
+    // Enhanced OTP input handling
+    const otpInput = document.querySelector('input[name="otp"]');
+
+    // Auto-format OTP input
+    otpInput.addEventListener('input', function() {
+      let value = this.value.replace(/\D/g, ''); // Remove non-digits
+      if (value.length > 6) value = value.slice(0, 6);
+      this.value = value;
+
+      // Auto-submit when 6 digits entered
+      if (value.length === 6) {
+        this.form.submit();
+      }
+    });
+
+    // Enhanced form interactions
+    document.querySelectorAll('.form-input-modern').forEach(input => {
+      input.addEventListener('focus', function() {
+        this.parentElement.style.transform = 'translateY(-2px)';
+        this.style.borderColor = 'var(--success)';
+      });
+
+      input.addEventListener('blur', function() {
+        this.parentElement.style.transform = 'translateY(0)';
+        if (!this.value) {
+          this.style.borderColor = 'var(--border-color)';
+        }
+      });
+    });
+
+    // Resend cooldown
+    let resendCooldown = 60;
+    const resendBtn = document.getElementById('resendBtn');
+
+    function startResendCooldown() {
+      resendBtn.style.pointerEvents = 'none';
+      resendBtn.style.opacity = '0.6';
+
+      const originalText = resendBtn.innerHTML;
+      const interval = setInterval(() => {
+        resendBtn.innerHTML = `<i class="fa fa-clock-o" style="margin-right: 8px;"></i>Resend in ${resendCooldown}s`;
+        resendCooldown--;
+
+        if (resendCooldown < 0) {
+          clearInterval(interval);
+          resendBtn.innerHTML = originalText;
+          resendBtn.style.pointerEvents = 'auto';
+          resendBtn.style.opacity = '1';
+          resendCooldown = 60;
+        }
+      }, 1000);
+    }
+
+    // Start cooldown on page load
+    startResendCooldown();
+
+    // Loading state for form submission
+    document.querySelector('form').addEventListener('submit', function(e) {
+      const submitBtn = this.querySelector('button[type="submit"]');
+      const originalText = submitBtn.innerHTML;
+
+      submitBtn.innerHTML = '<span class="spinner"></span> Verifying...';
+      submitBtn.disabled = true;
+
+      // Re-enable after 3 seconds in case of error
+      setTimeout(() => {
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+      }, 3000);
+    });
+  </script>
 </body>
 </html>

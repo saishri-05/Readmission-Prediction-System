@@ -3,124 +3,331 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Post-Discharge Care</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #e0f7fa;
-            color: #333;
-            margin: 0;
-            padding: 0;
-        }
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: #00695c;
-            padding: 20px;
-            color: white;
-            font-size: 1.5em;
-        }
-        header a {
-            color: white;
-            text-decoration: none;
-            font-size: 1.2em;
-        }
-        .container {
-            max-width: 600px;
-            margin: 50px auto;
-            padding: 20px;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        h1 {
-            color: #00695c;
-            text-align: center;
-            font-size: 1.8em;
-            margin-bottom: 20px; /* Space below the heading */
-        }
-        label {
-            display: block;
-            margin: 15px 0 5px;
-            font-size: 1.1em;
-        }
-        select, .checkbox-container {
-            padding: 10px;
-            margin: 5px 0 20px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-            font-size: 1em;
-        }
-        select {
-            width: 100%;
-        }
-        .checkbox-container {
-            width: 80%; /* Reduced width for the checkbox container */
-            padding: 15px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            background-color: #f9f9f9;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        .checkbox-container label {
-            display: block;
-            margin-bottom: 10px;
-            font-size: 1em;
-        }
-        .btn {
-            display: inline-block;
-            padding: 15px 30px;
-            font-size: 1.2em;
-            color: white;
-            background-color: #00695c;
-            border: none;
-            border-radius: 5px;
-            text-align: center;
-            text-decoration: none;
-            cursor: pointer;
-            width: 100%;
-        }
-        .btn:hover {
-            background-color: #004d40;
-        }
-    </style>
+    <link rel="icon" href="{{ url_for('static', filename='images/main.jpg') }}" type="image/gif">
+    <title>Post-Discharge Care - HealthGuard</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+    <link href="{{ url_for('static', filename='css/font-awesome.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/responsive.css') }}" rel="stylesheet">
 </head>
+
 <body>
+    <!-- Modern Navigation -->
+    <nav class="nav-modern">
+        <div class="nav-container">
+            <a href="{{ url_for('index') }}" class="nav-brand">
+                <i class="fa fa-heartbeat" style="margin-right: 8px;"></i>
+                HealthGuard
+            </a>
+            <div class="nav-links">
+                <a href="{{ url_for('home') }}" class="nav-link">
+                    <i class="fa fa-home" style="margin-right: 4px;"></i>
+                    Dashboard
+                </a>
+                <a href="{{ url_for('my_reports') }}" class="nav-link">
+                    <i class="fa fa-file-text-o" style="margin-right: 4px;"></i>
+                    My Reports
+                </a>
+                <a href="{{ url_for('logout') }}" class="btn-modern btn-outline btn-sm">
+                    <i class="fa fa-sign-out" style="margin-right: 4px;"></i>
+                    Logout
+                </a>
+            </div>
+        </div>
+    </nav>
 
-    <header>
-        <a href="/" class="riskometer">Post-Discharge Care</a>
-        <span></span> <!-- Empty span to center the title -->
-        <span></span> <!-- Empty span to keep the header balanced -->
-    </header>
+    <!-- Main Content -->
+    <div class="dashboard-container animate-fadeIn">
+        <!-- Enhanced Header -->
+        <div class="dashboard-header">
+            <div style="width: 100px; height: 100px; background: var(--gradient-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto var(--space-xl); box-shadow: var(--shadow-xl);">
+                <i class="fa fa-shield" style="font-size: 40px; color: white;"></i>
+            </div>
+            <h1 class="dashboard-title animate-fadeInUp">
+                Post-Discharge Care Plan
+            </h1>
+            <p class="dashboard-subtitle animate-fadeInUp" style="animation-delay: 0.2s;">
+                Get personalized preventive care recommendations based on your health conditions and risk assessment.
+            </p>
+        </div>
 
-    <div class="container">
-        <h1>Select Your Health Conditions</h1>
-        <form action="{{ url_for('preventive_measures') }}" method="post">
-            <label for="risk_level">Risk Level:</label>
-            <select id="risk_level" name="risk_level" required>
-                <option value="1">1-2</option>
-                <option value="2">2-4</option>
-                <option value="3">41-60</option>
-                <option value="4">61-80</option>
-                <option value="5">81-100</option>
-            </select>
+        <form action="{{ url_for('preventive_measures') }}" method="post" id="preventiveForm" class="animate-fadeInUp" style="animation-delay: 0.4s;">
+            <!-- Risk Level Section -->
+            <div class="form-section" style="background: var(--background-primary); padding: var(--space-2xl); border-radius: var(--radius-xl); margin-bottom: var(--space-xl); box-shadow: var(--shadow-md); border-left: 4px solid var(--primary-color);">
+                <h2 class="section-title" style="font-size: var(--text-2xl); font-weight: 600; color: var(--primary-color); margin-bottom: var(--space-xl); font-family: 'Playfair Display', serif; display: flex; align-items: center; gap: var(--space-md);">
+                    <div style="width: 50px; height: 50px; background: var(--gradient-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                        <i class="fa fa-chart-line" style="color: white; font-size: 20px;"></i>
+                    </div>
+                    Risk Assessment Level
+                </h2>
+                <p style="color: var(--text-secondary); margin-bottom: var(--space-lg); text-align: center;">Select your current risk level based on your recent health assessment.</p>
 
-            <label for="diseases">Do You Have Any of These Conditions?</label>
-            <div class="checkbox-container">
-                <label><input type="checkbox" name="diseases" value="Diabetes"> Diabetes</label>
-                <label><input type="checkbox" name="diseases" value="Heart Disease"> Heart Disease</label>
-                <label><input type="checkbox" name="diseases" value="Hypertension"> Hypertension</label>
-                <label><input type="checkbox" name="diseases" value="Liver Disease"> Liver Disease</label>
-                <label><input type="checkbox" name="diseases" value="Asthma"> Asthma</label>
-                <label><input type="checkbox" name="diseases" value="Obesity"> Obesity</label>
-                <label><input type="checkbox" name="diseases" value="Anemia"> Anemia</label>
+                <div class="form-group" style="display: flex; flex-direction: column; gap: var(--space-sm);">
+                    <label style="font-weight: 600; color: var(--text-primary); font-size: var(--text-sm); display: flex; align-items: center; gap: var(--space-xs); justify-content: center;">
+                        <i class="fa fa-thermometer-half" style="color: var(--primary-color);"></i>
+                        Risk Level Range
+                    </label>
+                    <select id="risk_level" name="risk_level" required style="padding: var(--space-md); border: 2px solid var(--border-color); border-radius: var(--radius-lg); font-size: var(--text-base); background: white; cursor: pointer; max-width: 400px; margin: 0 auto;">
+                        <option value="">Select your risk level</option>
+                        <option value="1">1-20 (Very Low Risk)</option>
+                        <option value="2">21-40 (Low Risk)</option>
+                        <option value="3">41-60 (Moderate Risk)</option>
+                        <option value="4">61-80 (High Risk)</option>
+                        <option value="5">81-100 (Very High Risk)</option>
+                    </select>
+                </div>
             </div>
 
-            <button type="submit" class="btn">Submit</button>
+            <!-- Health Conditions Section -->
+            <div class="form-section" style="background: var(--background-primary); padding: var(--space-2xl); border-radius: var(--radius-xl); margin-bottom: var(--space-xl); box-shadow: var(--shadow-md); border-left: 4px solid var(--error);">
+                <h2 class="section-title" style="font-size: var(--text-2xl); font-weight: 600; color: var(--error); margin-bottom: var(--space-xl); font-family: 'Playfair Display', serif; display: flex; align-items: center; gap: var(--space-md);">
+                    <div style="width: 50px; height: 50px; background: linear-gradient(135deg, #ef4444 0%, #f87171 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                        <i class="fa fa-medkit" style="color: white; font-size: 20px;"></i>
+                    </div>
+                    Current Health Conditions
+                </h2>
+                <p style="color: var(--text-secondary); margin-bottom: var(--space-lg); text-align: center;">Select any health conditions you currently have. This helps us provide targeted preventive care recommendations.</p>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--space-lg);">
+                    <div class="condition-card card-modern interactive-card" style="padding: var(--space-lg); cursor: pointer; border: 2px solid var(--border-color); transition: all var(--transition-base);">
+                        <label style="display: flex; align-items: center; gap: var(--space-md); cursor: pointer; margin: 0;">
+                            <input type="checkbox" name="diseases" value="Diabetes" style="width: 20px; height: 20px; accent-color: var(--error);">
+                            <div style="display: flex; align-items: center; gap: var(--space-sm);">
+                                <div style="width: 40px; height: 40px; background: var(--gradient-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                    <i class="fa fa-tint" style="color: white; font-size: 16px;"></i>
+                                </div>
+                                <div>
+                                    <div style="font-weight: 600; color: var(--text-primary);">Diabetes</div>
+                                    <div style="font-size: var(--text-xs); color: var(--text-secondary);">Blood sugar management</div>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="condition-card card-modern interactive-card" style="padding: var(--space-lg); cursor: pointer; border: 2px solid var(--border-color); transition: all var(--transition-base);">
+                        <label style="display: flex; align-items: center; gap: var(--space-md); cursor: pointer; margin: 0;">
+                            <input type="checkbox" name="diseases" value="Heart Disease" style="width: 20px; height: 20px; accent-color: var(--error);">
+                            <div style="display: flex; align-items: center; gap: var(--space-sm);">
+                                <div style="width: 40px; height: 40px; background: var(--gradient-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                    <i class="fa fa-heart" style="color: white; font-size: 16px;"></i>
+                                </div>
+                                <div>
+                                    <div style="font-weight: 600; color: var(--text-primary);">Heart Disease</div>
+                                    <div style="font-size: var(--text-xs); color: var(--text-secondary);">Cardiovascular health</div>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="condition-card card-modern interactive-card" style="padding: var(--space-lg); cursor: pointer; border: 2px solid var(--border-color); transition: all var(--transition-base);">
+                        <label style="display: flex; align-items: center; gap: var(--space-md); cursor: pointer; margin: 0;">
+                            <input type="checkbox" name="diseases" value="Hypertension" style="width: 20px; height: 20px; accent-color: var(--error);">
+                            <div style="display: flex; align-items: center; gap: var(--space-sm);">
+                                <div style="width: 40px; height: 40px; background: var(--gradient-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                    <i class="fa fa-heartbeat" style="color: white; font-size: 16px;"></i>
+                                </div>
+                                <div>
+                                    <div style="font-weight: 600; color: var(--text-primary);">Hypertension</div>
+                                    <div style="font-size: var(--text-xs); color: var(--text-secondary);">High blood pressure</div>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="condition-card card-modern interactive-card" style="padding: var(--space-lg); cursor: pointer; border: 2px solid var(--border-color); transition: all var(--transition-base);">
+                        <label style="display: flex; align-items: center; gap: var(--space-md); cursor: pointer; margin: 0;">
+                            <input type="checkbox" name="diseases" value="Liver Disease" style="width: 20px; height: 20px; accent-color: var(--error);">
+                            <div style="display: flex; align-items: center; gap: var(--space-sm);">
+                                <div style="width: 40px; height: 40px; background: var(--gradient-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                    <i class="fa fa-shield" style="color: white; font-size: 16px;"></i>
+                                </div>
+                                <div>
+                                    <div style="font-weight: 600; color: var(--text-primary);">Liver Disease</div>
+                                    <div style="font-size: var(--text-xs); color: var(--text-secondary);">Liver function support</div>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="condition-card card-modern interactive-card" style="padding: var(--space-lg); cursor: pointer; border: 2px solid var(--border-color); transition: all var(--transition-base);">
+                        <label style="display: flex; align-items: center; gap: var(--space-md); cursor: pointer; margin: 0;">
+                            <input type="checkbox" name="diseases" value="Asthma" style="width: 20px; height: 20px; accent-color: var(--error);">
+                            <div style="display: flex; align-items: center; gap: var(--space-sm);">
+                                <div style="width: 40px; height: 40px; background: var(--gradient-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                    <i class="fa fa-lungs" style="color: white; font-size: 16px;"></i>
+                                </div>
+                                <div>
+                                    <div style="font-weight: 600; color: var(--text-primary);">Asthma</div>
+                                    <div style="font-size: var(--text-xs); color: var(--text-secondary);">Respiratory care</div>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="condition-card card-modern interactive-card" style="padding: var(--space-lg); cursor: pointer; border: 2px solid var(--border-color); transition: all var(--transition-base);">
+                        <label style="display: flex; align-items: center; gap: var(--space-md); cursor: pointer; margin: 0;">
+                            <input type="checkbox" name="diseases" value="Obesity" style="width: 20px; height: 20px; accent-color: var(--error);">
+                            <div style="display: flex; align-items: center; gap: var(--space-sm);">
+                                <div style="width: 40px; height: 40px; background: var(--gradient-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                    <i class="fa fa-user" style="color: white; font-size: 16px;"></i>
+                                </div>
+                                <div>
+                                    <div style="font-weight: 600; color: var(--text-primary);">Obesity</div>
+                                    <div style="font-size: var(--text-xs); color: var(--text-secondary);">Weight management</div>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="condition-card card-modern interactive-card" style="padding: var(--space-lg); cursor: pointer; border: 2px solid var(--border-color); transition: all var(--transition-base);">
+                        <label style="display: flex; align-items: center; gap: var(--space-md); cursor: pointer; margin: 0;">
+                            <input type="checkbox" name="diseases" value="Anemia" style="width: 20px; height: 20px; accent-color: var(--error);">
+                            <div style="display: flex; align-items: center; gap: var(--space-sm);">
+                                <div style="width: 40px; height: 40px; background: var(--gradient-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                    <i class="fa fa-tint" style="color: white; font-size: 16px;"></i>
+                                </div>
+                                <div>
+                                    <div style="font-weight: 600; color: var(--text-primary);">Anemia</div>
+                                    <div style="font-size: var(--text-xs); color: var(--text-secondary);">Iron deficiency care</div>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Submit Section -->
+            <div class="submit-section" style="text-align: center; margin-top: var(--space-2xl); padding: var(--space-2xl); background: var(--background-primary); border-radius: var(--radius-xl); box-shadow: var(--shadow-lg); border: 2px solid var(--primary-color);">
+                <div style="width: 80px; height: 80px; background: var(--gradient-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto var(--space-lg);">
+                    <i class="fa fa-rocket" style="font-size: 32px; color: white;"></i>
+                </div>
+                <h3 style="color: var(--primary-color); margin-bottom: var(--space-lg); font-size: var(--text-2xl);">Get Your Care Plan</h3>
+                <p style="color: var(--text-secondary); margin-bottom: var(--space-xl); max-width: 600px; margin-left: auto; margin-right: auto;">Receive personalized preventive care recommendations, medication guidelines, and lifestyle modifications tailored to your specific health conditions.</p>
+                <button type="submit" class="btn-modern btn-primary btn-lg" style="padding: var(--space-lg) var(--space-2xl); font-size: var(--text-lg);">
+                    <i class="fa fa-shield" style="margin-right: 12px;"></i>
+                    Generate Care Plan
+                </button>
+            </div>
         </form>
+
+        <!-- Information Cards -->
+        <div class="grid-modern grid-3 animate-fadeInUp" style="animation-delay: 0.6s; margin-top: var(--space-3xl);">
+            <div class="card-modern" style="text-align: center; background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, rgba(16, 185, 129, 0.1) 100%); border: 2px solid rgba(16, 185, 129, 0.2);">
+                <div style="width: 60px; height: 60px; background: var(--gradient-success); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto var(--space-md);">
+                    <i class="fa fa-calendar-check-o" style="font-size: 24px; color: white;"></i>
+                </div>
+                <h3 style="color: var(--secondary-color); margin-bottom: var(--space-sm); font-size: var(--text-lg);">Follow-up Schedule</h3>
+                <p style="color: var(--text-secondary); font-size: var(--text-sm);">Personalized appointment reminders and check-up schedules</p>
+            </div>
+
+            <div class="card-modern" style="text-align: center; background: linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, rgba(59, 130, 246, 0.1) 100%); border: 2px solid rgba(59, 130, 246, 0.2);">
+                <div style="width: 60px; height: 60px; background: var(--gradient-secondary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto var(--space-md);">
+                    <i class="fa fa-pills" style="font-size: 24px; color: white;"></i>
+                </div>
+                <h3 style="color: var(--info); margin-bottom: var(--space-sm); font-size: var(--text-lg);">Medication Guidelines</h3>
+                <p style="color: var(--text-secondary); font-size: var(--text-sm);">Detailed medication schedules and adherence tips</p>
+            </div>
+
+            <div class="card-modern" style="text-align: center; background: linear-gradient(135deg, rgba(245, 158, 11, 0.05) 0%, rgba(245, 158, 11, 0.1) 100%); border: 2px solid rgba(245, 158, 11, 0.2);">
+                <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto var(--space-md);">
+                    <i class="fa fa-heart" style="font-size: 24px; color: white;"></i>
+                </div>
+                <h3 style="color: var(--accent-color); margin-bottom: var(--space-sm); font-size: var(--text-lg);">Lifestyle Modifications</h3>
+                <p style="color: var(--text-secondary); font-size: var(--text-sm);">Evidence-based lifestyle changes for better health</p>
+            </div>
+        </div>
     </div>
 
+    <script>
+        // Enhanced form interactions
+        document.querySelectorAll('input, select').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.style.borderColor = 'var(--primary-color)';
+                this.style.boxShadow = '0 0 0 3px rgba(37, 99, 235, 0.1)';
+                if (this.parentElement.classList.contains('form-group')) {
+                    this.parentElement.style.transform = 'translateY(-2px)';
+                }
+            });
+
+            input.addEventListener('blur', function() {
+                if (!this.value) {
+                    this.style.borderColor = 'var(--border-color)';
+                }
+                this.style.boxShadow = 'none';
+                if (this.parentElement.classList.contains('form-group')) {
+                    this.parentElement.style.transform = 'translateY(0)';
+                }
+            });
+        });
+
+        // Condition card interactions
+        document.querySelectorAll('.condition-card input[type="checkbox"]').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const card = this.closest('.condition-card');
+                if (this.checked) {
+                    card.style.borderColor = 'var(--error)';
+                    card.style.background = 'rgba(239, 68, 68, 0.1)';
+                    card.style.transform = 'translateY(-4px)';
+                } else {
+                    card.style.borderColor = 'var(--border-color)';
+                    card.style.background = 'var(--background-primary)';
+                    card.style.transform = 'translateY(0)';
+                }
+            });
+        });
+
+        // Enhanced card hover effects
+        document.querySelectorAll('.interactive-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                if (!this.querySelector('input:checked')) {
+                    this.style.transform = 'translateY(-4px)';
+                    this.style.boxShadow = 'var(--shadow-lg)';
+                }
+            });
+
+            card.addEventListener('mouseleave', function() {
+                if (!this.querySelector('input:checked')) {
+                    this.style.transform = 'translateY(0)';
+                    this.style.boxShadow = 'var(--shadow-md)';
+                }
+            });
+        });
+
+        // Loading state for form submission
+        document.getElementById('preventiveForm').addEventListener('submit', function(e) {
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+
+            submitBtn.innerHTML = '<span class="spinner"></span> Generating Care Plan...';
+            submitBtn.disabled = true;
+            submitBtn.style.pointerEvents = 'none';
+        });
+
+        // Form validation
+        function validateForm() {
+            const riskLevel = document.getElementById('risk_level').value;
+            const diseases = document.querySelectorAll('input[name="diseases"]:checked');
+
+            return riskLevel !== '' && diseases.length > 0;
+        }
+
+        // Enable/disable submit button based on form completion
+        function updateSubmitButton() {
+            const submitBtn = document.querySelector('button[type="submit"]');
+            const isValid = validateForm();
+
+            submitBtn.disabled = !isValid;
+            submitBtn.style.opacity = isValid ? '1' : '0.6';
+        }
+
+        // Add event listeners for validation
+        document.getElementById('risk_level').addEventListener('change', updateSubmitButton);
+        document.querySelectorAll('input[name="diseases"]').forEach(checkbox => {
+            checkbox.addEventListener('change', updateSubmitButton);
+        });
+
+        // Initialize form state
+        updateSubmitButton();
+    </script>
 </body>
 </html>

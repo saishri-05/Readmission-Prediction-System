@@ -1,29 +1,171 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="utf-8"/>
-  <title>Doctor Login</title>
-  <style>
-    body{font-family:Arial;background:#f4f7f9;margin:0;display:flex;align-items:center;justify-content:center;height:100vh}
-    .card{background:#fff;padding:24px;border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.08);width:360px}
-    h2{margin:0 0 16px;color:#0a3d62}
-    label{display:block;margin:10px 0 6px}
-    input{width:100%;padding:10px;border:1px solid #ddd;border-radius:6px}
-    button{margin-top:14px;width:100%;padding:12px;border:none;background:#0a3d62;color:#fff;border-radius:6px;cursor:pointer}
-    a{display:inline-block;margin-top:10px;color:#0a3d62;text-decoration:none}
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="icon" href="{{ url_for('static', filename='images/main.jpg') }}" type="image/gif">
+  <title>HealthGuard - Doctor Portal</title>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+  <link href="{{ url_for('static', filename='css/font-awesome.min.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static', filename='css/responsive.css') }}" rel="stylesheet">
 </head>
+
 <body>
-  <div class="card">
-    <h2>Doctor Login</h2>
-    <form method="post">
-      <label>Email</label>
-      <input type="email" name="email" required>
-      <label>Password</label>
-      <input type="password" name="password" required>
-      <button type="submit">Sign in</button>
-    </form>
-    <a href="{{ url_for('login') }}">Back to Patient Login</a>
+  <!-- Enhanced Auth Background -->
+  <div class="hero-modern" style="min-height: 100vh; display: flex; align-items: center; justify-content: center; position: relative;">
+    <div class="floating-shapes">
+      <div class="shape"></div>
+      <div class="shape"></div>
+      <div class="shape"></div>
+    </div>
+
+    <!-- Back to Home Link -->
+    <a href="{{ url_for('index') }}" style="position: absolute; top: var(--space-xl); left: var(--space-xl); color: white; text-decoration: none; font-size: var(--text-base); font-weight: 500; transition: all var(--transition-base); z-index: 10; display: flex; align-items: center; gap: var(--space-sm); padding: var(--space-sm) var(--space-md); background: rgba(255, 255, 255, 0.1); border-radius: var(--radius-lg); backdrop-filter: blur(10px);">
+      <i class="fa fa-arrow-left"></i>
+      Back to Home
+    </a>
+
+    <div style="width: 100%; max-width: 480px; padding: 0 var(--space-lg); z-index: 3; position: relative;">
+      <!-- Auth Header -->
+      <div style="text-align: center; margin-bottom: var(--space-2xl); color: white;">
+        <div style="display: flex; align-items: center; justify-content: center; gap: var(--space-md); margin-bottom: var(--space-lg);">
+          <div style="width: 60px; height: 60px; background: rgba(255, 255, 255, 0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(10px);">
+            <i class="fa fa-heartbeat" style="font-size: 24px; color: white;"></i>
+          </div>
+          <h1 style="font-size: var(--text-3xl); font-weight: 700; margin: 0; font-family: 'Playfair Display', serif;">
+            HealthGuard
+          </h1>
+        </div>
+        <p style="font-size: var(--text-lg); opacity: 0.9; margin: 0;">
+          Doctor Portal - Secure Access for Healthcare Professionals
+        </p>
+      </div>
+
+      <!-- Auth Box -->
+      <div style="background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px); padding: var(--space-2xl); border-radius: var(--radius-2xl); box-shadow: var(--shadow-2xl); border: 1px solid rgba(255, 255, 255, 0.2);">
+        <div style="text-align: center; margin-bottom: var(--space-xl);">
+          <div style="display: inline-flex; align-items: center; gap: var(--space-sm); color: var(--info); font-size: var(--text-2xl); font-weight: 600; font-family: 'Playfair Display', serif;">
+            <i class="fa fa-user-md"></i>
+            Doctor Login
+          </div>
+          <p style="color: var(--text-secondary); font-size: var(--text-sm); margin-top: var(--space-sm);">
+            Access patient reports and analytics
+          </p>
+        </div>
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="alert-modern alert-error" style="margin-bottom: var(--space-lg); display: flex; align-items: center; gap: var(--space-sm);">
+                <i class="fa fa-exclamation-triangle"></i>
+                {{ message }}
+              </div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        <!-- Login Form -->
+        <form method="post" class="form-modern">
+          <div class="form-group-modern">
+            <label class="form-label-modern">
+              <i class="fa fa-envelope" style="margin-right: 4px; color: var(--info);"></i>
+              Doctor Email
+            </label>
+            <input type="email" name="email" class="form-input-modern" placeholder="Enter your professional email" required>
+          </div>
+
+          <div class="form-group-modern">
+            <label class="form-label-modern">
+              <i class="fa fa-lock" style="margin-right: 4px; color: var(--info);"></i>
+              Password
+            </label>
+            <input type="password" name="password" class="form-input-modern" placeholder="Enter your password" required>
+          </div>
+
+          <button type="submit" class="btn-modern w-full" style="background: var(--gradient-secondary); color: white; border: none; margin-bottom: var(--space-lg);">
+            <i class="fa fa-sign-in" style="margin-right: 8px;"></i>
+            Access Doctor Portal
+          </button>
+        </form>
+
+        <div style="text-align: center; color: var(--text-secondary); font-size: var(--text-sm); position: relative; margin: var(--space-lg) 0;">
+          <div style="position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: var(--border-color); z-index: 1;"></div>
+          <span style="background: white; padding: 0 var(--space-md); position: relative; z-index: 2;">
+            Other Login Options
+          </span>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-md);">
+          <a href="{{ url_for('hospital_login') }}" class="btn-modern btn-outline" style="font-size: var(--text-sm);">
+            <i class="fa fa-hospital-o" style="margin-right: 4px;"></i>
+            Hospital Portal
+          </a>
+          <a href="{{ url_for('login') }}" class="btn-modern btn-outline" style="font-size: var(--text-sm);">
+            <i class="fa fa-user" style="margin-right: 4px;"></i>
+            Patient Login
+          </a>
+        </div>
+
+        <!-- Professional Notice -->
+        <div style="margin-top: var(--space-xl); padding: var(--space-md); background: rgba(59, 130, 246, 0.05); border-radius: var(--radius-lg); border: 1px solid rgba(59, 130, 246, 0.1);">
+          <p style="color: var(--text-secondary); font-size: var(--text-xs); margin: 0; text-align: center;">
+            <i class="fa fa-shield" style="margin-right: 4px; color: var(--info);"></i>
+            This portal is restricted to licensed healthcare professionals only
+          </p>
+        </div>
+      </div>
+    </div>
   </div>
+
+  <script src="{{ url_for('static', filename='js/jquery-3.4.1.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/bootstrap.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/custom.js') }}"></script>
+
+  <script>
+    // Enhanced form interactions
+    document.querySelectorAll('.form-input-modern').forEach(input => {
+      input.addEventListener('focus', function() {
+        this.parentElement.style.transform = 'translateY(-2px)';
+        this.style.borderColor = 'var(--info)';
+      });
+
+      input.addEventListener('blur', function() {
+        this.parentElement.style.transform = 'translateY(0)';
+        if (!this.value) {
+          this.style.borderColor = 'var(--border-color)';
+        }
+      });
+    });
+
+    // Loading state for form submission
+    document.querySelector('form').addEventListener('submit', function(e) {
+      const submitBtn = this.querySelector('button[type="submit"]');
+      const originalText = submitBtn.innerHTML;
+
+      submitBtn.innerHTML = '<span class="spinner"></span> Authenticating...';
+      submitBtn.disabled = true;
+
+      // Re-enable after 3 seconds in case of error
+      setTimeout(() => {
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+      }, 3000);
+    });
+
+    // Mobile responsive grid
+    function handleResize() {
+      const buttonGrid = document.querySelector('div[style*="grid-template-columns: 1fr 1fr"]');
+      if (window.innerWidth <= 480) {
+        buttonGrid.style.gridTemplateColumns = '1fr';
+      } else {
+        buttonGrid.style.gridTemplateColumns = '1fr 1fr';
+      }
+    }
+
+    window.addEventListener('resize', handleResize);
+    handleResize();
+  </script>
 </body>
 </html>

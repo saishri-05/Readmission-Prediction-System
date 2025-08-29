@@ -1,74 +1,373 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="utf-8"/>
-  <title>Doctor Reports</title>
-  <style>
-    body{font-family:Arial;background:#f4f7f9;margin:0;padding:20px}
-    h1{color:#0a3d62}
-    table{width:100%;border-collapse:collapse;background:#fff;margin-top:20px;box-shadow:0 8px 24px rgba(0,0,0,.08)}
-    th,td{padding:10px;border:1px solid #ddd;text-align:left;white-space:nowrap}
-    th{background:#0a3d62;color:#fff;position:sticky;top:0}
-    tr:nth-child(even){background:#f9f9f9}
-    form{margin-bottom:20px}
-    input[type=text]{padding:6px;width:280px}
-    button{padding:6px 12px;background:#0a3d62;color:#fff;border:none;border-radius:4px;cursor:pointer}
-    .muted{color:#666}
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="icon" href="{{ url_for('static', filename='images/main.jpg') }}" type="image/gif">
+  <title>Patient Reports - HealthGuard</title>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+  <link href="{{ url_for('static', filename='css/font-awesome.min.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static', filename='css/responsive.css') }}" rel="stylesheet">
 </head>
 <body>
-  <h1>Patient Reports</h1>
-  <form method="get">
-    <input type="text" name="q" placeholder="Search by patient name/email" value="{{ q or '' }}">
-    <button type="submit">Search</button>
-  </form>
+  <!-- Modern Navigation -->
+  <nav class="nav-modern">
+    <div class="nav-container">
+      <a href="{{ url_for('index') }}" class="nav-brand">
+        <i class="fa fa-heartbeat" style="margin-right: 8px;"></i>
+        HealthGuard
+      </a>
+      <div class="nav-links">
+        <a href="{{ url_for('doctor_home') }}" class="nav-link">
+          <i class="fa fa-home" style="margin-right: 4px;"></i>
+          Dashboard
+        </a>
+{#        <a href="{{ url_for('doctor_ehr') }}" class="nav-link">#}
+{#          <i class="fa fa-file-text-o" style="margin-right: 4px;"></i>#}
+{#          EHR Requests#}
+{#        </a>#}
+        <a href="{{ url_for('doctor_logout') }}" class="btn-modern btn-outline btn-sm">
+          <i class="fa fa-sign-out" style="margin-right: 4px;"></i>
+          Logout
+        </a>
+      </div>
+    </div>
+  </nav>
 
-  <div style="overflow-x:auto">
-    <table>
-      <thead>
-        <tr>
-          <th>Checkup Time</th>
-          <th>Patient</th>
-          <th>Email</th>
-          <th>Age</th>
-          <th>Gender</th>
-          <th>BMI</th>
-          <th>BP (S/D)</th>
-          <th>Heart Rate</th>
-          <th>Stress</th>
-          <th>Diseases</th>
-          <th>Risk</th>
-          <th>LOS</th>
-          <th>Readmission</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for r in reports %}
-        <tr>
-          <td>{{ r[0] }}</td> <!-- checkup_time -->
-          <td>{{ r[3] }}</td> <!-- patient_name -->
-          <td>{{ r[4] }}</td> <!-- patient_email -->
-          <td>{{ r[5] }}</td> <!-- age -->
-          <td>{% if r[6]==1 %}Male{% elif r[6]==0 %}Female{% else %}-{% endif %}</td> <!-- gender -->
-          <td>{{ r[7] }}</td> <!-- bmi -->
-          <td>{{ r[8] }}/{{ r[9] }}</td> <!-- systole/diastole -->
-          <td>{{ r[10] }}</td> <!-- heart_rate -->
-          <td>{{ r[11] or '-' }}</td> <!-- stress_level -->
-          <td>{{ r[12] or '-' }}</td> <!-- diseases -->
-          <td>{{ r[13] if r[13] is not none else '-' }}</td> <!-- risk_score -->
-          <td>{{ r[14] if r[14] is not none else '-' }}</td> <!-- predicted_los -->
-          <td>
-            {% if r[15] %}
-              {{ r[15] }}
-              {% if r[16] is not none %}
-                ({{ '%.2f' % r[16] }})
-              {% endif %}
-            {% else %}-{% endif %}
-          </td> <!-- readmission label (prob) -->
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+  <!-- Dashboard Content -->
+  <div class="dashboard-container animate-fadeIn">
+    <!-- Enhanced Header -->
+    <div class="dashboard-header">
+      <div style="width: 100px; height: 100px; background: var(--gradient-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto var(--space-xl); box-shadow: var(--shadow-xl);">
+        <i class="fa fa-clipboard" style="font-size: 40px; color: white;"></i>
+      </div>
+      <h1 class="dashboard-title animate-fadeInUp">
+        Patient Health Reports
+      </h1>
+      <p class="dashboard-subtitle animate-fadeInUp" style="animation-delay: 0.2s;">
+        Comprehensive patient health analytics, risk assessments, and readmission predictions for clinical decision support.
+      </p>
+    </div>
+
+    <!-- Search and Filters -->
+    <div class="card-modern animate-fadeInUp" style="animation-delay: 0.4s; margin-bottom: var(--space-2xl); background: var(--background-primary); border-left: 4px solid var(--primary-color);">
+      <div style="display: flex; align-items: center; gap: var(--space-md); margin-bottom: var(--space-lg);">
+        <div style="width: 40px; height: 40px; background: var(--gradient-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+          <i class="fa fa-search" style="font-size: 16px; color: white;"></i>
+        </div>
+        <h2 style="color: var(--primary-color); margin: 0; font-size: var(--text-lg); font-weight: 600;">Search & Filter Patients</h2>
+      </div>
+      <form method="get" style="display: flex; gap: var(--space-md); align-items: end; flex-wrap: wrap;">
+        <div style="flex: 1; min-width: 250px;">
+          <label style="font-weight: 600; color: var(--text-primary); font-size: var(--text-sm); margin-bottom: var(--space-xs); display: block;">
+            <i class="fa fa-user" style="margin-right: 4px; color: var(--primary-color);"></i>
+            Search by Name or Email
+          </label>
+          <input type="text" name="q" placeholder="Enter patient name or email" value="{{ q or '' }}" style="width: 100%; padding: var(--space-md); border: 2px solid var(--border-color); border-radius: var(--radius-lg); font-size: var(--text-base); transition: all var(--transition-base);">
+        </div>
+        <button type="submit" class="btn-modern btn-primary" style="padding: var(--space-md) var(--space-xl);">
+          <i class="fa fa-search" style="margin-right: 8px;"></i>
+          Search Reports
+        </button>
+        {% if q %}
+        <a href="{{ url_for('doctor_reports') }}" class="btn-modern btn-outline" style="padding: var(--space-md) var(--space-lg);">
+          <i class="fa fa-times" style="margin-right: 4px;"></i>
+          Clear
+        </a>
+        {% endif %}
+      </form>
+    </div>
+
+    {% if reports %}
+    <!-- Reports Summary -->
+    <div class="grid-modern grid-4 animate-fadeInUp" style="animation-delay: 0.6s; margin-bottom: var(--space-2xl);">
+      <div class="card-modern text-center">
+        <div style="background: var(--gradient-primary); color: white; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto var(--space-md); font-size: 18px;">
+          <i class="fa fa-users"></i>
+        </div>
+        <h3 class="card-title" style="color: var(--primary-color); margin-bottom: var(--space-sm); font-size: var(--text-lg);">Total Patients</h3>
+        <div style="font-size: var(--text-2xl); font-weight: 700; color: var(--text-primary);">{{ reports|length }}</div>
+      </div>
+      <div class="card-modern text-center">
+        <div style="background: var(--gradient-success); color: white; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto var(--space-md); font-size: 18px;">
+          <i class="fa fa-check-circle"></i>
+        </div>
+        <h3 class="card-title" style="color: var(--success); margin-bottom: var(--space-sm); font-size: var(--text-lg);">Low Risk</h3>
+        <div style="font-size: var(--text-2xl); font-weight: 700; color: var(--text-primary);">
+          {{ reports|selectattr(13, 'lt', 3)|list|length }}
+        </div>
+      </div>
+      <div class="card-modern text-center">
+        <div style="background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%); color: white; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto var(--space-md); font-size: 18px;">
+          <i class="fa fa-exclamation-triangle"></i>
+        </div>
+        <h3 class="card-title" style="color: var(--warning); margin-bottom: var(--space-sm); font-size: var(--text-lg);">High Risk</h3>
+        <div style="font-size: var(--text-2xl); font-weight: 700; color: var(--text-primary);">
+          {{ reports|selectattr(13, 'gt', 3)|list|length }}
+        </div>
+      </div>
+      <div class="card-modern text-center">
+        <div style="background: var(--gradient-secondary); color: white; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto var(--space-md); font-size: 18px;">
+          <i class="fa fa-calendar"></i>
+        </div>
+        <h3 class="card-title" style="color: var(--info); margin-bottom: var(--space-sm); font-size: var(--text-lg);">Today's Reports</h3>
+        <div style="font-size: var(--text-2xl); font-weight: 700; color: var(--text-primary);">
+          {{ reports|selectattr(0, 'match', '.*' + moment().format('YYYY-MM-DD') + '.*')|list|length if moment else 0 }}
+        </div>
+      </div>
+    </div>
+
+    <!-- Reports Table -->
+    <div class="card-modern animate-fadeInUp" style="animation-delay: 0.8s; padding: 0; overflow: hidden;">
+      <div style="padding: var(--space-xl) var(--space-xl) var(--space-lg); background: var(--gradient-primary); color: white;">
+        <h2 style="margin: 0; font-size: var(--text-xl); font-weight: 600; display: flex; align-items: center; gap: var(--space-sm);">
+          <i class="fa fa-table"></i>
+          Patient Health Reports
+          {% if q %}
+          <span style="font-size: var(--text-sm); opacity: 0.8; margin-left: var(--space-md);">
+            (Filtered by: "{{ q }}")
+          </span>
+          {% endif %}
+        </h2>
+      </div>
+      <div style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse; background: white; font-size: var(--text-sm);">
+          <thead>
+            <tr style="background: var(--background-secondary);">
+              <th style="padding: var(--space-md); text-align: left; font-weight: 600; color: var(--text-primary); border-bottom: 2px solid var(--border-color); white-space: nowrap; position: sticky; top: 0; background: var(--background-secondary);">
+                <i class="fa fa-calendar" style="margin-right: 4px; color: var(--primary-color);"></i>
+                Assessment Date
+              </th>
+              <th style="padding: var(--space-md); text-align: left; font-weight: 600; color: var(--text-primary); border-bottom: 2px solid var(--border-color); white-space: nowrap; position: sticky; top: 0; background: var(--background-secondary);">
+                <i class="fa fa-user" style="margin-right: 4px; color: var(--primary-color);"></i>
+                Patient
+              </th>
+              <th style="padding: var(--space-md); text-align: left; font-weight: 600; color: var(--text-primary); border-bottom: 2px solid var(--border-color); white-space: nowrap; position: sticky; top: 0; background: var(--background-secondary);">
+                <i class="fa fa-envelope" style="margin-right: 4px; color: var(--primary-color);"></i>
+                Email
+              </th>
+              <th style="padding: var(--space-md); text-align: left; font-weight: 600; color: var(--text-primary); border-bottom: 2px solid var(--border-color); white-space: nowrap; position: sticky; top: 0; background: var(--background-secondary);">Age</th>
+              <th style="padding: var(--space-md); text-align: left; font-weight: 600; color: var(--text-primary); border-bottom: 2px solid var(--border-color); white-space: nowrap; position: sticky; top: 0; background: var(--background-secondary);">Gender</th>
+              <th style="padding: var(--space-md); text-align: left; font-weight: 600; color: var(--text-primary); border-bottom: 2px solid var(--border-color); white-space: nowrap; position: sticky; top: 0; background: var(--background-secondary);">BMI</th>
+              <th style="padding: var(--space-md); text-align: left; font-weight: 600; color: var(--text-primary); border-bottom: 2px solid var(--border-color); white-space: nowrap; position: sticky; top: 0; background: var(--background-secondary);">Blood Pressure</th>
+              <th style="padding: var(--space-md); text-align: left; font-weight: 600; color: var(--text-primary); border-bottom: 2px solid var(--border-color); white-space: nowrap; position: sticky; top: 0; background: var(--background-secondary);">Heart Rate</th>
+              <th style="padding: var(--space-md); text-align: left; font-weight: 600; color: var(--text-primary); border-bottom: 2px solid var(--border-color); white-space: nowrap; position: sticky; top: 0; background: var(--background-secondary);">Stress Level</th>
+              <th style="padding: var(--space-md); text-align: left; font-weight: 600; color: var(--text-primary); border-bottom: 2px solid var(--border-color); max-width: 200px; position: sticky; top: 0; background: var(--background-secondary);">Health Conditions</th>
+              <th style="padding: var(--space-md); text-align: left; font-weight: 600; color: var(--text-primary); border-bottom: 2px solid var(--border-color); white-space: nowrap; position: sticky; top: 0; background: var(--background-secondary);">Risk Score</th>
+              <th style="padding: var(--space-md); text-align: left; font-weight: 600; color: var(--text-primary); border-bottom: 2px solid var(--border-color); white-space: nowrap; position: sticky; top: 0; background: var(--background-secondary);">Predicted LOS</th>
+              <th style="padding: var(--space-md); text-align: left; font-weight: 600; color: var(--text-primary); border-bottom: 2px solid var(--border-color); white-space: nowrap; position: sticky; top: 0; background: var(--background-secondary);">Readmission Risk</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for r in reports %}
+            <tr style="border-bottom: 1px solid var(--border-light); transition: background-color var(--transition-base);" onmouseover="this.style.backgroundColor='var(--background-secondary)'" onmouseout="this.style.backgroundColor='white'">
+              <td style="padding: var(--space-md); color: var(--text-primary); white-space: nowrap;">
+                <div style="font-weight: 500;">{{ r[0].split(' ')[0] }}</div>
+                <div style="font-size: var(--text-xs); color: var(--text-secondary);">{{ r[0].split(' ')[1] if ' ' in r[0] else '' }}</div>
+              </td>
+              <td style="padding: var(--space-md); color: var(--text-primary); font-weight: 500;">{{ r[3] }}</td>
+              <td style="padding: var(--space-md); color: var(--text-secondary); font-size: var(--text-sm);">{{ r[4] }}</td>
+              <td style="padding: var(--space-md); color: var(--text-primary); text-align: center;">{{ r[5] }}</td>
+              <td style="padding: var(--space-md);">
+                <span style="padding: var(--space-xs) var(--space-sm); background: {{ 'rgba(59, 130, 246, 0.1)' if r[6] == 1 else 'rgba(236, 72, 153, 0.1)' }}; color: {{ 'var(--info)' if r[6] == 1 else '#ec4899' }}; border-radius: var(--radius-md); font-size: var(--text-xs); font-weight: 600;">
+                  {{ "Male" if r[6] == 1 else "Female" }}
+                </span>
+              </td>
+              <td style="padding: var(--space-md); color: var(--text-primary); font-weight: 500; text-align: center;">
+                {% if r[7] %}
+                  {{ "%.1f"|format(r[7]) }}
+                  {% if r[7] < 18.5 %}
+                    <span style="color: var(--warning); font-size: var(--text-xs);">⚠</span>
+                  {% elif r[7] > 25 %}
+                    <span style="color: var(--error); font-size: var(--text-xs);">⚠</span>
+                  {% endif %}
+                {% else %}
+                  N/A
+                {% endif %}
+              </td>
+              <td style="padding: var(--space-md); color: var(--text-primary); font-weight: 500; text-align: center;">
+                {% if r[8] and r[9] %}
+                  {{ r[8] }}/{{ r[9] }}
+                  {% if r[8] > 140 or r[9] > 90 %}
+                    <span style="color: var(--error); font-size: var(--text-xs);">⚠</span>
+                  {% endif %}
+                {% else %}
+                  N/A
+                {% endif %}
+              </td>
+              <td style="padding: var(--space-md); color: var(--text-primary); font-weight: 500; text-align: center;">
+                {% if r[10] %}
+                  {{ r[10] }} bpm
+                  {% if r[10] > 100 or r[10] < 60 %}
+                    <span style="color: var(--warning); font-size: var(--text-xs);">⚠</span>
+                  {% endif %}
+                {% else %}
+                  N/A
+                {% endif %}
+              </td>
+              <td style="padding: var(--space-md);">
+                {% if r[11] %}
+                  {% set stress_color = 'var(--success)' if r[11] == 'Low' else ('var(--warning)' if r[11] == 'Moderate' else 'var(--error)') %}
+                  <span style="padding: var(--space-xs) var(--space-sm); background: {{ 'rgba(16, 185, 129, 0.1)' if r[11] == 'Low' else ('rgba(245, 158, 11, 0.1)' if r[11] == 'Moderate' else 'rgba(239, 68, 68, 0.1)') }}; color: {{ stress_color }}; border-radius: var(--radius-md); font-size: var(--text-xs); font-weight: 600;">
+                    {{ r[11] }}
+                  </span>
+                {% else %}
+                  <span style="color: var(--text-light);">N/A</span>
+                {% endif %}
+              </td>
+              <td style="padding: var(--space-md); max-width: 200px; word-wrap: break-word; color: var(--text-secondary); font-size: var(--text-sm);">
+                {% if r[12] %}
+                  {{ r[12][:50] }}{% if r[12]|length > 50 %}...{% endif %}
+                {% else %}
+                  <span style="color: var(--text-light); font-style: italic;">None reported</span>
+                {% endif %}
+              </td>
+              <td style="padding: var(--space-md); text-align: center;">
+                {% if r[13] is not none %}
+                  {% set risk_color = 'var(--success)' if r[13] < 2 else ('var(--warning)' if r[13] < 4 else 'var(--error)') %}
+                  <div style="display: flex; flex-direction: column; align-items: center; gap: var(--space-xs);">
+                    <span style="font-weight: 600; color: var(--text-primary);">{{ "%.2f"|format(r[13]) }}</span>
+                    <span style="padding: var(--space-xs) var(--space-sm); background: {{ 'rgba(16, 185, 129, 0.1)' if r[13] < 2 else ('rgba(245, 158, 11, 0.1)' if r[13] < 4 else 'rgba(239, 68, 68, 0.1)') }}; color: {{ risk_color }}; border-radius: var(--radius-md); font-size: var(--text-xs); font-weight: 600;">
+                      {{ 'Low' if r[13] < 2 else ('Medium' if r[13] < 4 else 'High') }}
+                    </span>
+                  </div>
+                {% else %}
+                  <span style="color: var(--text-light);">N/A</span>
+                {% endif %}
+              </td>
+              <td style="padding: var(--space-md); color: var(--text-primary); text-align: center;">
+                {% if r[14] is not none %}
+                  <div style="font-weight: 500;">{{ "%.1f"|format(r[14]) }} days</div>
+                {% else %}
+                  <span style="color: var(--text-light);">N/A</span>
+                {% endif %}
+              </td>
+              <td style="padding: var(--space-md);">
+                {% if r[15] %}
+                  {% set readmission_color = 'var(--success)' if 'Low' in r[15] else ('var(--warning)' if 'Medium' in r[15] else 'var(--error)') %}
+                  <div style="display: flex; flex-direction: column; gap: var(--space-xs);">
+                    <span style="padding: var(--space-xs) var(--space-sm); background: {{ 'rgba(16, 185, 129, 0.1)' if 'Low' in r[15] else ('rgba(245, 158, 11, 0.1)' if 'Medium' in r[15] else 'rgba(239, 68, 68, 0.1)') }}; color: {{ readmission_color }}; border-radius: var(--radius-md); font-size: var(--text-xs); font-weight: 600;">
+                      {{ r[15] }}
+                    </span>
+                    {% if r[16] is not none %}
+                      <span style="font-size: var(--text-xs); color: var(--text-secondary); text-align: center;">({{ (r[16] * 100)|round(1) }}%)</span>
+                    {% endif %}
+                  </div>
+                {% else %}
+                  <span style="color: var(--text-light);">N/A</span>
+                {% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    {% else %}
+    <!-- No Data State -->
+    <div class="card-modern animate-fadeInUp" style="animation-delay: 0.6s; text-align: center; padding: var(--space-3xl); background: var(--background-secondary); border: 2px dashed var(--border-color);">
+      <div style="width: 120px; height: 120px; background: var(--gradient-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto var(--space-xl); opacity: 0.8;">
+        <i class="fa fa-clipboard" style="font-size: 48px; color: white;"></i>
+      </div>
+      <h2 style="color: var(--text-primary); margin-bottom: var(--space-lg); font-size: var(--text-2xl);">
+        {% if q %}No Reports Found{% else %}No Patient Reports Available{% endif %}
+      </h2>
+      <p style="color: var(--text-secondary); margin-bottom: var(--space-2xl); max-width: 500px; margin-left: auto; margin-right: auto; font-size: var(--text-lg);">
+        {% if q %}
+          No patient reports match your search criteria "{{ q }}". Try adjusting your search terms or clear the filter to view all reports.
+        {% else %}
+          No patient health reports are currently available in the system. Reports will appear here as patients complete their health assessments.
+        {% endif %}
+      </p>
+      <div style="display: flex; gap: var(--space-lg); justify-content: center; flex-wrap: wrap;">
+        {% if q %}
+        <a href="{{ url_for('doctor_reports') }}" class="btn-modern btn-primary btn-lg">
+          <i class="fa fa-list" style="margin-right: 8px;"></i>
+          View All Reports
+        </a>
+        {% endif %}
+        <a href="{{ url_for('doctor_home') }}" class="btn-modern btn-outline btn-lg">
+          <i class="fa fa-home" style="margin-right: 8px;"></i>
+          Back to Dashboard
+        </a>
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- Action Buttons -->
+    <div class="animate-fadeInUp" style="animation-delay: 1s; text-align: center; margin-top: var(--space-2xl);">
+      <div style="display: flex; gap: var(--space-lg); justify-content: center; flex-wrap: wrap;">
+        <a href="" class="btn-modern btn-secondary btn-lg">
+          <i class="fa fa-file-text-o" style="margin-right: 8px;"></i>
+          EHR Approvals
+        </a>
+        <a href="{{ url_for('doctor_home') }}" class="btn-modern btn-outline btn-lg">
+          <i class="fa fa-home" style="margin-right: 8px;"></i>
+          Back to Dashboard
+        </a>
+      </div>
+    </div>
   </div>
+
+  <script>
+    // Enhanced table interactions
+    document.querySelectorAll('tbody tr').forEach(row => {
+      row.style.cursor = 'pointer';
+
+      row.addEventListener('click', function() {
+        // Add click animation
+        this.style.transform = 'scale(0.98)';
+        setTimeout(() => {
+          this.style.transform = 'scale(1)';
+        }, 150);
+      });
+    });
+
+    // Enhanced form interactions
+    document.querySelectorAll('input').forEach(input => {
+      input.addEventListener('focus', function() {
+        this.style.borderColor = 'var(--primary-color)';
+        this.style.boxShadow = '0 0 0 3px rgba(37, 99, 235, 0.1)';
+      });
+
+      input.addEventListener('blur', function() {
+        this.style.borderColor = 'var(--border-color)';
+        this.style.boxShadow = 'none';
+      });
+    });
+
+    // Add loading states to buttons
+    document.querySelectorAll('.btn-modern').forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        if (this.href && !this.href.includes('#')) {
+          const originalText = this.innerHTML;
+          this.innerHTML = '<span class="spinner"></span> Loading...';
+          this.style.pointerEvents = 'none';
+
+          setTimeout(() => {
+            this.innerHTML = originalText;
+            this.style.pointerEvents = 'auto';
+          }, 2000);
+        }
+      });
+    });
+
+    // Responsive table handling
+    function handleTableResponsive() {
+      const table = document.querySelector('table');
+      const container = table.parentElement;
+
+      if (window.innerWidth <= 768) {
+        container.style.fontSize = 'var(--text-xs)';
+      } else {
+        container.style.fontSize = 'var(--text-sm)';
+      }
+    }
+
+    window.addEventListener('resize', handleTableResponsive);
+    handleTableResponsive();
+  </script>
 </body>
 </html>

@@ -3,79 +3,185 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Preventive Measures</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #e0f7fa;
-            color: #333;
-            margin: 0;
-            padding: 0;
-        }
-        header {
-            display: flex;
-            justify-content: flex-start;
-            background-color: #00695c;
-            padding: 20px;
-            color: white;
-            font-size: 1.5em;
-        }
-        header a {
-            color: white;
-            text-decoration: none;
-            font-size: 1.2em;
-        }
-        .container {
-            max-width: 600px;
-            margin: 50px auto;
-            padding: 20px;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        ul {
-            list-style-type: disc;
-            margin: 20px 0;
-            padding-left: 20px;
-            font-size: 1.1em;
-        }
-        li {
-            margin-bottom: 10px;
-        }
-        .btn {
-            display: block;
-            padding: 10px 20px;
-            font-size: 1.1em;
-            color: white;
-            background-color: #00695c;
-            border: none;
-            border-radius: 5px;
-            text-align: center;
-            text-decoration: none;
-            cursor: pointer;
-            margin: 40px auto 0 auto; /* Center the button */
-            width: 50%; /* Adjust button width for better appearance */
-        }
-        .btn:hover {
-            background-color: #004d40;
-        }
-    </style>
+    <link rel="icon" href="{{ url_for('static', filename='images/main.jpg') }}" type="image/gif">
+    <title>Your Care Plan - HealthGuard</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+    <link href="{{ url_for('static', filename='css/font-awesome.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/responsive.css') }}" rel="stylesheet">
 </head>
+
 <body>
+    <!-- Modern Navigation -->
+    <nav class="nav-modern">
+        <div class="nav-container">
+            <a href="{{ url_for('index') }}" class="nav-brand">
+                <i class="fa fa-heartbeat" style="margin-right: 8px;"></i>
+                HealthGuard
+            </a>
+            <div class="nav-links">
+                <a href="{{ url_for('home') }}" class="nav-link">
+                    <i class="fa fa-home" style="margin-right: 4px;"></i>
+                    Dashboard
+                </a>
+                <a href="{{ url_for('my_reports') }}" class="nav-link">
+                    <i class="fa fa-file-text-o" style="margin-right: 4px;"></i>
+                    My Reports
+                </a>
+                <a href="{{ url_for('logout') }}" class="btn-modern btn-outline btn-sm">
+                    <i class="fa fa-sign-out" style="margin-right: 4px;"></i>
+                    Logout
+                </a>
+            </div>
+        </div>
+    </nav>
 
-    <header>
-        <a href="/home">Riskometer</a>
-    </header>
+    <!-- Main Content -->
+    <div class="dashboard-container animate-fadeIn">
+        <!-- Enhanced Header -->
+        <div class="dashboard-header">
+            <div style="width: 100px; height: 100px; background: var(--gradient-success); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto var(--space-xl); box-shadow: var(--shadow-xl);">
+                <i class="fa fa-shield" style="font-size: 40px; color: white;"></i>
+            </div>
+            <h1 class="dashboard-title animate-fadeInUp">
+                Your Personalized Care Plan
+            </h1>
+            <p class="dashboard-subtitle animate-fadeInUp" style="animation-delay: 0.2s;">
+                Based on your health conditions and risk assessment, here are your personalized preventive care recommendations.
+            </p>
+        </div>
 
-    <div class="container">
-        <ul>
-            {% for measure in preventive_measures %}
-                <li>{{ measure }}</li>
-            {% endfor %}
-        </ul>
+        <!-- Care Plan Content -->
+        <div class="card-modern animate-fadeInUp" style="animation-delay: 0.4s; margin-bottom: var(--space-3xl); border-left: 4px solid var(--primary-color);">
+            <div style="display: flex; align-items: center; gap: var(--space-md); margin-bottom: var(--space-xl);">
+                <div style="width: 50px; height: 50px; background: var(--gradient-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                    <i class="fa fa-list-alt" style="font-size: 20px; color: white;"></i>
+                </div>
+                <h2 style="color: var(--primary-color); margin: 0; font-size: var(--text-xl); font-family: 'Playfair Display', serif;">Preventive Care Recommendations</h2>
+            </div>
 
-        <a href="/home" class="btn">Back to Home</a>
+            <div style="display: grid; gap: var(--space-lg);">
+                {% for measure in preventive_measures %}
+                <div style="background: var(--background-secondary); padding: var(--space-lg); border-radius: var(--radius-lg); border-left: 4px solid var(--success); display: flex; align-items: flex-start; gap: var(--space-md);">
+                    <div style="width: 40px; height: 40px; background: var(--gradient-success); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: var(--space-xs);">
+                        <i class="fa fa-check" style="font-size: 16px; color: white;"></i>
+                    </div>
+                    <div style="flex: 1;">
+                        <div style="color: var(--text-primary); line-height: 1.6; font-size: var(--text-base);">{{ measure }}</div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Important Notes Section -->
+        <div class="card-modern animate-fadeInUp" style="animation-delay: 0.6s; margin-bottom: var(--space-3xl); background: rgba(245, 158, 11, 0.05); border: 2px solid rgba(245, 158, 11, 0.2);">
+            <div style="display: flex; align-items: center; gap: var(--space-md); margin-bottom: var(--space-lg);">
+                <div style="width: 50px; height: 50px; background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                    <i class="fa fa-exclamation-triangle" style="font-size: 20px; color: white;"></i>
+                </div>
+                <h2 style="color: var(--warning); margin: 0; font-size: var(--text-xl); font-family: 'Playfair Display', serif;">Important Notes</h2>
+            </div>
+            <div style="background: white; padding: var(--space-lg); border-radius: var(--radius-lg);">
+                <ul style="list-style: none; padding: 0; margin: 0;">
+                    <li style="padding: var(--space-sm) 0; color: var(--text-secondary); display: flex; align-items: flex-start; gap: var(--space-sm);">
+                        <i class="fa fa-info-circle" style="color: var(--warning); margin-top: 2px; flex-shrink: 0;"></i>
+                        <span>Always consult with your healthcare provider before making significant changes to your treatment plan.</span>
+                    </li>
+                    <li style="padding: var(--space-sm) 0; color: var(--text-secondary); display: flex; align-items: flex-start; gap: var(--space-sm);">
+                        <i class="fa fa-phone" style="color: var(--warning); margin-top: 2px; flex-shrink: 0;"></i>
+                        <span>Contact your doctor immediately if you experience any concerning symptoms.</span>
+                    </li>
+                    <li style="padding: var(--space-sm) 0; color: var(--text-secondary); display: flex; align-items: flex-start; gap: var(--space-sm);">
+                        <i class="fa fa-calendar" style="color: var(--warning); margin-top: 2px; flex-shrink: 0;"></i>
+                        <span>Follow up with scheduled appointments and regular health monitoring.</span>
+                    </li>
+                    <li style="padding: var(--space-sm) 0; color: var(--text-secondary); display: flex; align-items: flex-start; gap: var(--space-sm);">
+                        <i class="fa fa-pills" style="color: var(--warning); margin-top: 2px; flex-shrink: 0;"></i>
+                        <span>Take all medications as prescribed and report any side effects to your healthcare team.</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Quick Actions Section -->
+        <div class="card-modern animate-fadeInUp" style="animation-delay: 0.8s; text-align: center; background: var(--background-primary); border: 2px solid var(--primary-color);">
+            <div style="margin-bottom: var(--space-lg);">
+                <div style="width: 60px; height: 60px; background: var(--gradient-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto var(--space-md);">
+                    <i class="fa fa-rocket" style="font-size: 24px; color: white;"></i>
+                </div>
+                <h3 style="color: var(--primary-color); margin-bottom: var(--space-md);">Continue Your Health Journey</h3>
+                <p style="color: var(--text-secondary); margin-bottom: var(--space-lg);">Take the next steps in managing your health with our comprehensive tools and resources.</p>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-md);">
+                <a href="{{ url_for('checkup') }}" class="btn-modern btn-primary">
+                    <i class="fa fa-plus-circle" style="margin-right: 8px;"></i>
+                    New Assessment
+                </a>
+                <a href="{{ url_for('diet_plan') }}" class="btn-modern btn-secondary">
+                    <i class="fa fa-cutlery" style="margin-right: 8px;"></i>
+                    Diet Plan
+                </a>
+                <a href="{{ url_for('my_reports') }}" class="btn-modern btn-outline">
+                    <i class="fa fa-chart-line" style="margin-right: 8px;"></i>
+                    View Reports
+                </a>
+                <a href="{{ url_for('home') }}" class="btn-modern btn-outline">
+                    <i class="fa fa-home" style="margin-right: 8px;"></i>
+                    Dashboard
+                </a>
+            </div>
+        </div>
+
+        <!-- Emergency Contact Section -->
+        <div class="card-modern animate-fadeInUp" style="animation-delay: 1s; margin-top: var(--space-2xl); background: rgba(239, 68, 68, 0.05); border: 2px solid rgba(239, 68, 68, 0.2);">
+            <div style="text-align: center;">
+                <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #ef4444 0%, #f87171 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto var(--space-md);">
+                    <i class="fa fa-phone" style="font-size: 24px; color: white;"></i>
+                </div>
+                <h3 style="color: var(--error); margin-bottom: var(--space-md);">Emergency Contact</h3>
+                <p style="color: var(--text-secondary); margin-bottom: var(--space-lg);">If you experience any medical emergency or concerning symptoms, contact emergency services immediately.</p>
+                <div style="display: flex; gap: var(--space-md); justify-content: center; flex-wrap: wrap;">
+                    <a href="tel:911" class="btn-modern" style="background: var(--gradient-primary); color: white; border: none;">
+                        <i class="fa fa-phone" style="margin-right: 8px;"></i>
+                        Emergency: 911
+                    </a>
+                    <a href="{{ url_for('feedback') }}" class="btn-modern btn-outline" style="border-color: var(--error); color: var(--error);">
+                        <i class="fa fa-comment" style="margin-right: 8px;"></i>
+                        Contact Support
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
 
+    <script>
+        // Add loading states to buttons
+        document.querySelectorAll('.btn-modern').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                if (this.href && !this.href.includes('#') && !this.href.includes('tel:')) {
+                    const originalText = this.innerHTML;
+                    this.innerHTML = '<span class="spinner"></span> Loading...';
+                    this.style.pointerEvents = 'none';
+
+                    setTimeout(() => {
+                        this.innerHTML = originalText;
+                        this.style.pointerEvents = 'auto';
+                    }, 2000);
+                }
+            });
+        });
+
+        // Print functionality
+        function printCarePlan() {
+            window.print();
+        }
+
+        // Enhanced animations for care recommendations
+        document.querySelectorAll('[style*="border-left: 4px solid var(--success)"]').forEach((item, index) => {
+            item.style.animationDelay = `${0.1 * index}s`;
+            item.classList.add('animate-fadeInUp');
+        });
+    </script>
 </body>
 </html>

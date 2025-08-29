@@ -1,24 +1,14 @@
-from flask import Flask, jsonify, render_template, request, redirect, url_for, flash, session
 import sqlite3
-import pickle
-import numpy as np
+import json
 import os
+import sqlite3
+
+import joblib
 import pandas as pd
 import plotly
-from sklearn.calibration import LabelEncoder
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import StandardScaler
-import joblib
-from xgboost import XGBClassifier
-
-
 import plotly.express as px
-import plotly.graph_objects as go
-import json
-from datetime import datetime
-from werkzeug.security import generate_password_hash, check_password_hash
 from flask import Flask, render_template, request, session, redirect, url_for, flash
-
+from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'  # Necessary for flash messages
@@ -110,7 +100,7 @@ def forgot_password():
 @app.route('/logout')
 def logout():
     session.pop('user_id', None)
-    return redirect(url_for('login'))  
+    return redirect(url_for('index'))
 
 @app.route('/about')
 def about():
@@ -1566,7 +1556,7 @@ def doctor_logout():
     session.pop("doctor_id", None)
     session.pop("doctor_name", None)
     flash("Signed out.", "info")
-    return redirect(url_for("doctor_login"))
+    return redirect(url_for("index"))
 
 
 @app.route("/doctor/home")
@@ -1644,7 +1634,6 @@ def analyze_current_system():
     import pandas as pd
     from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score
     from sklearn.model_selection import cross_val_score
-    import numpy as np
 
     # Load the merged dataset
     df = pd.read_csv('data/merged.csv')
@@ -1785,7 +1774,7 @@ def hospital_logout():
     session.pop("hospital_id", None)
     session.pop("hospital_name", None)
     flash("Signed out.", "info")
-    return redirect(url_for("hospital_login"))
+    return redirect(url_for("index"))
 
 @app.route("/hospital/home")
 @hospital_login_required
