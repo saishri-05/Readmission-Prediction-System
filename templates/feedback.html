@@ -3,159 +3,328 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Share Your Experience</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f5f5f5;
-            margin: 0;
-            padding: 0;
-        }
-
-        .form-container {
-            background-color: white;
-            max-width: 800px; /* Adjusted for wider layout */
-            margin: 50px auto;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            border-radius: 5px;
-        }
-
-        h1 {
-            text-align: center;
-            color: #2f8b87;
-        }
-
-        p {
-            text-align: center;
-            color: #666;
-            margin-bottom: 30px;
-        }
-
-        .form-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
-        }
-
-        .form-group {
-            flex: 1;
-            margin-right: 10px;
-        }
-
-        .form-group:last-child {
-            margin-right: 0;
-        }
-
-        label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-
-        input[type="text"],
-        input[type="email"],
-        textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 3px;
-            font-size: 16px;
-            box-sizing: border-box;
-        }
-
-        textarea {
-            resize: vertical;
-            height: 250px; /* Increased height */
-        }
-
-        .submit-btn {
-            display: block;
-            width: 100%;
-            padding: 10px;
-            background-color: #f26741;
-            color: white;
-            font-size: 18px;
-            font-weight: bold;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 20px;
-        }
-
-        .submit-btn:hover {
-            background-color: #e14d2f;
-        }
-
-        .flash-messages {
-            margin-bottom: 20px;
-        }
-
-        .flash-message {
-            padding: 10px;
-            border-radius: 5px;
-            margin-bottom: 10px;
-        }
-
-        .flash-success {
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-
-        .flash-error {
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-    </style>
+    <link rel="icon" href="{{ url_for('static', filename='images/main.jpg') }}" type="image/gif">
+    <title>Share Your Experience - HealthGuard</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+    <link href="{{ url_for('static', filename='css/font-awesome.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/responsive.css') }}" rel="stylesheet">
 </head>
-<body>
-    <!-- Header -->
-    <header style="background-color: #20b2aa; padding: 15px; display: flex; justify-content: space-between; align-items: center; color: #fff; margin-bottom: 20px;">
-        <a href="{{ url_for('index') }}" style="font-size: 2em; font-weight: bold; text-decoration: none; color: #ffffff;">Riskometer</a>
-        <nav>
-            <a href="{{ url_for('home') }}" style="color: #ffffff; text-decoration: none; margin-left: 20px; font-size: 1.1em;">Home</a>
-        </nav>
-    </header>
 
-    <div class="form-container">
-        <h1>Share Your Experience</h1>
-        <p>We welcome your feedback and suggestions to help us improve further and serve you better. If you have any query related to our services, please fill out the form</p>
+<body>
+    <!-- Modern Navigation -->
+    <nav class="nav-modern">
+        <div class="nav-container">
+            <a href="{{ url_for('index') }}" class="nav-brand">
+                <i class="fa fa-heartbeat" style="margin-right: 8px;"></i>
+                HealthGuard
+            </a>
+            <div class="nav-links">
+                <a href="{{ url_for('home') }}" class="nav-link">
+                    <i class="fa fa-home" style="margin-right: 4px;"></i>
+                    Dashboard
+                </a>
+                <a href="{{ url_for('my_reports') }}" class="nav-link">
+                    <i class="fa fa-file-text-o" style="margin-right: 4px;"></i>
+                    My Reports
+                </a>
+                <a href="{{ url_for('logout') }}" class="btn-modern btn-outline btn-sm">
+                    <i class="fa fa-sign-out" style="margin-right: 4px;"></i>
+                    Logout
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="dashboard-container animate-fadeIn">
+        <!-- Enhanced Header -->
+        <div class="dashboard-header">
+            <div style="width: 120px; height: 120px; background: var(--gradient-secondary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto var(--space-xl); box-shadow: var(--shadow-xl); position: relative;">
+                <i class="fa fa-comment" style="font-size: 48px; color: white;"></i>
+                <div style="position: absolute; bottom: 8px; right: 8px; width: 32px; height: 32px; background: var(--success); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 3px solid white;">
+                    <i class="fa fa-heart" style="font-size: 12px; color: white;"></i>
+                </div>
+            </div>
+            <h1 class="dashboard-title animate-fadeInUp">
+                Share Your Experience
+            </h1>
+            <p class="dashboard-subtitle animate-fadeInUp" style="animation-delay: 0.2s;">
+                Your feedback helps us improve HealthGuard and provide better healthcare experiences. We value your thoughts, suggestions, and any questions you may have about our services.
+            </p>
+        </div>
 
         <!-- Flash Messages -->
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
-                <div class="flash-messages">
+                <div class="animate-fadeInUp" style="animation-delay: 0.4s; margin-bottom: var(--space-xl);">
                     {% for category, message in messages %}
-                        <div class="flash-message flash-{{ category }}">
+                        <div class="alert-modern alert-{{ 'success' if category == 'success' else 'error' }}" style="display: flex; align-items: center; gap: var(--space-sm); margin-bottom: var(--space-md);">
+                            <i class="fa fa-{{ 'check-circle' if category == 'success' else 'exclamation-triangle' }}"></i>
                             {{ message }}
                         </div>
                     {% endfor %}
                 </div>
             {% endif %}
         {% endwith %}
-        <form method="POST" action="{{ url_for('feedback') }}">
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="name">Full Name*</label>
-                    <input type="text" id="name" name="name" placeholder="Enter Full Name" required>
+
+        <!-- Feedback Form -->
+        <div class="card-modern animate-fadeInUp" style="animation-delay: 0.6s; background: var(--background-primary); border-left: 4px solid var(--secondary-color); position: relative; overflow: hidden;">
+            <div style="position: absolute; top: -50px; right: -50px; width: 150px; height: 150px; background: rgba(16, 185, 129, 0.1); border-radius: 50%; opacity: 0.3;"></div>
+            <div style="position: absolute; bottom: -30px; left: -30px; width: 100px; height: 100px; background: rgba(59, 130, 246, 0.1); border-radius: 50%; opacity: 0.4;"></div>
+
+            <div style="position: relative; z-index: 2;">
+                <div style="display: flex; align-items: center; gap: var(--space-md); margin-bottom: var(--space-xl);">
+                    <div style="width: 60px; height: 60px; background: var(--gradient-success); border-radius: var(--radius-xl); display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow-lg);">
+                        <i class="fa fa-edit" style="font-size: 24px; color: white;"></i>
+                    </div>
+                    <div>
+                        <h2 style="color: var(--secondary-color); margin: 0; font-size: var(--text-2xl); font-family: 'Playfair Display', serif;">Tell Us About Your Experience</h2>
+                        <p style="color: var(--text-secondary); margin: 0; font-size: var(--text-sm);">Your insights help us serve you better</p>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="email">Email ID*</label>
-                    <input type="email" id="email" name="email" placeholder="Enter Email" required>
-                </div>
-                <div class="form-group">
-                    <label for="mobile">Mobile No.*</label>
-                    <input type="text" id="mobile" name="mobile" placeholder="Enter Mobile No." required>
-                </div>
+
+                <form method="POST" action="{{ url_for('feedback') }}" class="form-modern">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--space-lg); margin-bottom: var(--space-lg);">
+                        <div class="form-group-modern">
+                            <label class="form-label-modern">
+                                <i class="fa fa-user" style="margin-right: 4px; color: var(--secondary-color);"></i>
+                                Full Name
+                            </label>
+                            <input type="text" id="name" name="name" class="form-input-modern" placeholder="Enter your full name" required>
+                        </div>
+                        <div class="form-group-modern">
+                            <label class="form-label-modern">
+                                <i class="fa fa-envelope" style="margin-right: 4px; color: var(--secondary-color);"></i>
+                                Email Address
+                            </label>
+                            <input type="email" id="email" name="email" class="form-input-modern" placeholder="Enter your email address" required>
+                        </div>
+                        <div class="form-group-modern">
+                            <label class="form-label-modern">
+                                <i class="fa fa-phone" style="margin-right: 4px; color: var(--secondary-color);"></i>
+                                Mobile Number
+                            </label>
+                            <input type="tel" id="mobile" name="mobile" class="form-input-modern" placeholder="Enter your mobile number" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group-modern">
+                        <label class="form-label-modern">
+                            <i class="fa fa-comment" style="margin-right: 4px; color: var(--secondary-color);"></i>
+                            Your Message
+                        </label>
+                        <textarea id="message" name="message" class="form-input-modern" rows="6" placeholder="Share your experience, suggestions, or any questions about HealthGuard. We read every message and use your feedback to improve our services..." required style="resize: vertical; min-height: 150px;"></textarea>
+                        <div style="font-size: var(--text-xs); color: var(--text-secondary); margin-top: var(--space-xs); text-align: right;">
+                            <span id="charCount">0</span>/1000 characters
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-modern btn-secondary btn-lg w-full" style="margin-top: var(--space-lg);">
+                        <i class="fa fa-paper-plane" style="margin-right: 8px;"></i>
+                        Send Your Feedback
+                    </button>
+                </form>
             </div>
-            <div class="form-group">
-                <label for="message">Message*</label>
-                <textarea id="message" name="message" placeholder="Enter Message" required></textarea>
+        </div>
+
+        <!-- Why Feedback Matters Section -->
+        <div class="grid-modern grid-3 animate-fadeInUp" style="animation-delay: 0.8s; margin-top: var(--space-3xl);">
+            <div class="card-modern interactive-card" style="text-align: center; background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, rgba(16, 185, 129, 0.1) 100%); border: 2px solid rgba(16, 185, 129, 0.2); cursor: default;">
+                <div style="width: 60px; height: 60px; background: var(--gradient-success); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto var(--space-md); box-shadow: var(--shadow-md);">
+                    <i class="fa fa-lightbulb-o" style="font-size: 24px; color: white;"></i>
+                </div>
+                <h3 style="color: var(--secondary-color); margin-bottom: var(--space-sm); font-size: var(--text-lg); font-family: 'Playfair Display', serif;">Improve Our Platform</h3>
+                <p style="color: var(--text-secondary); font-size: var(--text-sm); line-height: 1.6;">Your suggestions help us enhance features and create better user experiences</p>
             </div>
-            <button type="submit" class="submit-btn">Send Feedback</button>
-        </form>
+
+            <div class="card-modern interactive-card" style="text-align: center; background: linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, rgba(59, 130, 246, 0.1) 100%); border: 2px solid rgba(59, 130, 246, 0.2); cursor: default;">
+                <div style="width: 60px; height: 60px; background: var(--gradient-secondary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto var(--space-md); box-shadow: var(--shadow-md);">
+                    <i class="fa fa-users" style="font-size: 24px; color: white;"></i>
+                </div>
+                <h3 style="color: var(--info); margin-bottom: var(--space-sm); font-size: var(--text-lg); font-family: 'Playfair Display', serif;">Help Others</h3>
+                <p style="color: var(--text-secondary); font-size: var(--text-sm); line-height: 1.6;">Share insights that can benefit the entire HealthGuard community</p>
+            </div>
+
+            <div class="card-modern interactive-card" style="text-align: center; background: linear-gradient(135deg, rgba(245, 158, 11, 0.05) 0%, rgba(245, 158, 11, 0.1) 100%); border: 2px solid rgba(245, 158, 11, 0.2); cursor: default;">
+                <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto var(--space-md); box-shadow: var(--shadow-md);">
+                    <i class="fa fa-star" style="font-size: 24px; color: white;"></i>
+                </div>
+                <h3 style="color: var(--accent-color); margin-bottom: var(--space-sm); font-size: var(--text-lg); font-family: 'Playfair Display', serif;">Get Support</h3>
+                <p style="color: var(--text-secondary); font-size: var(--text-sm); line-height: 1.6;">Receive personalized assistance and answers to your questions</p>
+            </div>
+        </div>
+
+        <!-- Contact Information -->
+        <div class="card-modern animate-fadeInUp" style="animation-delay: 1s; margin-top: var(--space-3xl); text-align: center; background: var(--background-primary); border: 2px solid var(--primary-color);">
+            <div style="margin-bottom: var(--space-lg);">
+                <div style="width: 80px; height: 80px; background: var(--gradient-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto var(--space-lg); box-shadow: var(--shadow-xl);">
+                    <i class="fa fa-life-ring" style="font-size: 32px; color: white;"></i>
+                </div>
+                <h3 style="color: var(--primary-color); margin-bottom: var(--space-md); font-size: var(--text-2xl); font-family: 'Playfair Display', serif;">Need Immediate Help?</h3>
+                <p style="color: var(--text-secondary); margin-bottom: var(--space-xl); max-width: 600px; margin-left: auto; margin-right: auto; font-size: var(--text-base); line-height: 1.6;">For urgent health concerns or technical support, you can reach our team directly through multiple channels.</p>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-md);">
+                <a href="tel:+15551234567" class="btn-modern btn-primary">
+                    <i class="fa fa-phone" style="margin-right: 8px;"></i>
+                    Call Support
+                </a>
+                <a href="mailto:support@healthguard.com" class="btn-modern btn-secondary">
+                    <i class="fa fa-envelope" style="margin-right: 8px;"></i>
+                    Email Us
+                </a>
+                <a href="{{ url_for('home') }}" class="btn-modern btn-outline">
+                    <i class="fa fa-home" style="margin-right: 8px;"></i>
+                    Back to Dashboard
+                </a>
+            </div>
+        </div>
+
+        <!-- Privacy Notice -->
+        <div style="margin-top: var(--space-2xl); padding: var(--space-lg); background: rgba(37, 99, 235, 0.05); border-radius: var(--radius-lg); border: 1px solid rgba(37, 99, 235, 0.1); text-align: center;" class="animate-fadeInUp" style="animation-delay: 1.2s;">
+            <p style="color: var(--text-secondary); font-size: var(--text-sm); margin: 0; line-height: 1.6;">
+                <i class="fa fa-shield" style="margin-right: 4px; color: var(--primary-color);"></i>
+                Your feedback is confidential and helps us improve our services. We respect your privacy and will only use your contact information to respond to your message.
+            </p>
+        </div>
     </div>
+
+    <script>
+        // Enhanced form interactions
+        document.querySelectorAll('.form-input-modern').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.style.borderColor = 'var(--secondary-color)';
+                this.style.boxShadow = '0 0 0 3px rgba(16, 185, 129, 0.1)';
+                this.parentElement.style.transform = 'translateY(-2px)';
+            });
+
+            input.addEventListener('blur', function() {
+                if (!this.value) {
+                    this.style.borderColor = 'var(--border-color)';
+                }
+                this.style.boxShadow = 'none';
+                this.parentElement.style.transform = 'translateY(0)';
+            });
+        });
+
+        // Character counter for message textarea
+        const messageTextarea = document.getElementById('message');
+        const charCount = document.getElementById('charCount');
+
+        messageTextarea.addEventListener('input', function() {
+            const length = this.value.length;
+            charCount.textContent = length;
+
+            if (length > 800) {
+                charCount.style.color = 'var(--error)';
+            } else if (length > 600) {
+                charCount.style.color = 'var(--warning)';
+            } else {
+                charCount.style.color = 'var(--text-secondary)';
+            }
+
+            // Limit to 1000 characters
+            if (length > 1000) {
+                this.value = this.value.substring(0, 1000);
+                charCount.textContent = '1000';
+            }
+        });
+
+        // Form validation
+        function validateForm() {
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const mobile = document.getElementById('mobile').value.trim();
+            const message = document.getElementById('message').value.trim();
+
+            const submitBtn = document.querySelector('button[type="submit"]');
+            const isValid = name && email && mobile && message && message.length >= 10;
+
+            submitBtn.disabled = !isValid;
+            submitBtn.style.opacity = isValid ? '1' : '0.6';
+
+            return isValid;
+        }
+
+        // Add validation listeners
+        ['name', 'email', 'mobile', 'message'].forEach(fieldId => {
+            document.getElementById(fieldId).addEventListener('input', validateForm);
+        });
+
+        // Email validation
+        document.getElementById('email').addEventListener('input', function() {
+            const email = this.value;
+            const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+            if (email && !isValid) {
+                this.style.borderColor = 'var(--error)';
+            } else if (email && isValid) {
+                this.style.borderColor = 'var(--success)';
+            }
+        });
+
+        // Phone number formatting
+        document.getElementById('mobile').addEventListener('input', function() {
+            let value = this.value.replace(/\D/g, '');
+            if (value.length >= 10) {
+                this.style.borderColor = 'var(--success)';
+            }
+        });
+
+        // Loading state for form submission
+        document.querySelector('form').addEventListener('submit', function(e) {
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+
+            submitBtn.innerHTML = '<span class="spinner"></span> Sending Feedback...';
+            submitBtn.disabled = true;
+
+            // Re-enable after 3 seconds in case of error
+            setTimeout(() => {
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }, 3000);
+        });
+
+        // Add loading states to navigation buttons
+        document.querySelectorAll('.btn-modern').forEach(btn => {
+            if (!btn.closest('form') && !btn.href.includes('tel:') && !btn.href.includes('mailto:')) {
+                btn.addEventListener('click', function(e) {
+                    if (this.href && !this.href.includes('#')) {
+                        const originalText = this.innerHTML;
+                        this.innerHTML = '<span class="spinner"></span> Loading...';
+                        this.style.pointerEvents = 'none';
+
+                        setTimeout(() => {
+                            this.innerHTML = originalText;
+                            this.style.pointerEvents = 'auto';
+                        }, 2000);
+                    }
+                });
+            }
+        });
+
+        // Enhanced card hover effects
+        document.querySelectorAll('.interactive-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-8px) scale(1.02)';
+                this.style.boxShadow = 'var(--shadow-xl)';
+            });
+
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+                this.style.boxShadow = 'var(--shadow-md)';
+            });
+        });
+
+        // Initialize form validation
+        validateForm();
+
+        // Auto-resize textarea
+        messageTextarea.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = Math.min(this.scrollHeight, 200) + 'px';
+        });
+    </script>
 </body>
 </html>

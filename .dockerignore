@@ -27,9 +27,6 @@ env/
 venv/
 ENV/
 
-# SQLite databases
-*.db
-
 # Git
 .git/
 .gitignore
