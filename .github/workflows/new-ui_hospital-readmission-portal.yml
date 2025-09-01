@@ -38,15 +38,15 @@ jobs:
         run: |
           source venv/bin/activate
           python -m pip install --upgrade pip
-          # Install essential build tools first
-          pip install setuptools wheel
-          # Install NumPy first with a compatible version
-          pip install numpy>=1.24.0
-          # Install other dependencies, skipping numpy since we already installed it
+          # Upgrade build tools to Python 3.12-compatible versions
+          pip install --upgrade setuptools wheel
+          # Install NumPy first (avoid build issues)
+          pip install "numpy>=1.24.0"
+          # Install other dependencies
           pip install -r requirements.txt
 
       # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
-      
+
       - name: Upload artifact for deployment jobs
         uses: actions/upload-artifact@v4
         with:
