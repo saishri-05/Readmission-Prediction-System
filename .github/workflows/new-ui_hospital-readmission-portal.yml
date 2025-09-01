@@ -28,12 +28,23 @@ jobs:
         run: |
           python -m venv venv
           source venv/bin/activate
-      
-      - name: Install dependencies
-        run: pip install -r requirements.txt
-        
-      # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
 
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential python3-dev
+
+      - name: Install dependencies
+        run: |
+          source venv/bin/activate
+          python -m pip install --upgrade pip
+          # Install NumPy first with a compatible version
+          pip install numpy>=1.24.0
+          # Install other dependencies
+          pip install -r requirements.txt
+
+      # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
+      
       - name: Upload artifact for deployment jobs
         uses: actions/upload-artifact@v4
         with:
@@ -54,7 +65,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: python-app
-      
+
       - name: Login to Azure
         uses: azure/login@v2
         with:
@@ -68,4 +79,3 @@ jobs:
         with:
           app-name: 'hospital-readmission-portal'
           slot-name: 'Production'
-          
