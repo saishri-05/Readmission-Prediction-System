@@ -22,7 +22,7 @@ jobs:
       - name: Set up Python version
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'   # ✅ Use stable Python version
+          python-version: '3.11'   # ✅ Stable Python version
 
       - name: Create and start virtual environment
         run: |
@@ -34,15 +34,14 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y build-essential python3-dev
 
-      - name: Install dependencies
+      - name: Install and freeze dependencies
         run: |
           source venv/bin/activate
-          python -m pip install --upgrade pip
-          pip install --upgrade setuptools wheel
+          python -m pip install --upgrade pip setuptools wheel
           pip install "numpy>=1.24.0"
           pip install -r requirements.txt
-
-      # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
+          # ✅ Freeze exact versions for deployment
+          pip freeze > requirements.txt
 
       - name: Upload artifact for deployment jobs
         uses: actions/upload-artifact@v4
@@ -78,3 +77,5 @@ jobs:
         with:
           app-name: 'hospital-readmission-portal'
           slot-name: 'Production'
+          package: '.'   # ✅ Deploy as-is, skip Oryx rebuild
+
